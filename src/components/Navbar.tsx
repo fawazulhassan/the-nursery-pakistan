@@ -1,17 +1,18 @@
 import { Search, ShoppingCart, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const categories = [
-    "Indoor Plants",
-    "Outdoor Plants",
-    "Pots & Accessories",
-    "Fertilizers & Soil",
-    "Sale",
+    { name: "Indoor Plants", slug: "indoor-plants" },
+    { name: "Outdoor Plants", slug: "outdoor-plants" },
+    { name: "Pots & Accessories", slug: "pots-accessories" },
+    { name: "Fertilizers & Soil", slug: "fertilizers-soil" },
+    { name: "Sale", slug: "sale" },
   ];
 
   return (
@@ -20,12 +21,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="text-2xl font-bold text-primary">
               The Nursery
             </div>
             <div className="hidden sm:block text-sm text-muted-foreground">Pakistan</div>
-          </div>
+          </Link>
 
           {/* Search Bar */}
           <div className="hidden md:flex flex-1 max-w-md">
@@ -79,13 +80,18 @@ const Navbar = () => {
         <div className="container mx-auto px-4">
           <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:flex md:items-center md:gap-1 py-2`}>
             {categories.map((category) => (
-              <Button
-                key={category}
-                variant="ghost"
-                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
+              <Link
+                key={category.slug}
+                to={`/category/${category.slug}`}
+                className="block"
               >
-                {category}
-              </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
+                >
+                  {category.name}
+                </Button>
+              </Link>
             ))}
           </div>
         </div>
