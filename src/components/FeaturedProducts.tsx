@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Heart, ShoppingCart, Star } from "lucide-react";
@@ -5,8 +6,10 @@ import monsteraImg from "@/assets/product-monstera.jpg";
 import snakePlantImg from "@/assets/product-snake-plant.jpg";
 import fiddleLeafImg from "@/assets/product-fiddle-leaf.jpg";
 import succulentsImg from "@/assets/product-succulents.jpg";
+import ProductDetailDialog from "./ProductDetailDialog";
 
 const FeaturedProducts = () => {
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const products = [
     {
       id: 1,
@@ -99,7 +102,10 @@ const FeaturedProducts = () => {
               </CardContent>
 
               <CardFooter className="p-4 pt-0">
-                <Button className="w-full group/btn">
+                <Button
+                  className="w-full group/btn"
+                  onClick={() => setSelectedProduct(product)}
+                >
                   <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
                   Add to Cart
                 </Button>
@@ -114,6 +120,14 @@ const FeaturedProducts = () => {
           </Button>
         </div>
       </div>
+
+      {selectedProduct && (
+        <ProductDetailDialog
+          open={!!selectedProduct}
+          onOpenChange={(open) => !open && setSelectedProduct(null)}
+          product={selectedProduct}
+        />
+      )}
     </section>
   );
 };

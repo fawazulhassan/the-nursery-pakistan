@@ -6,8 +6,10 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Heart, ShoppingCart, Star, ArrowLeft, SlidersHorizontal } from "lucide-react";
 import { getProductsByCategory } from "@/data/products";
 import { useState } from "react";
+import ProductDetailDialog from "@/components/ProductDetailDialog";
 
 const CategoryPage = () => {
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const { category } = useParams<{ category: string }>();
   const [priceFilter, setPriceFilter] = useState<string>("all");
   
@@ -173,7 +175,10 @@ const CategoryPage = () => {
                     </CardContent>
 
                     <CardFooter className="p-4 pt-0">
-                      <Button className="w-full group/btn">
+                      <Button
+                        className="w-full group/btn"
+                        onClick={() => setSelectedProduct(product)}
+                      >
                         <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
                         Add to Cart
                       </Button>
@@ -194,6 +199,14 @@ const CategoryPage = () => {
           </div>
         </section>
       </main>
+
+      {selectedProduct && (
+        <ProductDetailDialog
+          open={!!selectedProduct}
+          onOpenChange={(open) => !open && setSelectedProduct(null)}
+          product={selectedProduct}
+        />
+      )}
 
       <Footer />
     </div>
