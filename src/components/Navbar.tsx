@@ -1,31 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search, ShoppingCart, User, Menu, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const { getCartCount } = useCart();
+  const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     navigate("/auth");
   };
 
@@ -65,14 +53,26 @@ const Navbar = () => {
           {/* Actions */}
           <div className="flex items-center gap-2">
             {user ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleLogout}
-                className="hidden md:flex"
-              >
-                <LogOut className="h-5 w-5" />
-              </Button>
+              <>
+                {isAdmin && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => navigate('/admin')}
+                    className="hidden md:flex"
+                  >
+                    Admin
+                  </Button>
+                )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleLogout}
+                  className="hidden md:flex"
+                >
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </>
             ) : (
               <Link to="/auth">
                 <Button variant="ghost" size="icon" className="hidden md:flex">
