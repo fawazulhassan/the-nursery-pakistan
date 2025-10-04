@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import AuthPage from "./pages/AuthPage";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +22,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/" element={<Index />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/cart" element={<CartPage />} />
