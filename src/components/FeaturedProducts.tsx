@@ -1,49 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Heart, ShoppingCart, Star } from "lucide-react";
-import monsteraImg from "@/assets/product-monstera.jpg";
-import snakePlantImg from "@/assets/product-snake-plant.jpg";
-import fiddleLeafImg from "@/assets/product-fiddle-leaf.jpg";
-import succulentsImg from "@/assets/product-succulents.jpg";
+import { Heart, ShoppingCart } from "lucide-react";
 import ProductDetailDialog from "./ProductDetailDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const FeaturedProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const products = [
-    {
-      id: 1,
-      name: "Monstera Deliciosa",
-      price: "Rs 2,500",
-      rating: 4.8,
-      image: monsteraImg,
-      category: "Indoor Plants",
-    },
-    {
-      id: 2,
-      name: "Snake Plant",
-      price: "Rs 1,200",
-      rating: 4.9,
-      image: snakePlantImg,
-      category: "Indoor Plants",
-    },
-    {
-      id: 3,
-      name: "Fiddle Leaf Fig",
-      price: "Rs 3,800",
-      rating: 4.7,
-      image: fiddleLeafImg,
-      category: "Indoor Plants",
-    },
-    {
-      id: 4,
-      name: "Succulent Collection",
-      price: "Rs 800",
-      rating: 4.9,
-      image: succulentsImg,
-      category: "Indoor Plants",
-    },
-  ];
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('in_stock', true)
+        .order('created_at', { ascending: false })
+        .limit(8);
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: 'Failed to load products',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Loading Products...</h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-background">
@@ -66,7 +71,7 @@ const FeaturedProducts = () => {
             >
               <div className="relative overflow-hidden bg-muted">
                 <img
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -91,13 +96,11 @@ const FeaturedProducts = () => {
                 <h3 className="font-semibold text-lg mb-2 text-foreground">
                   {product.name}
                 </h3>
-                <div className="flex items-center gap-1 mb-3">
-                  <Star className="h-4 w-4 fill-accent text-accent" />
-                  <span className="text-sm font-medium">{product.rating}</span>
-                  <span className="text-sm text-muted-foreground">(120 reviews)</span>
-                </div>
+                <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                  {product.description}
+                </p>
                 <div className="text-2xl font-bold text-primary">
-                  {product.price}
+                  Rs {product.price}
                 </div>
               </CardContent>
 

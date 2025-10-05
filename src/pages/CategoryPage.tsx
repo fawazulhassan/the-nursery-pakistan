@@ -4,14 +4,18 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Heart, ShoppingCart, Star, ArrowLeft, SlidersHorizontal } from "lucide-react";
-import { getProductsByCategory } from "@/data/products";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const CategoryPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const { category } = useParams<{ category: string }>();
   const [priceFilter, setPriceFilter] = useState<string>("all");
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
   
   // Convert URL slug back to category name
   const categoryName = category
@@ -19,7 +23,32 @@ const CategoryPage = () => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ") || "";
 
-  const products = getProductsByCategory(categoryName);
+  useEffect(() => {
+    fetchProducts();
+  }, [categoryName]);
+
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', categoryName)
+        .eq('in_stock', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: 'Failed to load products',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getCategoryDescription = (cat: string) => {
     const descriptions: Record<string, string> = {
@@ -34,7 +63,7 @@ const CategoryPage = () => {
 
   const filteredProducts = products.filter((product) => {
     if (priceFilter === "all") return true;
-    const price = parseInt(product.price.replace(/[^0-9]/g, ""));
+    const price = parseFloat(product.price);
     if (priceFilter === "low") return price < 1500;
     if (priceFilter === "mid") return price >= 1500 && price <= 3000;
     if (priceFilter === "high") return price > 3000;
@@ -111,7 +140,11 @@ const CategoryPage = () => {
             </div>
 
             {/* Products Grid */}
-            {filteredProducts.length > 0 ? (
+            {isLoading ? (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground text-lg">Loading products...</p>
+              </div>
+            ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product, index) => (
                   <Card
@@ -121,7 +154,7 @@ const CategoryPage = () => {
                   >
                     <div className="relative overflow-hidden bg-muted">
                       <img
-                        src={product.image}
+                        src={product.image_url}
                         alt={product.name}
                         className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -132,20 +165,11 @@ const CategoryPage = () => {
                       >
                         <Heart className="h-4 w-4" />
                       </Button>
-                      {product.originalPrice && (
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-destructive text-destructive-foreground text-xs px-3 py-1 rounded-full font-medium">
-                            Sale
-                          </span>
-                        </div>
-                      )}
-                      {!product.originalPrice && (
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full font-medium">
-                            Popular
-                          </span>
-                        </div>
-                      )}
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full font-medium">
+                          Popular
+                        </span>
+                      </div>
                     </div>
 
                     <CardContent className="p-4">
@@ -155,22 +179,8 @@ const CategoryPage = () => {
                       <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                         {product.description}
                       </p>
-                      <div className="flex items-center gap-1 mb-3">
-                        <Star className="h-4 w-4 fill-accent text-accent" />
-                        <span className="text-sm font-medium">{product.rating}</span>
-                        <span className="text-sm text-muted-foreground">
-                          ({product.reviews})
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="text-2xl font-bold text-primary">
-                          {product.price}
-                        </div>
-                        {product.originalPrice && (
-                          <div className="text-sm text-muted-foreground line-through">
-                            {product.originalPrice}
-                          </div>
-                        )}
+                      <div className="text-2xl font-bold text-primary">
+                        Rs {product.price}
                       </div>
                     </CardContent>
 
