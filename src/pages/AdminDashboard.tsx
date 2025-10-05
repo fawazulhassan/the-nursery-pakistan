@@ -16,25 +16,69 @@ const AdminDashboard = () => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [plantType, setPlantType] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   
   const { toast } = useToast();
   const { signOut } = useAuth();
   const navigate = useNavigate();
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!imageFile) {
+      toast({
+        title: 'Error',
+        description: 'Please select an image',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
+      // Upload image to Supabase Storage
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, imageFile, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      // Insert product with image URL
       const { error } = await supabase.from('products').insert({
         name,
         price: parseFloat(price),
         description,
         category,
         plant_type: plantType,
-        image_url: imageUrl,
+        image_url: publicUrl,
         in_stock: true,
       });
 
@@ -51,7 +95,8 @@ const AdminDashboard = () => {
       setDescription('');
       setCategory('');
       setPlantType('');
-      setImageUrl('');
+      setImageFile(null);
+      setImagePreview('');
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -155,15 +200,24 @@ const AdminDashboard = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">Image URL *</Label>
+              <Label htmlFor="image">Product Image *</Label>
               <Input
-                id="imageUrl"
-                type="url"
-                placeholder="https://example.com/plant-image.jpg"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
                 required
+                className="cursor-pointer"
               />
+              {imagePreview && (
+                <div className="mt-4">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full max-w-md h-48 object-cover rounded-lg border border-border"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
