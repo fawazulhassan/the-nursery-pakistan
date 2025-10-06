@@ -33,7 +33,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i
         );
       }
-      return [...prev, { ...item, quantity }];
+      // Ensure price is formatted as string
+      const formattedItem = {
+        ...item,
+        price: typeof item.price === 'string' ? item.price : `Rs ${item.price}`,
+        quantity
+      };
+      return [...prev, formattedItem];
     });
     toast({
       title: "Added to cart",
@@ -65,7 +71,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const getCartTotal = () => {
     const total = cartItems.reduce((sum, item) => {
-      const price = parseInt(item.price.replace(/[^0-9]/g, ""));
+      const price = typeof item.price === 'string' 
+        ? parseInt(item.price.replace(/[^0-9]/g, ""))
+        : item.price;
       return sum + price * item.quantity;
     }, 0);
     return `Rs ${total.toLocaleString()}`;
