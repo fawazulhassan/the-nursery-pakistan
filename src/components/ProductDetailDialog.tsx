@@ -14,9 +14,9 @@ interface ProductDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   product: {
-    id: number;
+    id: string;
     name: string;
-    price: string;
+    price: string | number;
     image: string;
     description?: string;
   };
@@ -34,7 +34,11 @@ const ProductDetailDialog = ({
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    const formattedProduct = {
+      ...product,
+      price: typeof product.price === 'string' ? product.price : `Rs ${product.price}`
+    };
+    addToCart(formattedProduct, quantity);
     setQuantity(1);
     onOpenChange(false);
   };
@@ -65,7 +69,9 @@ const ProductDetailDialog = ({
             </div>
 
             <div className="border-t border-border pt-4">
-              <p className="text-3xl font-bold text-primary mb-4">{product.price}</p>
+              <p className="text-3xl font-bold text-primary mb-4">
+                {typeof product.price === 'string' ? product.price : `Rs ${product.price}`}
+              </p>
               
               <div className="flex items-center gap-4 mb-6">
                 <span className="font-medium">Quantity:</span>

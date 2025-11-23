@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, Leaf, Users } from 'lucide-react';
+import { ArrowLeft, Upload, Leaf, Users, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -122,6 +122,14 @@ const AdminDashboard = () => {
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
           </div>
           <div className="flex items-center gap-4">
+            <Button
+              variant="secondary"
+              onClick={() => navigate('/admin/orders')}
+              className="flex items-center gap-2"
+            >
+              <Package className="h-4 w-4" />
+              View Orders
+            </Button>
             <Button
               variant="secondary"
               onClick={() => navigate('/admin/users')}
