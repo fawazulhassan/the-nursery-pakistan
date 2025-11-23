@@ -10,10 +10,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,17 +27,80 @@ const CheckoutPage = () => {
     notes: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulate order placement
-    toast({
-      title: "Order Placed Successfully!",
-      description: "We'll contact you shortly to confirm your order.",
-    });
-    
-    clearCart();
-    navigate("/");
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to place an order.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Calculate total amount
+      const totalAmount = cartItems.reduce((sum, item) => {
+        const price = typeof item.price === 'string' 
+          ? parseInt(item.price.replace(/[^0-9]/g, ""))
+          : item.price;
+        return sum + price * item.quantity;
+      }, 0);
+
+      // Create the order
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          total_amount: totalAmount,
+          status: 'pending',
+          shipping_address: `${formData.address}, ${formData.city}`,
+          phone_number: formData.phone,
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // Create order items
+      const orderItems = cartItems.map(item => {
+        const price = typeof item.price === 'string' 
+          ? parseInt(item.price.replace(/[^0-9]/g, ""))
+          : item.price;
+        
+        return {
+          order_id: orderData.id,
+          product_id: item.id,
+          quantity: item.quantity,
+          price: price,
+        };
+      });
+
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
+
+      if (itemsError) throw itemsError;
+
+      toast({
+        title: "Order Placed Successfully!",
+        description: "We'll contact you shortly to confirm your order.",
+      });
+      
+      clearCart();
+      navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to place order. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -192,8 +259,8 @@ const CheckoutPage = () => {
                         </p>
                       </div>
 
-                      <Button type="submit" size="lg" className="w-full">
-                        Place Order
+                      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? "Placing Order..." : "Place Order"}
                       </Button>
                     </CardContent>
                   </Card>
