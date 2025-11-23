@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Heart, ShoppingCart, Tag } from "lucide-react";
 import ProductDetailDialog from "./ProductDetailDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +22,6 @@ const FeaturedProducts = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('in_stock', true)
         .order('created_at', { ascending: false })
         .limit(8);
 
@@ -36,6 +36,11 @@ const FeaturedProducts = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const calculateSalePrice = (price: number, salePercentage: number | null) => {
+    if (!salePercentage) return null;
+    return price - (price * salePercentage / 100);
   };
 
   if (isLoading) {
@@ -82,10 +87,21 @@ const FeaturedProducts = () => {
                 >
                   <Heart className="h-4 w-4" />
                 </Button>
-                <div className="absolute top-4 left-4">
-                  <span className="bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full font-medium">
-                    Popular
-                  </span>
+                <div className="absolute top-4 left-4 flex gap-2">
+                  {!product.in_stock ? (
+                    <Badge variant="destructive" className="text-xs px-3 py-1">
+                      Sold Out
+                    </Badge>
+                  ) : product.sale_percentage ? (
+                    <Badge className="bg-red-500 text-white text-xs px-3 py-1">
+                      <Tag className="h-3 w-3 mr-1" />
+                      {product.sale_percentage}% OFF
+                    </Badge>
+                  ) : (
+                    <span className="bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full font-medium">
+                      Popular
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -99,8 +115,21 @@ const FeaturedProducts = () => {
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {product.description}
                 </p>
-                <div className="text-2xl font-bold text-primary">
-                  Rs {product.price}
+                <div className="flex items-center gap-2">
+                  {product.sale_percentage ? (
+                    <>
+                      <div className="text-xl line-through text-muted-foreground">
+                        Rs {product.price}
+                      </div>
+                      <div className="text-2xl font-bold text-red-500">
+                        Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-2xl font-bold text-primary">
+                      Rs {product.price}
+                    </div>
+                  )}
                 </div>
               </CardContent>
 
@@ -108,9 +137,10 @@ const FeaturedProducts = () => {
                 <Button
                   className="w-full group/btn"
                   onClick={() => setSelectedProduct(product)}
+                  disabled={!product.in_stock}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                  Add to Cart
+                  {product.in_stock ? 'Add to Cart' : 'Out of Stock'}
                 </Button>
               </CardFooter>
             </Card>

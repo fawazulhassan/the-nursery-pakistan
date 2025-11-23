@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +17,8 @@ const AdminDashboard = () => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [plantType, setPlantType] = useState('');
+  const [salePercentage, setSalePercentage] = useState('');
+  const [inStock, setInStock] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +82,8 @@ const AdminDashboard = () => {
         category,
         plant_type: plantType,
         image_url: publicUrl,
-        in_stock: true,
+        in_stock: inStock,
+        sale_percentage: salePercentage ? parseFloat(salePercentage) : null,
       });
 
       if (error) throw error;
@@ -95,6 +99,8 @@ const AdminDashboard = () => {
       setDescription('');
       setCategory('');
       setPlantType('');
+      setSalePercentage('');
+      setInStock(true);
       setImageFile(null);
       setImagePreview('');
     } catch (error: any) {
@@ -212,6 +218,29 @@ const AdminDashboard = () => {
                     <SelectItem value="Outdoor">Outdoor</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="salePercentage">Sale Percentage (Optional)</Label>
+                <Input
+                  id="salePercentage"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  placeholder="e.g., 20 for 20% off"
+                  value={salePercentage}
+                  onChange={(e) => setSalePercentage(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2 flex items-center justify-between">
+                <Label htmlFor="inStock">Product In Stock</Label>
+                <Switch
+                  id="inStock"
+                  checked={inStock}
+                  onCheckedChange={setInStock}
+                />
               </div>
             </div>
 
