@@ -108,6 +108,7 @@ export type Database = {
           name: string
           plant_type: string
           price: number
+          sale_percentage: number | null
           updated_at: string | null
         }
         Insert: {
@@ -120,6 +121,7 @@ export type Database = {
           name: string
           plant_type: string
           price: number
+          sale_percentage?: number | null
           updated_at?: string | null
         }
         Update: {
@@ -132,6 +134,7 @@ export type Database = {
           name?: string
           plant_type?: string
           price?: number
+          sale_percentage?: number | null
           updated_at?: string | null
         }
         Relationships: []
