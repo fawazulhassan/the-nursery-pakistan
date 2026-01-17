@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
@@ -19,6 +19,7 @@ const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode; adminOnly?: boolean }) => {
   const { user, isAdmin, loading } = useAuth();
+  const location = useLocation();
   
   if (loading) {
     return (
@@ -29,7 +30,8 @@ const ProtectedRoute = ({ children, adminOnly = false }: { children: React.React
   }
   
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    // Redirect to auth with return URL
+    return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
   }
   
   if (adminOnly && !isAdmin) {
@@ -40,26 +42,22 @@ const ProtectedRoute = ({ children, adminOnly = false }: { children: React.React
 };
 
 const AppRoutes = () => {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-  
   return (
     <Routes>
-      <Route path="/auth" element={user ? <Navigate to="/" replace /> : <AuthPage />} />
-      <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-      <Route path="/category/:category" element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
-      <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+      {/* Public routes - accessible without login */}
+      <Route path="/" element={<Index />} />
+      <Route path="/category/:category" element={<CategoryPage />} />
+      <Route path="/cart" element={<CartPage />} />
+      <Route path="/auth" element={<AuthPage />} />
+      
+      {/* Protected routes - require authentication */}
       <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+      
+      {/* Admin routes - require admin role */}
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsersPage /></ProtectedRoute>} />
       <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrdersPage /></ProtectedRoute>} />
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

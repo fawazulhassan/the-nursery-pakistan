@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Leaf } from 'lucide-react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Leaf, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,8 +15,18 @@ const AuthPage = () => {
   const [signupName, setSignupName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get the return URL from state, default to home
+  const from = (location.state as { from?: string })?.from || '/';
+
+  // Redirect if already logged in
+  if (user) {
+    navigate(from, { replace: true });
+    return null;
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +35,7 @@ const AuthPage = () => {
     const { error } = await signIn(loginEmail, loginPassword);
     
     if (!error) {
-      navigate('/');
+      navigate(from, { replace: true });
     }
     setIsLoading(false);
   };
@@ -53,8 +63,11 @@ const AuthPage = () => {
             <h1 className="text-3xl font-bold text-white">The Nursery Pakistan</h1>
           </div>
           <p className="text-white/90">Welcome back to your plant paradise</p>
+          <Link to="/" className="inline-flex items-center gap-1 text-white/80 hover:text-white mt-2 text-sm">
+            <ArrowLeft className="h-4 w-4" />
+            Continue browsing
+          </Link>
         </div>
-
         <div className="bg-white rounded-lg shadow-xl p-6">
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
