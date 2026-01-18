@@ -33,7 +33,7 @@ interface Order {
   profiles: {
     email: string;
     full_name: string | null;
-  };
+  } | null;
   order_items: OrderItem[];
 }
 
@@ -102,8 +102,8 @@ const AdminOrdersPage = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(order =>
-        order.profiles.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.profiles.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.profiles?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.profiles?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.id.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -252,8 +252,8 @@ const AdminOrdersPage = () => {
                           </Badge>
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1">
-                          <p>Customer: {order.profiles.full_name || order.profiles.email}</p>
-                          <p>Email: {order.profiles.email}</p>
+                          <p>Customer: {order.profiles?.full_name || order.profiles?.email || 'Unknown'}</p>
+                          <p>Email: {order.profiles?.email || 'N/A'}</p>
                           <p>Phone: {order.phone_number}</p>
                           <p>Total: Rs {order.total_amount.toLocaleString()}</p>
                           <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
@@ -307,8 +307,8 @@ const AdminOrdersPage = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Customer Information</h4>
                   <div className="text-sm space-y-1">
-                    <p>Name: {selectedOrder.profiles.full_name || 'N/A'}</p>
-                    <p>Email: {selectedOrder.profiles.email}</p>
+                    <p>Name: {selectedOrder.profiles?.full_name || 'N/A'}</p>
+                    <p>Email: {selectedOrder.profiles?.email || 'N/A'}</p>
                     <p>Phone: {selectedOrder.phone_number}</p>
                   </div>
                 </div>
