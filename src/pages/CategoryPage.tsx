@@ -171,10 +171,22 @@ const CategoryPage = () => {
                         <Heart className="h-4 w-4" />
                       </Button>
                       <div className="absolute top-4 left-4 flex gap-2">
-                        {!product.in_stock ? (
+                        {product.stock_quantity === 0 ? (
                           <Badge variant="destructive" className="text-xs px-3 py-1">
                             Sold Out
                           </Badge>
+                        ) : product.stock_quantity < 5 ? (
+                          <>
+                            {product.sale_percentage && (
+                              <Badge className="bg-red-500 text-white text-xs px-3 py-1">
+                                <Tag className="h-3 w-3 mr-1" />
+                                {product.sale_percentage}% OFF
+                              </Badge>
+                            )}
+                            <Badge variant="secondary" className="text-xs px-3 py-1 bg-yellow-500 text-white">
+                              Only {product.stock_quantity} left
+                            </Badge>
+                          </>
                         ) : product.sale_percentage ? (
                           <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                             <Tag className="h-3 w-3 mr-1" />
@@ -217,10 +229,10 @@ const CategoryPage = () => {
                       <Button
                         className="w-full group/btn"
                         onClick={() => setSelectedProduct(product)}
-                        disabled={!product.in_stock}
+                        disabled={product.stock_quantity === 0}
                       >
                         <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                        {product.in_stock ? 'Add to Cart' : 'Out of Stock'}
+                        {product.stock_quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
                       </Button>
                     </CardFooter>
                   </Card>

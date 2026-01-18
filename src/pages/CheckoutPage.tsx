@@ -13,11 +13,19 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
+interface StockError {
+  product_id: string;
+  name: string;
+  available: number;
+  requested: number;
+}
+
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [stockErrors, setStockErrors] = useState<StockError[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,8 +48,38 @@ const CheckoutPage = () => {
     }
 
     setIsSubmitting(true);
+    setStockErrors([]);
 
     try {
+      // First, validate stock availability for all items
+      const stockCheckItems = cartItems.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity
+      }));
+
+      const { data: stockValidation, error: stockError } = await supabase
+        .rpc('validate_stock', { p_items: stockCheckItems });
+
+      if (stockError) throw stockError;
+
+      // Check for any invalid items
+      const invalidItems = (stockValidation as any[]).filter(item => !item.valid);
+      if (invalidItems.length > 0) {
+        setStockErrors(invalidItems.map(item => ({
+          product_id: item.product_id,
+          name: item.name,
+          available: item.available,
+          requested: item.requested
+        })));
+        toast({
+          title: "Stock Unavailable",
+          description: "Some items in your cart exceed available stock. Please adjust quantities.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       // Calculate total amount
       const totalAmount = cartItems.reduce((sum, item) => {
         const price = typeof item.price === 'string' 
@@ -49,6 +87,20 @@ const CheckoutPage = () => {
           : item.price;
         return sum + price * item.quantity;
       }, 0);
+
+      // Process stock decrease atomically
+      const { error: processError } = await supabase
+        .rpc('process_order_stock', { p_items: stockCheckItems });
+
+      if (processError) {
+        toast({
+          title: "Stock Error",
+          description: "Some items are no longer available. Please refresh and try again.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
 
       // Create the order
       const { data: orderData, error: orderError } = await supabase
@@ -233,6 +285,17 @@ const CheckoutPage = () => {
                         Order Summary
                       </h3>
                       
+                      {stockErrors.length > 0 && (
+                        <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                          <p className="text-sm font-medium text-destructive mb-2">Stock Issues:</p>
+                          {stockErrors.map((error) => (
+                            <p key={error.product_id} className="text-xs text-destructive">
+                              {error.name}: Only {error.available} available (requested {error.requested})
+                            </p>
+                          ))}
+                        </div>
+                      )}
+
                       <div className="space-y-3 mb-6">
                         {cartItems.map((item) => (
                           <div key={item.id} className="flex justify-between text-sm">
