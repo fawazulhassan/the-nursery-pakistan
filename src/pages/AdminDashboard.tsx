@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, Leaf, Users, Package } from 'lucide-react';
+import { ArrowLeft, Upload, Leaf, Users, Package, AlertTriangle, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,16 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  stock_quantity: number;
+  in_stock: boolean;
+  image_url: string;
+  category: string;
+}
+
 const AdminDashboard = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
@@ -18,14 +28,66 @@ const AdminDashboard = () => {
   const [category, setCategory] = useState('');
   const [plantType, setPlantType] = useState('');
   const [salePercentage, setSalePercentage] = useState('');
-  const [inStock, setInStock] = useState(true);
+  const [stockQuantity, setStockQuantity] = useState('10');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editStockQuantity, setEditStockQuantity] = useState('');
   
   const { toast } = useToast();
   const { signOut } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    const { data } = await supabase
+      .from('products')
+      .select('id, name, price, stock_quantity, in_stock, image_url, category')
+      .order('created_at', { ascending: false });
+    if (data) setProducts(data);
+  };
+
+  const lowStockProducts = products.filter(p => p.stock_quantity < 5 && p.stock_quantity > 0);
+  const outOfStockProducts = products.filter(p => p.stock_quantity === 0);
+
+  const handleUpdateStock = async (productId: string, newQuantity: number) => {
+    if (newQuantity < 0) {
+      toast({
+        title: 'Error',
+        description: 'Stock quantity cannot be negative',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('products')
+      .update({ 
+        stock_quantity: newQuantity,
+        in_stock: newQuantity > 0
+      })
+      .eq('id', productId);
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } else {
+      toast({
+        title: 'Success',
+        description: 'Stock updated successfully',
+      });
+      fetchProducts();
+      setEditingProduct(null);
+    }
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -74,6 +136,8 @@ const AdminDashboard = () => {
         .from('product-images')
         .getPublicUrl(filePath);
 
+      const stockQty = parseInt(stockQuantity) || 0;
+      
       // Insert product with image URL
       const { error } = await supabase.from('products').insert({
         name,
@@ -82,7 +146,8 @@ const AdminDashboard = () => {
         category,
         plant_type: plantType,
         image_url: publicUrl,
-        in_stock: inStock,
+        in_stock: stockQty > 0,
+        stock_quantity: stockQty,
         sale_percentage: salePercentage ? parseFloat(salePercentage) : null,
       });
 
@@ -100,9 +165,10 @@ const AdminDashboard = () => {
       setCategory('');
       setPlantType('');
       setSalePercentage('');
-      setInStock(true);
+      setStockQuantity('10');
       setImageFile(null);
       setImagePreview('');
+      fetchProducts();
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -234,12 +300,17 @@ const AdminDashboard = () => {
                 />
               </div>
 
-              <div className="space-y-2 flex items-center justify-between">
-                <Label htmlFor="inStock">Product In Stock</Label>
-                <Switch
-                  id="inStock"
-                  checked={inStock}
-                  onCheckedChange={setInStock}
+              <div className="space-y-2">
+                <Label htmlFor="stockQuantity">Stock Quantity *</Label>
+                <Input
+                  id="stockQuantity"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g., 10"
+                  value={stockQuantity}
+                  onChange={(e) => setStockQuantity(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -282,6 +353,102 @@ const AdminDashboard = () => {
             </Button>
           </form>
         </div>
+
+        {/* Inventory Warnings Section */}
+        {(lowStockProducts.length > 0 || outOfStockProducts.length > 0) && (
+          <div className="bg-card rounded-lg shadow-lg p-8 mt-8">
+            <div className="flex items-center gap-3 mb-6">
+              <AlertTriangle className="h-6 w-6 text-yellow-500" />
+              <h2 className="text-2xl font-bold">Inventory Alerts</h2>
+            </div>
+
+            {outOfStockProducts.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-destructive mb-3">Out of Stock ({outOfStockProducts.length})</h3>
+                <div className="space-y-2">
+                  {outOfStockProducts.map(product => (
+                    <div key={product.id} className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                      <div className="flex items-center gap-3">
+                        <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover rounded" />
+                        <div>
+                          <p className="font-medium">{product.name}</p>
+                          <p className="text-sm text-muted-foreground">Stock: 0</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {editingProduct?.id === product.id ? (
+                          <>
+                            <Input
+                              type="number"
+                              min="0"
+                              className="w-20"
+                              value={editStockQuantity}
+                              onChange={(e) => setEditStockQuantity(e.target.value)}
+                            />
+                            <Button size="sm" onClick={() => handleUpdateStock(product.id, parseInt(editStockQuantity) || 0)}>
+                              Save
+                            </Button>
+                          </>
+                        ) : (
+                          <Button size="sm" variant="outline" onClick={() => {
+                            setEditingProduct(product);
+                            setEditStockQuantity(product.stock_quantity.toString());
+                          }}>
+                            <Edit className="h-4 w-4 mr-1" />
+                            Restock
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {lowStockProducts.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-yellow-600 mb-3">Low Stock ({lowStockProducts.length})</h3>
+                <div className="space-y-2">
+                  {lowStockProducts.map(product => (
+                    <div key={product.id} className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                      <div className="flex items-center gap-3">
+                        <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover rounded" />
+                        <div>
+                          <p className="font-medium">{product.name}</p>
+                          <p className="text-sm text-yellow-600">Stock: {product.stock_quantity}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {editingProduct?.id === product.id ? (
+                          <>
+                            <Input
+                              type="number"
+                              min="0"
+                              className="w-20"
+                              value={editStockQuantity}
+                              onChange={(e) => setEditStockQuantity(e.target.value)}
+                            />
+                            <Button size="sm" onClick={() => handleUpdateStock(product.id, parseInt(editStockQuantity) || 0)}>
+                              Save
+                            </Button>
+                          </>
+                        ) : (
+                          <Button size="sm" variant="outline" onClick={() => {
+                            setEditingProduct(product);
+                            setEditStockQuantity(product.stock_quantity.toString());
+                          }}>
+                            <Edit className="h-4 w-4 mr-1" />
+                            Update Stock
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

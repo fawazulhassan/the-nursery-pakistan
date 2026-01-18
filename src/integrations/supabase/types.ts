@@ -109,6 +109,7 @@ export type Database = {
           plant_type: string
           price: number
           sale_percentage: number | null
+          stock_quantity: number
           updated_at: string | null
         }
         Insert: {
@@ -122,6 +123,7 @@ export type Database = {
           plant_type: string
           price: number
           sale_percentage?: number | null
+          stock_quantity?: number
           updated_at?: string | null
         }
         Update: {
@@ -135,6 +137,7 @@ export type Database = {
           plant_type?: string
           price?: number
           sale_percentage?: number | null
+          stock_quantity?: number
           updated_at?: string | null
         }
         Relationships: []
@@ -186,6 +189,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      decrease_stock: {
+        Args: { p_product_id: string; p_quantity: number }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -193,6 +200,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      process_order_stock: { Args: { p_items: Json }; Returns: boolean }
+      validate_stock: { Args: { p_items: Json }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
