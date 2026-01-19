@@ -60,6 +60,8 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          payment_method: string
+          payment_status: string
           phone_number: string
           shipping_address: string
           status: string
@@ -70,6 +72,8 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          payment_method?: string
+          payment_status?: string
           phone_number: string
           shipping_address: string
           status?: string
@@ -80,6 +84,8 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          payment_method?: string
+          payment_status?: string
           phone_number?: string
           shipping_address?: string
           status?: string

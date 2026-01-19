@@ -30,6 +30,8 @@ interface Order {
   shipping_address: string;
   phone_number: string;
   created_at: string;
+  payment_method: string;
+  payment_status: string;
   profiles: {
     email: string;
     full_name: string | null;
@@ -185,6 +187,14 @@ const AdminOrdersPage = () => {
     }
   };
 
+  const getPaymentMethodLabel = (method: string) => {
+    return method === 'cod' ? 'Cash on Delivery' : 'Online Payment';
+  };
+
+  const getPaymentStatusBadgeVariant = (status: string) => {
+    return status === 'paid' ? 'default' : 'secondary';
+  };
+
   const handleLogout = async () => {
     await signOut();
     navigate('/auth');
@@ -284,6 +294,12 @@ const AdminOrdersPage = () => {
                           <p>Total: Rs {order.total_amount.toLocaleString()}</p>
                           <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
                           <p>Items: {order.order_items.length} product(s)</p>
+                          <p className="flex items-center gap-2 mt-2">
+                            Payment: {getPaymentMethodLabel(order.payment_method)} 
+                            <Badge variant={getPaymentStatusBadgeVariant(order.payment_status)}>
+                              {order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
+                            </Badge>
+                          </p>
                         </div>
                       </div>
                       
@@ -351,6 +367,13 @@ const AdminOrdersPage = () => {
                     <p>Status: <Badge variant={getStatusBadgeVariant(selectedOrder.status)}>{selectedOrder.status}</Badge></p>
                     <p>Date: {new Date(selectedOrder.created_at).toLocaleString()}</p>
                     <p>Total: Rs {selectedOrder.total_amount.toLocaleString()}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span>Payment:</span>
+                      <span>{getPaymentMethodLabel(selectedOrder.payment_method)}</span>
+                      <Badge variant={getPaymentStatusBadgeVariant(selectedOrder.payment_status)}>
+                        {selectedOrder.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </div>
