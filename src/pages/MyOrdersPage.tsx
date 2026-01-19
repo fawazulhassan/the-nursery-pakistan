@@ -30,6 +30,8 @@ interface Order {
   shipping_address: string;
   phone_number: string;
   created_at: string;
+  payment_method: string;
+  payment_status: string;
   order_items: OrderItem[];
 }
 
@@ -67,6 +69,8 @@ const MyOrdersPage = () => {
           shipping_address,
           phone_number,
           created_at,
+          payment_method,
+          payment_status,
           order_items (
             id,
             quantity,
@@ -120,6 +124,14 @@ const MyOrdersPage = () => {
       cancelled: 'Cancelled',
     };
     return labels[status] || status;
+  };
+
+  const getPaymentMethodLabel = (method: string) => {
+    return method === 'cod' ? 'Cash on Delivery' : 'Online Payment';
+  };
+
+  const getPaymentStatusBadgeVariant = (status: string) => {
+    return status === 'paid' ? 'default' : 'secondary';
   };
 
   const viewOrderDetails = (order: Order) => {
@@ -197,6 +209,12 @@ const MyOrdersPage = () => {
                               day: 'numeric',
                             })}</p>
                             <p>{order.order_items.length} item(s) • Total: Rs {order.total_amount.toLocaleString()}</p>
+                            <p className="flex items-center gap-2">
+                              {getPaymentMethodLabel(order.payment_method)} • 
+                              <Badge variant={getPaymentStatusBadgeVariant(order.payment_status)} className="text-xs">
+                                {order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
+                              </Badge>
+                            </p>
                           </div>
 
                           {/* Order Timeline */}
@@ -274,17 +292,28 @@ const MyOrdersPage = () => {
                 </div>
               </div>
 
-              <div>
-                <h4 className="font-semibold mb-2">Order Date</h4>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(selectedOrder.created_at).toLocaleString('en-PK', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Order Date</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(selectedOrder.created_at).toLocaleString('en-PK', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Payment</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {getPaymentMethodLabel(selectedOrder.payment_method)}
+                  </p>
+                  <Badge variant={getPaymentStatusBadgeVariant(selectedOrder.payment_status)} className="mt-1">
+                    {selectedOrder.payment_status === 'paid' ? 'Paid' : 'Payment Pending'}
+                  </Badge>
+                </div>
               </div>
 
               <div>

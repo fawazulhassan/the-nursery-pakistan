@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ArrowLeft, Banknote, CreditCard } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,6 +35,7 @@ const CheckoutPage = () => {
     city: "",
     notes: "",
   });
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,6 +104,9 @@ const CheckoutPage = () => {
         return;
       }
 
+      // Determine payment status based on method
+      const paymentStatus = paymentMethod === 'online' ? 'paid' : 'unpaid';
+
       // Create the order
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
@@ -111,6 +116,8 @@ const CheckoutPage = () => {
           status: 'pending',
           shipping_address: `${formData.address}, ${formData.city}`,
           phone_number: formData.phone,
+          payment_method: paymentMethod,
+          payment_status: paymentStatus,
         })
         .select()
         .single();
@@ -139,7 +146,9 @@ const CheckoutPage = () => {
 
       toast({
         title: "Order Placed Successfully!",
-        description: "We'll contact you shortly to confirm your order.",
+        description: paymentMethod === 'online' 
+          ? "Payment successful! Your order is being processed." 
+          : "We'll contact you shortly to confirm your order.",
       });
       
       clearCart();
@@ -273,6 +282,37 @@ const CheckoutPage = () => {
                             rows={3}
                           />
                         </div>
+
+                        {/* Payment Method Selection */}
+                        <div className="pt-4 border-t border-border">
+                          <Label className="text-base font-semibold">Payment Method *</Label>
+                          <RadioGroup
+                            value={paymentMethod}
+                            onValueChange={(value: 'cod' | 'online') => setPaymentMethod(value)}
+                            className="mt-3 space-y-3"
+                          >
+                            <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                              <RadioGroupItem value="cod" id="cod" />
+                              <Label htmlFor="cod" className="flex items-center gap-3 cursor-pointer flex-1">
+                                <Banknote className="h-5 w-5 text-primary" />
+                                <div>
+                                  <p className="font-medium">Cash on Delivery</p>
+                                  <p className="text-sm text-muted-foreground">Pay when you receive your order</p>
+                                </div>
+                              </Label>
+                            </div>
+                            <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                              <RadioGroupItem value="online" id="online" />
+                              <Label htmlFor="online" className="flex items-center gap-3 cursor-pointer flex-1">
+                                <CreditCard className="h-5 w-5 text-primary" />
+                                <div>
+                                  <p className="font-medium">Online Payment</p>
+                                  <p className="text-sm text-muted-foreground">Pay securely online (Credit/Debit Card)</p>
+                                </div>
+                              </Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -318,7 +358,9 @@ const CheckoutPage = () => {
 
                       <div className="bg-muted/50 p-4 rounded-lg mb-4">
                         <p className="text-sm text-muted-foreground">
-                          We'll contact you to confirm your order and arrange cash on delivery.
+                          {paymentMethod === 'cod' 
+                            ? "We'll contact you to confirm your order and arrange cash on delivery."
+                            : "You will be redirected to complete your payment securely."}
                         </p>
                       </div>
 
