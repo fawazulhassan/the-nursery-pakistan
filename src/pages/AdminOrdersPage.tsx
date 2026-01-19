@@ -115,7 +115,33 @@ const AdminOrdersPage = () => {
     setFilteredOrders(filtered);
   };
 
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  // Define valid status transitions
+  const VALID_TRANSITIONS: Record<string, string[]> = {
+    pending: ['processing', 'cancelled'],
+    processing: ['shipped', 'cancelled'],
+    shipped: ['delivered'],
+    delivered: [],
+    cancelled: [],
+  };
+
+  const canTransitionTo = (currentStatus: string, newStatus: string) => {
+    return VALID_TRANSITIONS[currentStatus]?.includes(newStatus) ?? false;
+  };
+
+  const getAvailableStatuses = (currentStatus: string) => {
+    return VALID_TRANSITIONS[currentStatus] || [];
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string, currentStatus: string) => {
+    if (!canTransitionTo(currentStatus, newStatus)) {
+      toast({
+        title: 'Invalid Transition',
+        description: `Cannot change status from "${currentStatus}" to "${newStatus}"`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('orders')
@@ -126,7 +152,7 @@ const AdminOrdersPage = () => {
 
       toast({
         title: 'Success',
-        description: 'Order status updated',
+        description: `Order status updated to "${newStatus}"`,
       });
 
       fetchOrders();
@@ -262,21 +288,27 @@ const AdminOrdersPage = () => {
                       </div>
                       
                       <div className="flex flex-col gap-2">
-                        <Select
-                          value={order.status}
-                          onValueChange={(value) => updateOrderStatus(order.id, value)}
-                        >
-                          <SelectTrigger className="w-[160px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="processing">Processing</SelectItem>
-                            <SelectItem value="shipped">Shipped</SelectItem>
-                            <SelectItem value="delivered">Delivered</SelectItem>
-                            <SelectItem value="cancelled">Cancelled</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        {getAvailableStatuses(order.status).length > 0 ? (
+                          <Select
+                            value=""
+                            onValueChange={(value) => updateOrderStatus(order.id, value, order.status)}
+                          >
+                            <SelectTrigger className="w-[160px]">
+                              <SelectValue placeholder="Change Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {getAvailableStatuses(order.status).map((status) => (
+                                <SelectItem key={status} value={status}>
+                                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <div className="w-[160px] text-center text-sm text-muted-foreground py-2">
+                            {order.status === 'delivered' ? 'Completed' : 'No actions'}
+                          </div>
+                        )}
                         <Button
                           variant="outline"
                           size="sm"

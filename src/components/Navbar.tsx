@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, ShoppingCart, User, Menu, LogOut } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, LogOut, Package } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +54,11 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             {user ? (
               <>
+                <Link to="/my-orders" className="hidden md:flex">
+                  <Button variant="ghost" size="icon" title="My Orders">
+                    <Package className="h-5 w-5" />
+                  </Button>
+                </Link>
                 {isAdmin && (
                   <Button
                     variant="secondary"
@@ -69,6 +74,7 @@ const Navbar = () => {
                   size="icon"
                   onClick={handleLogout}
                   className="hidden md:flex"
+                  title="Logout"
                 >
                   <LogOut className="h-5 w-5" />
                 </Button>
