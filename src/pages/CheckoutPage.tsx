@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, Banknote, CreditCard } from "lucide-react";
+import { ArrowLeft, Banknote, CreditCard, MapPin } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDefaultAddress } from "@/hooks/useDefaultAddress";
 
 interface StockError {
   product_id: string;
@@ -25,6 +26,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
+  const { defaultAddress, isLoading: addressLoading } = useDefaultAddress();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stockErrors, setStockErrors] = useState<StockError[]>([]);
   const [formData, setFormData] = useState({
@@ -36,6 +38,20 @@ const CheckoutPage = () => {
     notes: "",
   });
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
+
+  // Pre-fill form with default address when available
+  useEffect(() => {
+    if (defaultAddress && !formData.name) {
+      setFormData({
+        name: defaultAddress.full_name,
+        email: user?.email || "",
+        phone: defaultAddress.phone_number,
+        address: defaultAddress.address_line,
+        city: defaultAddress.city,
+        notes: defaultAddress.notes || "",
+      });
+    }
+  }, [defaultAddress, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,6 +221,18 @@ const CheckoutPage = () => {
                       <h2 className="text-2xl font-bold text-foreground mb-6">
                         Delivery Information
                       </h2>
+
+                      {defaultAddress && (
+                        <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-start gap-3">
+                          <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-foreground">Using your saved address</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              You can update your addresses in <Link to="/account" className="text-primary hover:underline">My Account</Link>
+                            </p>
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="space-y-4">
                         <div>
