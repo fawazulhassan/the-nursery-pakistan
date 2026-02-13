@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+
+const CART_STORAGE_BASE_KEY = "leafy-luxe-cart";
 
 export interface CartItem {
   id: string;
@@ -23,7 +26,31 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  // Unique storage key for each user. If not logged in, use a guest key.
+  const storageKey = user ? `${CART_STORAGE_BASE_KEY}-${user.id}` : `${CART_STORAGE_BASE_KEY}-guest`;
+
+  // Load cart when user changes
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setCartItems(Array.isArray(parsed) ? parsed : []);
+      } else {
+        setCartItems([]);
+      }
+    } catch {
+      setCartItems([]);
+    }
+  }, [storageKey]);
+
+  // Save cart when items change
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(cartItems));
+  }, [cartItems, storageKey]);
 
   const addToCart = (item: Omit<CartItem, "quantity">, quantity: number) => {
     setCartItems((prev) => {
@@ -71,12 +98,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const getCartTotal = () => {
     const total = cartItems.reduce((sum, item) => {
-      const price = typeof item.price === 'string' 
-        ? parseInt(item.price.replace(/[^0-9]/g, ""))
-        : item.price;
+      let price = 0;
+      if (typeof item.price === 'string') {
+        // Remove "Rs" and any non-numeric/non-decimal characters, then parse float
+        // Updated regex to keep the decimal point
+        const cleanPrice = item.price.replace(/[^0-9.]/g, "");
+        price = parseFloat(cleanPrice);
+      } else {
+        price = item.price;
+      }
+
+      // Safety check if parsing failed
+      if (isNaN(price)) price = 0;
+
       return sum + price * item.quantity;
     }, 0);
-    return `Rs ${total.toLocaleString()}`;
+
+    // Format back to locale string with max 2 decimals if needed
+    return `Rs ${total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
   };
 
   const getCartCount = () => {

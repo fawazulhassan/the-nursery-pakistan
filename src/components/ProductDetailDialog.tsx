@@ -17,8 +17,10 @@ interface ProductDetailDialogProps {
     id: string;
     name: string;
     price: string | number;
-    image: string;
+    image?: string;
+    image_url?: string;
     description?: string;
+    sale_percentage?: number | null;
   };
 }
 
@@ -30,15 +32,28 @@ const ProductDetailDialog = ({
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
+  const imageUrl = product.image_url || product.image || "";
+  const basePrice = typeof product.price === "string"
+    ? parseInt(product.price.replace(/[^0-9]/g, ""), 10)
+    : Number(product.price);
+  const salePrice = product.sale_percentage
+    ? basePrice - (basePrice * product.sale_percentage / 100)
+    : null;
+  const effectivePrice = salePrice ?? basePrice;
+  const displayPrice = typeof product.price === "string" ? product.price : `Rs ${effectivePrice.toLocaleString()}`;
+
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
 
   const handleAddToCart = () => {
-    const formattedProduct = {
-      ...product,
-      price: typeof product.price === 'string' ? product.price : `Rs ${product.price}`
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: `Rs ${effectivePrice.toLocaleString()}`,
+      image: imageUrl,
+      description: product.description,
     };
-    addToCart(formattedProduct, quantity);
+    addToCart(cartItem, quantity);
     setQuantity(1);
     onOpenChange(false);
   };
@@ -53,7 +68,7 @@ const ProductDetailDialog = ({
         <div className="grid md:grid-cols-2 gap-6">
           <div className="aspect-square overflow-hidden rounded-lg bg-muted">
             <img
-              src={product.image}
+              src={imageUrl}
               alt={product.name}
               className="w-full h-full object-cover"
             />
@@ -70,7 +85,7 @@ const ProductDetailDialog = ({
 
             <div className="border-t border-border pt-4">
               <p className="text-3xl font-bold text-primary mb-4">
-                {typeof product.price === 'string' ? product.price : `Rs ${product.price}`}
+                {displayPrice}
               </p>
               
               <div className="flex items-center gap-4 mb-6">

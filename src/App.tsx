@@ -7,6 +7,10 @@ import { CartProvider } from "@/context/CartContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
+import ProductsPage from "./pages/ProductsPage";
+import GuidePage from "./pages/GuidePage";
+import SearchPage from "./pages/SearchPage";
+import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import AuthPage from "./pages/AuthPage";
@@ -49,6 +53,10 @@ const AppRoutes = () => {
       {/* Public routes - accessible without login */}
       <Route path="/" element={<Index />} />
       <Route path="/category/:category" element={<CategoryPage />} />
+      <Route path="/products" element={<ProductsPage />} />
+      <Route path="/product/:id" element={<ProductPage />} />
+      <Route path="/guide" element={<GuidePage />} />
+      <Route path="/search" element={<SearchPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/auth" element={<AuthPage />} />
       

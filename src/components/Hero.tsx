@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-plants.jpg";
@@ -24,12 +25,14 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="group">
-                Shop Plants
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <Button size="lg" asChild className="group">
+                <Link to="/products">
+                  Shop Plants
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
-              <Button size="lg" variant="outline">
-                Plant Care Guide
+              <Button size="lg" variant="outline" asChild>
+                <Link to="/guide">Plant Care Guide</Link>
               </Button>
             </div>
 

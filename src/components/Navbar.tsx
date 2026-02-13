@@ -5,25 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { CATEGORIES } from "@/lib/constants";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { getCartCount } = useCart();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = searchQuery.trim();
+    if (trimmed) {
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+      setMobileMenuOpen(false);
+    }
+  };
 
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
   };
-
-  const categories = [
-    { name: "Indoor Plants", slug: "indoor-plants" },
-    { name: "Outdoor Plants", slug: "outdoor-plants" },
-    { name: "Pots & Accessories", slug: "pots-accessories" },
-    { name: "Fertilizers & Soil", slug: "fertilizers-soil" },
-    { name: "Sale", slug: "sale" },
-  ];
 
   return (
     <nav className="sticky top-0 z-50 bg-card border-b border-border">
@@ -39,16 +42,18 @@ const Navbar = () => {
           </Link>
 
           {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-md">
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Search plants, pots, accessories..."
                 className="pl-10"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-          </div>
+          </form>
 
           {/* Actions */}
           <div className="flex items-center gap-2">
@@ -108,23 +113,25 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Search */}
-        <div className="md:hidden mt-3">
+        <form onSubmit={handleSearch} className="md:hidden mt-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               type="search"
               placeholder="Search..."
               className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-        </div>
+        </form>
       </div>
 
       {/* Categories */}
       <div className="border-t border-border">
         <div className="container mx-auto px-4">
           <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:flex md:items-center md:gap-1 py-2`}>
-            {categories.map((category) => (
+            {CATEGORIES.map((category) => (
               <Link
                 key={category.slug}
                 to={`/category/${category.slug}`}

@@ -1,0 +1,141 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ShoppingCart, Tag, ArrowRight } from "lucide-react";
+import ProductDetailDialog from "./ProductDetailDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+const HomeSaleSection = () => {
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchSaleProducts();
+  }, []);
+
+  const fetchSaleProducts = async () => {
+    try {
+      const now = new Date().toISOString();
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_visible", true)
+        .gt("sale_percentage", 0)
+        .order("created_at", { ascending: false })
+        .limit(6);
+
+      if (error) throw error;
+
+      const filtered = (data || []).filter((p) => {
+        if (!p.sale_percentage || p.sale_percentage <= 0) return false;
+        if (p.sale_start_at && new Date(p.sale_start_at) > new Date(now)) return false;
+        if (p.sale_end_at && new Date(p.sale_end_at) < new Date(now)) return false;
+        return true;
+      });
+      setProducts(filtered);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load sale products",
+        variant: "destructive",
+      });
+      setProducts([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const calculateSalePrice = (price: number, salePercentage: number | null) => {
+    if (!salePercentage) return null;
+    return price - (price * salePercentage / 100);
+  };
+
+  if (isLoading || products.length === 0) return null;
+
+  return (
+    <section className="py-16 bg-primary/5 border-y border-border">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              On Sale Now
+            </h2>
+            <p className="text-muted-foreground">
+              Limited time deals on our most popular plants and accessories
+            </p>
+          </div>
+          <Button asChild variant="outline" size="lg">
+            <Link to="/category/sale" className="flex items-center gap-2">
+              View All Deals
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map((product, index) => (
+            <Card
+              key={product.id}
+              className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-border"
+            >
+              <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-muted">
+                <img
+                  src={product.image_url}
+                  alt={product.name}
+                  className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <Badge className="bg-red-500 text-white text-sm px-3 py-1">
+                    <Tag className="h-3 w-3 mr-1" />
+                    {product.sale_percentage}% OFF
+                  </Badge>
+                </div>
+              </Link>
+              <CardContent className="p-4">
+                <div className="text-xs text-muted-foreground mb-1">{product.category}</div>
+                <Link to={`/product/${product.id}`}>
+                  <h3 className="font-semibold text-lg mb-2 text-foreground hover:text-primary">
+                    {product.name}
+                  </h3>
+                </Link>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg line-through text-muted-foreground">
+                    Rs {product.price}
+                  </span>
+                  <span className="text-2xl font-bold text-red-500">
+                    Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
+                  </span>
+                </div>
+              </CardContent>
+              <CardFooter className="p-4 pt-0">
+                <Button
+                  className="w-full"
+                  onClick={() => setSelectedProduct(product)}
+                  disabled={product.stock_quantity === 0}
+                >
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {selectedProduct && (
+        <ProductDetailDialog
+          open={!!selectedProduct}
+          onOpenChange={(open) => !open && setSelectedProduct(null)}
+          product={selectedProduct}
+        />
+      )}
+    </section>
+  );
+};
+
+export default HomeSaleSection;

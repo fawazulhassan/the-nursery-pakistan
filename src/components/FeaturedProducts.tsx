@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ const FeaturedProducts = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
+        .eq('is_visible', true)
         .order('created_at', { ascending: false })
         .limit(8);
 
@@ -74,7 +76,7 @@ const FeaturedProducts = () => {
               className="group hover:shadow-xl transition-all duration-300 animate-fade-in overflow-hidden border-border"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="relative overflow-hidden bg-muted">
+              <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-muted">
                 <img
                   src={product.image_url}
                   alt={product.name}
@@ -115,15 +117,17 @@ const FeaturedProducts = () => {
                     </span>
                   )}
                 </div>
-              </div>
+              </Link>
 
               <CardContent className="p-4">
                 <div className="text-xs text-muted-foreground mb-1">
                   {product.category}
                 </div>
-                <h3 className="font-semibold text-lg mb-2 text-foreground">
-                  {product.name}
-                </h3>
+                <Link to={`/product/${product.id}`}>
+                  <h3 className="font-semibold text-lg mb-2 text-foreground hover:text-primary">
+                    {product.name}
+                  </h3>
+                </Link>
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {product.description}
                 </p>
@@ -160,8 +164,8 @@ const FeaturedProducts = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            View All Products
+          <Button variant="outline" size="lg" asChild>
+            <Link to="/products">View All Products</Link>
           </Button>
         </div>
       </div>
