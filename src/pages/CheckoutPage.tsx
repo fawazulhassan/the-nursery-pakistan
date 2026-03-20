@@ -200,24 +200,24 @@ const CheckoutPage = () => {
       
       <main className="flex-1">
         <section className="bg-muted/30 border-b border-border">
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-6 sm:py-8">
             <Link to="/cart" className="inline-flex items-center text-muted-foreground hover:text-primary mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Cart
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
               Checkout
             </h1>
           </div>
         </section>
 
-        <section className="py-12">
+        <section className="py-8 sm:py-12">
           <div className="container mx-auto px-4">
             <form onSubmit={handleSubmit}>
-              <div className="grid lg:grid-cols-3 gap-8">
+              <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
                 <div className="lg:col-span-2">
                   <Card>
-                    <CardContent className="p-6">
+                    <CardContent className="p-4 sm:p-6">
                       <h2 className="text-2xl font-bold text-foreground mb-6">
                         Delivery Information
                       </h2>
@@ -347,8 +347,8 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="lg:col-span-1">
-                  <Card className="sticky top-4">
-                    <CardContent className="p-6">
+                  <Card className="lg:sticky lg:top-4">
+                    <CardContent className="p-4 sm:p-6">
                       <h3 className="text-xl font-bold text-foreground mb-4">
                         Order Summary
                       </h3>

@@ -36,18 +36,18 @@ const Hero = () => {
               </Button>
             </div>
 
-            <div className="flex items-center gap-8 pt-4">
+            <div className="flex items-center gap-4 sm:gap-8 pt-4">
               <div>
-                <div className="text-2xl font-bold text-primary">500+</div>
-                <div className="text-sm text-muted-foreground">Plant Varieties</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary">500+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Plant Varieties</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-primary">50K+</div>
-                <div className="text-sm text-muted-foreground">Happy Customers</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary">50K+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Happy Customers</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-primary">100%</div>
-                <div className="text-sm text-muted-foreground">Organic Care</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary">100%</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Organic Care</div>
               </div>
             </div>
           </div>

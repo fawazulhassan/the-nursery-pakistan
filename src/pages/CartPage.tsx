@@ -69,12 +69,12 @@ const CartPage = () => {
 
       <main className="flex-1">
         <section className="bg-muted/30 border-b border-border">
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-6 sm:py-8">
             <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Continue Shopping
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
               Shopping Cart
             </h1>
             <p className="text-muted-foreground mt-2">
@@ -83,9 +83,9 @@ const CartPage = () => {
           </div>
         </section>
 
-        <section className="py-12">
+        <section className="py-8 sm:py-12">
           <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
               <div className="lg:col-span-2 space-y-4">
                 {cartItems.map((item) => {
                   const currentStock = stockLevels[item.id] ?? 999; // Default high if loading
@@ -96,15 +96,15 @@ const CartPage = () => {
                   return (
                     <Card key={item.id} className={isOutOfStock ? "opacity-75" : ""}>
                       <CardContent className="p-4">
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-4">
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="w-24 h-24 object-cover rounded-lg bg-muted"
+                            className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted shrink-0"
                           />
 
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-lg text-foreground mb-1">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-base sm:text-lg text-foreground mb-1">
                               {item.name}
                             </h3>
                             <p className="text-primary font-bold mb-3">{item.price}</p>
@@ -163,7 +163,7 @@ const CartPage = () => {
                             variant="ghost"
                             size="icon"
                             onClick={() => removeFromCart(item.id)}
-                            className="text-destructive hover:text-destructive"
+                            className="text-destructive hover:text-destructive shrink-0 self-start sm:self-center"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -175,8 +175,8 @@ const CartPage = () => {
               </div>
 
               <div className="lg:col-span-1">
-                <Card className="sticky top-4">
-                  <CardContent className="p-6">
+                <Card className="lg:sticky lg:top-4">
+                  <CardContent className="p-4 sm:p-6">
                     <h3 className="text-xl font-bold text-foreground mb-4">
                       Order Summary
                     </h3>

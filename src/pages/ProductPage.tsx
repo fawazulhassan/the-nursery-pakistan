@@ -112,17 +112,17 @@ const ProductPage = () => {
       <Navbar />
 
       <main className="flex-1">
-        <section className="py-12">
+        <section className="py-8 sm:py-12">
           <div className="container mx-auto px-4">
             <Link
               to="/products"
-              className="inline-flex items-center text-muted-foreground hover:text-primary mb-8"
+              className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 sm:mb-8"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Products
             </Link>
 
-            <div className="grid md:grid-cols-2 gap-12">
+            <div className="grid md:grid-cols-2 gap-6 sm:gap-12">
               <div className="aspect-square overflow-hidden rounded-2xl bg-muted">
                 <img
                   src={product.image_url}
@@ -143,19 +143,19 @@ const ProductPage = () => {
                     <Badge variant="destructive">Sold Out</Badge>
                   )}
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {product.name}
                 </h1>
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 mb-6 flex-wrap">
                   {product.sale_percentage ? (
                     <>
-                      <span className="text-2xl line-through text-muted-foreground">
+                      <span className="text-xl sm:text-2xl line-through text-muted-foreground">
                         Rs {product.price}
                       </span>
-                      <span className="text-3xl font-bold text-red-500">{displayPrice}</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-red-500">{displayPrice}</span>
                     </>
                   ) : (
-                    <span className="text-3xl font-bold text-primary">{displayPrice}</span>
+                    <span className="text-2xl sm:text-3xl font-bold text-primary">{displayPrice}</span>
                   )}
                 </div>
                 <p className="text-muted-foreground mb-8 leading-relaxed">

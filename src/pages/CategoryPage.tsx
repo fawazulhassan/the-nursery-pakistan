@@ -92,13 +92,13 @@ const CategoryPage = () => {
       <main className="flex-1">
         {/* Breadcrumb & Header */}
         <section className="bg-muted/30 border-b border-border">
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-6 sm:py-8">
             <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
             </Link>
             
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
               {categoryName}
             </h1>
             <p className="text-muted-foreground text-lg max-w-3xl">
@@ -117,15 +117,16 @@ const CategoryPage = () => {
         <section className="py-12">
           <div className="container mx-auto px-4">
             {/* Filter Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-8 p-4 bg-card border border-border rounded-lg">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 p-3 sm:p-4 bg-card border border-border rounded-lg">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">Filter by Price:</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex overflow-x-auto gap-2 pb-1 sm:pb-0 -mx-1 sm:mx-0">
                 <Button
                   variant={priceFilter === "all" ? "default" : "outline"}
                   size="sm"
+                  className="shrink-0"
                   onClick={() => setPriceFilter("all")}
                 >
                   All
@@ -133,6 +134,7 @@ const CategoryPage = () => {
                 <Button
                   variant={priceFilter === "low" ? "default" : "outline"}
                   size="sm"
+                  className="shrink-0"
                   onClick={() => setPriceFilter("low")}
                 >
                   Under Rs 1,500
@@ -140,6 +142,7 @@ const CategoryPage = () => {
                 <Button
                   variant={priceFilter === "mid" ? "default" : "outline"}
                   size="sm"
+                  className="shrink-0"
                   onClick={() => setPriceFilter("mid")}
                 >
                   Rs 1,500 - 3,000
@@ -147,6 +150,7 @@ const CategoryPage = () => {
                 <Button
                   variant={priceFilter === "high" ? "default" : "outline"}
                   size="sm"
+                  className="shrink-0"
                   onClick={() => setPriceFilter("high")}
                 >
                   Above Rs 3,000
@@ -160,7 +164,7 @@ const CategoryPage = () => {
                 <p className="text-muted-foreground text-lg">Loading products...</p>
               </div>
             ) : filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {filteredProducts.map((product, index) => (
                   <Card
                     key={product.id}
@@ -171,7 +175,7 @@ const CategoryPage = () => {
                       <img
                         src={product.image_url}
                         alt={product.name}
-                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-40 sm:h-52 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <Button
                         size="icon"
@@ -210,34 +214,34 @@ const CategoryPage = () => {
                       </div>
                     </Link>
 
-                    <CardContent className="p-4">
+                    <CardContent className="p-3 sm:p-4">
                       <Link to={`/product/${product.id}`}>
-                        <h3 className="font-semibold text-lg mb-2 text-foreground hover:text-primary">
+                        <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-foreground hover:text-primary line-clamp-2">
                           {product.name}
                         </h3>
                       </Link>
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3 line-clamp-2">
                         {product.description}
                       </p>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                         {product.sale_percentage ? (
                           <>
-                            <div className="text-xl line-through text-muted-foreground">
+                            <div className="text-sm sm:text-xl line-through text-muted-foreground">
                               Rs {product.price}
                             </div>
-                            <div className="text-2xl font-bold text-red-500">
+                            <div className="text-base sm:text-2xl font-bold text-red-500">
                               Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
                             </div>
                           </>
                         ) : (
-                          <div className="text-2xl font-bold text-primary">
+                          <div className="text-base sm:text-2xl font-bold text-primary">
                             Rs {product.price}
                           </div>
                         )}
                       </div>
                     </CardContent>
 
-                    <CardFooter className="p-4 pt-0">
+                    <CardFooter className="p-3 sm:p-4 pt-0">
                       <Button
                         className="w-full group/btn"
                         onClick={() => setSelectedProduct(product)}

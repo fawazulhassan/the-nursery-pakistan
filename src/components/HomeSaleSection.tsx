@@ -77,7 +77,7 @@ const HomeSaleSection = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {products.map((product, index) => (
             <Card
               key={product.id}
@@ -87,7 +87,7 @@ const HomeSaleSection = () => {
                 <img
                   src={product.image_url}
                   alt={product.name}
-                  className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-40 sm:h-48 lg:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-red-500 text-white text-sm px-3 py-1">
@@ -96,23 +96,23 @@ const HomeSaleSection = () => {
                   </Badge>
                 </div>
               </Link>
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="text-xs text-muted-foreground mb-1">{product.category}</div>
                 <Link to={`/product/${product.id}`}>
-                  <h3 className="font-semibold text-lg mb-2 text-foreground hover:text-primary">
+                  <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-foreground hover:text-primary line-clamp-2">
                     {product.name}
                   </h3>
                 </Link>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg line-through text-muted-foreground">
+                <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                  <span className="text-sm sm:text-lg line-through text-muted-foreground">
                     Rs {product.price}
                   </span>
-                  <span className="text-2xl font-bold text-red-500">
+                  <span className="text-base sm:text-2xl font-bold text-red-500">
                     Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
                   </span>
                 </div>
               </CardContent>
-              <CardFooter className="p-4 pt-0">
+              <CardFooter className="p-3 sm:p-4 pt-0">
                 <Button
                   className="w-full"
                   onClick={() => setSelectedProduct(product)}

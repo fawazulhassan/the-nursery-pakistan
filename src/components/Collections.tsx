@@ -45,7 +45,7 @@ const Collections = () => {
             <Link
               key={collection.title}
               to={`/category/${collection.slug}`}
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br p-8 hover:shadow-2xl transition-all duration-300 animate-fade-in block"
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br p-6 sm:p-8 hover:shadow-2xl transition-all duration-300 animate-fade-in block"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${collection.color} opacity-20`} />
@@ -55,7 +55,7 @@ const Collections = () => {
                   {collection.items}
                 </div>
                 
-                <h3 className="text-2xl font-bold text-foreground">
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground">
                   {collection.title}
                 </h3>
                 

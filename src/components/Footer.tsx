@@ -60,9 +60,9 @@ const Footer = () => {
             <p className="text-muted-foreground text-sm mb-4">
               Get plant care tips and exclusive offers delivered to your inbox.
             </p>
-            <div className="flex gap-2">
-              <Input placeholder="Your email" />
-              <Button>Subscribe</Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Input placeholder="Your email" className="w-full" />
+              <Button className="w-full sm:w-auto">Subscribe</Button>
             </div>
           </div>
         </div>

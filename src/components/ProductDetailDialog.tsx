@@ -60,12 +60,12 @@ const ProductDetailDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-2xl p-4 sm:p-6 w-[calc(100vw-2rem)] sm:w-full">
         <DialogHeader>
-          <DialogTitle className="text-2xl">{product.name}</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl">{product.name}</DialogTitle>
         </DialogHeader>
         
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="aspect-square overflow-hidden rounded-lg bg-muted">
             <img
               src={imageUrl}
@@ -84,7 +84,7 @@ const ProductDetailDialog = ({
             </div>
 
             <div className="border-t border-border pt-4">
-              <p className="text-3xl font-bold text-primary mb-4">
+              <p className="text-2xl sm:text-3xl font-bold text-primary mb-4">
                 {displayPrice}
               </p>
               

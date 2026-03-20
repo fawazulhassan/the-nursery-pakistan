@@ -127,10 +127,37 @@ const Navbar = () => {
         </form>
       </div>
 
-      {/* Categories */}
+      {/* Categories + Mobile Account Links */}
       <div className="border-t border-border">
         <div className="container mx-auto px-4">
           <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:flex md:items-center md:gap-1 py-2`}>
+            {user && (
+              <div className="flex flex-col md:hidden border-b border-border pb-2 mb-2 gap-1">
+                <Link to="/account" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-sm hover:text-primary">
+                    <User className="h-4 w-4 mr-2" />
+                    My Account
+                  </Button>
+                </Link>
+                {isAdmin && (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-sm hover:text-primary"
+                    onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }}
+                  >
+                    Admin
+                  </Button>
+                )}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-sm hover:text-primary text-destructive"
+                  onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            )}
             {CATEGORIES.map((category) => (
               <Link
                 key={category.slug}
