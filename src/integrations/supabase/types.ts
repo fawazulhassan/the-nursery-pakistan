@@ -150,14 +150,10 @@ export type Database = {
           id: string
           image_url: string | null
           in_stock: boolean | null
-          is_visible: boolean
           name: string
           plant_type: string
           price: number
-          sale_end_at: string | null
           sale_percentage: number | null
-          sale_quantity_limit: number | null
-          sale_start_at: string | null
           stock_quantity: number
           updated_at: string | null
         }
@@ -168,14 +164,10 @@ export type Database = {
           id?: string
           image_url?: string | null
           in_stock?: boolean | null
-          is_visible?: boolean
           name: string
           plant_type: string
           price: number
-          sale_end_at?: string | null
           sale_percentage?: number | null
-          sale_quantity_limit?: number | null
-          sale_start_at?: string | null
           stock_quantity?: number
           updated_at?: string | null
         }
@@ -186,14 +178,10 @@ export type Database = {
           id?: string
           image_url?: string | null
           in_stock?: boolean | null
-          is_visible?: boolean
           name?: string
           plant_type?: string
           price?: number
-          sale_end_at?: string | null
           sale_percentage?: number | null
-          sale_quantity_limit?: number | null
-          sale_start_at?: string | null
           stock_quantity?: number
           updated_at?: string | null
         }
