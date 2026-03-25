@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Tag, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { fetchProductsWithFallback } from "@/lib/productQueries";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
@@ -30,13 +30,9 @@ const SearchPage = () => {
   const fetchSearchResults = async () => {
     setIsLoading(true);
     try {
-      const searchTerm = `%${q.trim()}%`;
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_visible", true)
-        .or(`name.ilike.${searchTerm},description.ilike.${searchTerm}`)
-        .order("created_at", { ascending: false });
+      const { data, error } = await fetchProductsWithFallback({
+        searchTerm: q.trim(),
+      });
 
       if (error) throw error;
       setProducts(data || []);

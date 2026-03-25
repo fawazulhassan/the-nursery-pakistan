@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Tag } from "lucide-react";
 import ProductDetailDialog from "./ProductDetailDialog";
-import { supabase } from "@/integrations/supabase/client";
+import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 
 const FeaturedProducts = () => {
@@ -20,12 +20,7 @@ const FeaturedProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('is_visible', true)
-        .order('created_at', { ascending: false })
-        .limit(8);
+      const { data, error } = await fetchProductsWithFallback({ limit: 8 });
 
       if (error) throw error;
       setProducts(data || []);

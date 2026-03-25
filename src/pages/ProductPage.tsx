@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/context/CartContext";
+import { fetchProductsWithFallback } from "@/lib/productQueries";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,15 +26,10 @@ const ProductPage = () => {
     if (!id) return;
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", id)
-        .eq("is_visible", true)
-        .single();
+      const { data, error } = await fetchProductsWithFallback({ id });
 
       if (error) throw error;
-      setProduct(data);
+      setProduct((data || [])[0] || null);
     } catch (error: any) {
       toast({
         title: "Error",

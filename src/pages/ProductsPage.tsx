@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Tag, ArrowLeft, SlidersHorizontal } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CATEGORIES as CATEGORY_LIST } from "@/lib/constants";
+import { fetchProductsWithFallback } from "@/lib/productQueries";
 
 const CATEGORIES = [
   { name: "All", value: "all" },
@@ -31,11 +31,7 @@ const ProductsPage = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_visible", true)
-        .order("created_at", { ascending: false });
+      const { data, error } = await fetchProductsWithFallback();
 
       if (error) throw error;
       setProducts(data || []);

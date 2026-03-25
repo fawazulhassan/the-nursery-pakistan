@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Tag, ArrowRight } from "lucide-react";
 import ProductDetailDialog from "./ProductDetailDialog";
-import { supabase } from "@/integrations/supabase/client";
+import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 
 const HomeSaleSection = () => {
@@ -21,13 +21,10 @@ const HomeSaleSection = () => {
   const fetchSaleProducts = async () => {
     try {
       const now = new Date().toISOString();
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_visible", true)
-        .gt("sale_percentage", 0)
-        .order("created_at", { ascending: false })
-        .limit(6);
+      const { data, error } = await fetchProductsWithFallback({
+        saleOnly: true,
+        limit: 6,
+      });
 
       if (error) throw error;
 

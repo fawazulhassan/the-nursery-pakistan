@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Tag, ArrowLeft, SlidersHorizontal } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { slugToCategory } from "@/lib/constants";
+import { fetchProductsWithFallback } from "@/lib/productQueries";
 
 const CategoryPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -28,15 +28,11 @@ const CategoryPage = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      let query = supabase.from('products').select('*').eq('is_visible', true).order('created_at', { ascending: false });
-
-      if (category === 'sale') {
-        query = query.gt('sale_percentage', 0);
-      } else {
-        query = query.eq('category', categoryName);
-      }
-
-      const { data, error } = await query;
+      const { data, error } = await fetchProductsWithFallback(
+        category === "sale"
+          ? { saleOnly: true }
+          : { category: categoryName }
+      );
 
       if (error) throw error;
       let result = data || [];
