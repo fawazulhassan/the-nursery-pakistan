@@ -62,7 +62,7 @@ const AppRoutes = () => {
       <Route path="/auth" element={<AuthPage />} />
       
       {/* Protected routes - require authentication */}
-      <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+      <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/my-orders" element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
       <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
       

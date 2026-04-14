@@ -24,7 +24,9 @@ interface OrderItem {
 
 interface Order {
   id: string;
-  user_id: string;
+  user_id: string | null;
+  customer_name: string | null;
+  customer_email: string | null;
   total_amount: number;
   status: string;
   shipping_address: string;
@@ -103,10 +105,13 @@ const AdminOrdersPage = () => {
     let filtered = orders;
 
     if (searchTerm) {
+      const normalizedSearch = searchTerm.toLowerCase();
       filtered = filtered.filter(order =>
-        order.profiles?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.profiles?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.id.toLowerCase().includes(searchTerm.toLowerCase())
+        order.profiles?.email?.toLowerCase().includes(normalizedSearch) ||
+        order.profiles?.full_name?.toLowerCase().includes(normalizedSearch) ||
+        order.customer_email?.toLowerCase().includes(normalizedSearch) ||
+        order.customer_name?.toLowerCase().includes(normalizedSearch) ||
+        order.id.toLowerCase().includes(normalizedSearch)
       );
     }
 
@@ -205,6 +210,12 @@ const AdminOrdersPage = () => {
     setIsDialogOpen(true);
   };
 
+  const getDisplayName = (order: Order) =>
+    order.profiles?.full_name || order.customer_name || order.profiles?.email || 'Unknown';
+
+  const getDisplayEmail = (order: Order) =>
+    order.profiles?.email || order.customer_email || 'N/A';
+
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
@@ -288,8 +299,8 @@ const AdminOrdersPage = () => {
                           </Badge>
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1">
-                          <p>Customer: {order.profiles?.full_name || order.profiles?.email || 'Unknown'}</p>
-                          <p>Email: {order.profiles?.email || 'N/A'}</p>
+                          <p>Customer: {getDisplayName(order)}</p>
+                          <p>Email: {getDisplayEmail(order)}</p>
                           <p>Phone: {order.phone_number}</p>
                           <p>Total: Rs {order.total_amount.toLocaleString()}</p>
                           <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
@@ -355,8 +366,8 @@ const AdminOrdersPage = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Customer Information</h4>
                   <div className="text-sm space-y-1">
-                    <p>Name: {selectedOrder.profiles?.full_name || 'N/A'}</p>
-                    <p>Email: {selectedOrder.profiles?.email || 'N/A'}</p>
+                    <p>Name: {getDisplayName(selectedOrder)}</p>
+                    <p>Email: {getDisplayEmail(selectedOrder)}</p>
                     <p>Phone: {selectedOrder.phone_number}</p>
                   </div>
                 </div>

@@ -25,8 +25,8 @@ interface StockError {
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cartItems, getCartTotal, clearCart } = useCart();
-  const { user } = useAuth();
-  const { defaultAddress, isLoading: addressLoading } = useDefaultAddress();
+  const { user, loading: authLoading } = useAuth();
+  const { defaultAddress } = useDefaultAddress();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stockErrors, setStockErrors] = useState<StockError[]>([]);
   const [formData, setFormData] = useState({
@@ -55,12 +55,11 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!user) {
+
+    if (authLoading) {
       toast({
-        title: "Error",
-        description: "You must be logged in to place an order.",
-        variant: "destructive",
+        title: "Please wait",
+        description: "Checking your session before placing order.",
       });
       return;
     }
@@ -106,59 +105,34 @@ const CheckoutPage = () => {
         return sum + price * item.quantity;
       }, 0);
 
-      // Process stock decrease atomically
-      const { error: processError } = await supabase
-        .rpc('process_order_stock', { p_items: stockCheckItems });
-
-      if (processError) {
-        toast({
-          title: "Stock Error",
-          description: "Some items are no longer available. Please refresh and try again.",
-          variant: "destructive",
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
       // Determine payment status based on method
       const paymentStatus = paymentMethod === 'online' ? 'paid' : 'unpaid';
 
-      // Create the order
-      const { data: orderData, error: orderError } = await supabase
-        .from('orders')
-        .insert({
-          user_id: user.id,
-          total_amount: totalAmount,
-          status: 'pending',
-          shipping_address: `${formData.address}, ${formData.city}`,
-          phone_number: formData.phone,
-          payment_method: paymentMethod,
-          payment_status: paymentStatus,
-        })
-        .select()
-        .single();
-
-      if (orderError) throw orderError;
-
-      // Create order items
-      const orderItems = cartItems.map(item => {
+      // Build atomic checkout payload (order + items + stock updates in one transaction)
+      const checkoutItems = cartItems.map(item => {
         const price = typeof item.price === 'string' 
           ? parseInt(item.price.replace(/[^0-9]/g, ""))
           : item.price;
         
         return {
-          order_id: orderData.id,
           product_id: item.id,
           quantity: item.quantity,
           price: price,
         };
       });
 
-      const { error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItems);
+      const { error: checkoutError } = await supabase.rpc('create_checkout_order', {
+        p_total_amount: totalAmount,
+        p_shipping_address: `${formData.address}, ${formData.city}`,
+        p_phone_number: formData.phone,
+        p_payment_method: paymentMethod,
+        p_payment_status: paymentStatus,
+        p_customer_name: formData.name,
+        p_customer_email: formData.email,
+        p_items: checkoutItems,
+      });
 
-      if (itemsError) throw itemsError;
+      if (checkoutError) throw checkoutError;
 
       toast({
         title: "Order Placed Successfully!",
@@ -222,7 +196,15 @@ const CheckoutPage = () => {
                         Delivery Information
                       </h2>
 
-                      {defaultAddress && (
+                      {!user && (
+                        <div className="mb-6 p-4 bg-muted/40 border border-border rounded-lg">
+                          <p className="text-sm text-muted-foreground">
+                            You are checking out as a guest. Log in to save addresses and view order history.
+                          </p>
+                        </div>
+                      )}
+
+                      {user && defaultAddress && (
                         <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-start gap-3">
                           <MapPin className="h-5 w-5 text-primary mt-0.5" />
                           <div className="flex-1">
@@ -392,8 +374,8 @@ const CheckoutPage = () => {
                         </p>
                       </div>
 
-                      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting ? "Placing Order..." : "Place Order"}
+                      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || authLoading}>
+                        {authLoading ? "Checking Session..." : isSubmitting ? "Placing Order..." : "Place Order"}
                       </Button>
                     </CardContent>
                   </Card>

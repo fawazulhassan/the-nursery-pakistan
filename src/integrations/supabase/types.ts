@@ -97,6 +97,8 @@ export type Database = {
       }
       orders: {
         Row: {
+          customer_email: string | null
+          customer_name: string | null
           created_at: string
           id: string
           payment_method: string
@@ -106,9 +108,11 @@ export type Database = {
           status: string
           total_amount: number
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
+          customer_email?: string | null
+          customer_name?: string | null
           created_at?: string
           id?: string
           payment_method?: string
@@ -118,9 +122,11 @@ export type Database = {
           status?: string
           total_amount: number
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
+          customer_email?: string | null
+          customer_name?: string | null
           created_at?: string
           id?: string
           payment_method?: string
@@ -130,7 +136,7 @@ export type Database = {
           status?: string
           total_amount?: number
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -234,6 +240,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_checkout_order: {
+        Args: {
+          p_customer_email: string
+          p_customer_name: string
+          p_items: Json
+          p_payment_method: string
+          p_payment_status: string
+          p_phone_number: string
+          p_shipping_address: string
+          p_total_amount: number
+        }
+        Returns: string
+      }
       decrease_stock: {
         Args: { p_product_id: string; p_quantity: number }
         Returns: boolean
