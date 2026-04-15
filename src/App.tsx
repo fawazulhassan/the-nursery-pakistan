@@ -21,6 +21,8 @@ import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import AccountPage from "./pages/AccountPage";
+import LandscapingServicesPage from "./pages/LandscapingServicesPage";
+import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +60,8 @@ const AppRoutes = () => {
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/guide" element={<GuidePage />} />
+      <Route path="/landscaping-services" element={<LandscapingServicesPage />} />
+      <Route path="/flower-workshop" element={<FlowerWorkshopPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/auth" element={<AuthPage />} />
