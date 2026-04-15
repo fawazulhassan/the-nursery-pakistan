@@ -59,7 +59,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             {user ? (
               <>
-                <Link to="/account" className="hidden md:flex">
+                <Link to="/account" className="flex">
                   <Button variant="ghost" size="icon" title="My Account">
                     <User className="h-5 w-5" />
                   </Button>
@@ -86,7 +86,7 @@ const Navbar = () => {
               </>
             ) : (
               <Link to="/auth">
-                <Button variant="ghost" size="icon" className="hidden md:flex">
+                <Button variant="ghost" size="icon" title="Login or create account">
                   <User className="h-5 w-5" />
                 </Button>
               </Link>
@@ -131,6 +131,16 @@ const Navbar = () => {
       <div className="border-t border-border">
         <div className="container mx-auto px-4">
           <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:flex md:items-center md:gap-1 py-2`}>
+            {!user && (
+              <div className="flex flex-col md:hidden border-b border-border pb-2 mb-2 gap-1">
+                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-sm hover:text-primary">
+                    <User className="h-4 w-4 mr-2" />
+                    Login / Create Account
+                  </Button>
+                </Link>
+              </div>
+            )}
             {user && (
               <div className="flex flex-col md:hidden border-b border-border pb-2 mb-2 gap-1">
                 <Link to="/account" onClick={() => setMobileMenuOpen(false)}>
