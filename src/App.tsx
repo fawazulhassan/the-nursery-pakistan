@@ -19,6 +19,7 @@ import AuthPage from "./pages/AuthPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
+import AdminReviewsPage from "./pages/AdminReviewsPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import AccountPage from "./pages/AccountPage";
 import LandscapingServicesPage from "./pages/LandscapingServicesPage";
@@ -75,6 +76,7 @@ const AppRoutes = () => {
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsersPage /></ProtectedRoute>} />
       <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrdersPage /></ProtectedRoute>} />
+      <Route path="/admin/reviews" element={<ProtectedRoute adminOnly><AdminReviewsPage /></ProtectedRoute>} />
       
       <Route path="*" element={<NotFound />} />
     </Routes>

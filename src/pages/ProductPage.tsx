@@ -3,11 +3,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/context/CartContext";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
+import ReviewList from "@/components/ReviewList";
+import ReviewForm from "@/components/ReviewForm";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,8 +19,10 @@ const ProductPage = () => {
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [showReviewForm, setShowReviewForm] = useState(false);
   const { toast } = useToast();
   const { addToCart } = useCart();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (id) fetchProduct();
@@ -197,9 +203,40 @@ const ProductPage = () => {
                 </Button>
               </div>
             </div>
+
+            <section className="mt-14 border-t pt-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Customer Reviews</h2>
+              <p className="text-muted-foreground mb-6">
+                Reviews from customers who bought this product.
+              </p>
+
+              <ReviewList productSlug={product.id} />
+
+              <div className="mt-6">
+                {user ? (
+                  <Button onClick={() => setShowReviewForm(true)}>Write a Review</Button>
+                ) : (
+                  <Button asChild>
+                    <Link to="/auth">Log in to write a review</Link>
+                  </Button>
+                )}
+              </div>
+            </section>
           </div>
         </section>
       </main>
+
+      <Dialog open={showReviewForm} onOpenChange={setShowReviewForm}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Write a Review</DialogTitle>
+            <DialogDescription>
+              Share your product experience. Your review appears after admin approval.
+            </DialogDescription>
+          </DialogHeader>
+          <ReviewForm productSlug={product.id} onSuccess={() => setShowReviewForm(false)} />
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

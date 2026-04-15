@@ -3,8 +3,16 @@ import { ArrowLeft, CheckCircle2, Trees, Shovel, Ruler } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ReviewList from "@/components/ReviewList";
+import ReviewForm from "@/components/ReviewForm";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 const LandscapingServicesPage = () => {
+  const { user } = useAuth();
+  const [showForm, setShowForm] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -79,9 +87,40 @@ const LandscapingServicesPage = () => {
                 </Button>
               </div>
             </div>
+
+            <section className="mt-12 border-t pt-10">
+              <h2 className="text-3xl font-bold text-foreground mb-3">Customer Reviews</h2>
+              <p className="text-muted-foreground mb-6">
+                Real feedback from clients who booked our landscaping services.
+              </p>
+
+              <ReviewList productSlug="landscaping-services" />
+
+              <div className="mt-6">
+                {user ? (
+                  <Button onClick={() => setShowForm(true)}>Write a Review</Button>
+                ) : (
+                  <Button asChild>
+                    <Link to="/auth">Log in to write a review</Link>
+                  </Button>
+                )}
+              </div>
+            </section>
           </div>
         </section>
       </main>
+
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Write a Review</DialogTitle>
+            <DialogDescription>
+              Share your landscaping experience. Your review will be visible after admin approval.
+            </DialogDescription>
+          </DialogHeader>
+          <ReviewForm productSlug="landscaping-services" onSuccess={() => setShowForm(false)} />
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
