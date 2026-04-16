@@ -1,28 +1,31 @@
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowRight } from "lucide-react";
+import { getHomepageBlogs, type BlogRow } from "@/lib/blogs";
 
 const BlogPreview = () => {
-  const posts = [
-    {
-      title: "Complete Guide to Monstera Care in Pakistan",
-      excerpt: "Learn everything about growing and maintaining your Monstera deliciosa in Pakistani climate conditions...",
-      date: "March 15, 2024",
-      category: "Plant Care",
-    },
-    {
-      title: "Top 10 Low-Maintenance Plants for Busy Professionals",
-      excerpt: "Discover beautiful plants that thrive with minimal care, perfect for your office or home...",
-      date: "March 12, 2024",
-      category: "Beginner Guide",
-    },
-    {
-      title: "Creating Your Indoor Garden: A Complete Setup Guide",
-      excerpt: "Everything you need to know about setting up a thriving indoor garden in your Pakistani home...",
-      date: "March 8, 2024",
-      category: "Indoor Gardening",
-    },
-  ];
+  const [posts, setPosts] = useState<BlogRow[]>([]);
+  const [homepageBlogCount, setHomepageBlogCount] = useState(6);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getHomepageBlogs();
+        setPosts(data.blogs);
+        setHomepageBlogCount(data.homepageBlogCount);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const mainPosts = useMemo(() => posts.slice(0, 3), [posts]);
+  const sidebarPosts = useMemo(() => posts.slice(3, homepageBlogCount), [posts, homepageBlogCount]);
 
   return (
     <section className="py-16 bg-muted/30">
@@ -36,54 +39,97 @@ const BlogPreview = () => {
               Expert advice to help your plants thrive
             </p>
           </div>
-          <Button variant="outline" className="hidden md:flex">
-            View All Articles
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/blogs" className="hidden md:flex">
+            <Button variant="outline">
+              View All Articles
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {posts.map((post, index) => (
-            <Card
-              key={post.title}
-              className="group hover:shadow-xl transition-all duration-300 animate-fade-in border-border overflow-hidden"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="h-48 bg-gradient-to-br from-nature-mint to-nature-sage" />
-              
-              <CardContent className="p-6">
-                <div className="inline-block bg-primary/10 text-primary text-xs px-3 py-1 rounded-full mb-3">
-                  {post.category}
-                </div>
-                
-                <h3 className="font-bold text-xl mb-3 text-foreground group-hover:text-primary transition-colors">
-                  {post.title}
-                </h3>
-                
-                <p className="text-muted-foreground mb-4 line-clamp-2">
-                  {post.excerpt}
-                </p>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {post.date}
+        {isLoading ? (
+          <div className="text-center text-muted-foreground py-10">Loading blog posts...</div>
+        ) : posts.length === 0 ? (
+          <Card className="border-dashed">
+            <CardContent className="p-10 text-center">
+              <h3 className="text-xl font-semibold mb-2">Coming Soon</h3>
+              <p className="text-muted-foreground">
+                We are preparing fresh plant care articles. Check back soon.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <>
+            <div className="grid lg:grid-cols-4 gap-6">
+              <div className="lg:col-span-3 grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {mainPosts.map((post, index) => (
+                  <Card
+                    key={post.id}
+                    className="group hover:shadow-xl transition-all duration-300 animate-fade-in border-border overflow-hidden"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    {post.featured_image_url ? (
+                      <img src={post.featured_image_url} alt={post.title} className="h-48 w-full object-cover" />
+                    ) : (
+                      <div className="h-48 bg-gradient-to-br from-nature-mint to-nature-sage" />
+                    )}
+
+                    <CardContent className="p-6">
+                      <div className="inline-block bg-primary/10 text-primary text-xs px-3 py-1 rounded-full mb-3">
+                        {post.category}
+                      </div>
+
+                      <h3 className="font-bold text-xl mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+
+                      <p className="text-muted-foreground mb-4 line-clamp-2">{post.excerpt}</p>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4" />
+                          {new Date(post.published_at ?? post.created_at).toLocaleDateString()}
+                        </div>
+                        <Link to={`/blog/${post.slug}`}>
+                          <Button variant="ghost" size="sm" className="group/btn">
+                            Read More
+                            <ArrowRight className="ml-1 h-3 w-3 group-hover/btn:translate-x-1 transition-transform" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {sidebarPosts.length > 0 && (
+                <div className="hidden lg:block">
+                  <div className="rounded-lg border bg-card p-4 space-y-4 sticky top-24">
+                    <h3 className="font-semibold">More Articles</h3>
+                    {sidebarPosts.map((post) => (
+                      <Link key={post.id} to={`/blog/${post.slug}`} className="block border-b pb-3 last:border-b-0 last:pb-0">
+                        <p className="font-medium text-sm line-clamp-2 hover:text-primary transition-colors">
+                          {post.title}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {new Date(post.published_at ?? post.created_at).toLocaleDateString()}
+                        </p>
+                      </Link>
+                    ))}
                   </div>
-                  <Button variant="ghost" size="sm" className="group/btn">
-                    Read More
-                    <ArrowRight className="ml-1 h-3 w-3 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              )}
+            </div>
+          </>
+        )}
 
         <div className="text-center mt-8 md:hidden">
-          <Button variant="outline">
-            View All Articles
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/blogs">
+            <Button variant="outline">
+              View All Articles
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

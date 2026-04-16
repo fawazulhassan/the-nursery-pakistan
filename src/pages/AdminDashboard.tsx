@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, Leaf, Users, Package, AlertTriangle, Edit, Eye, EyeOff, Tag, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Upload, Leaf, Users, Package, AlertTriangle, Edit, Eye, EyeOff, Tag, MessageSquare, BookOpenText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -309,6 +309,14 @@ const AdminDashboard = () => {
             >
               <MessageSquare className="h-4 w-4" />
               Manage Reviews
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => navigate('/admin/blogs')}
+              className="flex items-center gap-2"
+            >
+              <BookOpenText className="h-4 w-4" />
+              Manage Blogs
             </Button>
             <Button
               variant="secondary"

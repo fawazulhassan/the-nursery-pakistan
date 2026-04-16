@@ -20,10 +20,13 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import AdminReviewsPage from "./pages/AdminReviewsPage";
+import AdminBlogsPage from "./pages/AdminBlogsPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import AccountPage from "./pages/AccountPage";
 import LandscapingServicesPage from "./pages/LandscapingServicesPage";
 import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
+import BlogsPage from "./pages/BlogsPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +67,8 @@ const AppRoutes = () => {
       <Route path="/landscaping-services" element={<LandscapingServicesPage />} />
       <Route path="/flower-workshop" element={<FlowerWorkshopPage />} />
       <Route path="/search" element={<SearchPage />} />
+      <Route path="/blogs" element={<BlogsPage />} />
+      <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/auth" element={<AuthPage />} />
       
@@ -77,6 +82,7 @@ const AppRoutes = () => {
       <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsersPage /></ProtectedRoute>} />
       <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrdersPage /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute adminOnly><AdminReviewsPage /></ProtectedRoute>} />
+      <Route path="/admin/blogs" element={<ProtectedRoute adminOnly><AdminBlogsPage /></ProtectedRoute>} />
       
       <Route path="*" element={<NotFound />} />
     </Routes>
