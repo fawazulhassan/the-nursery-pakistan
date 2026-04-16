@@ -6,9 +6,30 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useWishlist } from "@/context/WishlistContext";
+import { useCart } from "@/context/CartContext";
 
 const WishlistPage = () => {
   const { wishlistItems, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
+
+  const handleAddToCartFromWishlist = (item: (typeof wishlistItems)[number]) => {
+    const salePrice = item.sale_percentage
+      ? item.price - (item.price * item.sale_percentage / 100)
+      : null;
+    const effectivePrice = salePrice ?? item.price;
+
+    addToCart(
+      {
+        id: item.id,
+        name: item.name,
+        price: `Rs ${effectivePrice.toLocaleString()}`,
+        image: item.image_url,
+        description: item.description,
+      },
+      1
+    );
+    removeFromWishlist(item.id);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -104,11 +125,12 @@ const WishlistPage = () => {
                       </CardContent>
 
                       <CardFooter className="p-3 sm:p-4 pt-0">
-                        <Button asChild className="w-full group/btn">
-                          <Link to={`/product/${item.id}`}>
-                            <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                            Add to Cart
-                          </Link>
+                        <Button
+                          className="w-full group/btn"
+                          onClick={() => handleAddToCartFromWishlist(item)}
+                        >
+                          <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
+                          Add to Cart
                         </Button>
                       </CardFooter>
                     </Card>

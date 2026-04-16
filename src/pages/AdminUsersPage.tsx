@@ -23,11 +23,20 @@ const AdminUsersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   
   const { toast } = useToast();
 
   useEffect(() => {
     fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setCurrentUserId(data.user?.id ?? null);
+    };
+    void loadCurrentUser();
   }, []);
 
   useEffect(() => {
@@ -97,21 +106,21 @@ const AdminUsersPage = () => {
   };
 
   const updateUserRole = async (userId: string, newRole: 'admin' | 'user') => {
+    if (userId === currentUserId) {
+      toast({
+        title: 'Not allowed',
+        description: 'You cannot change your own role.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     try {
-      // First, remove all existing roles for this user
-      const { error: deleteError } = await supabase
-        .from('user_roles')
-        .delete()
-        .eq('user_id', userId);
-
-      if (deleteError) throw deleteError;
-
-      // Then add the new role
-      const { error: insertError } = await supabase
-        .from('user_roles')
-        .insert({ user_id: userId, role: newRole });
-
-      if (insertError) throw insertError;
+      const { error } = await (supabase as any).rpc('admin_set_user_role', {
+        target_user_id: userId,
+        target_role: newRole,
+      });
+      if (error) throw error;
 
       toast({
         title: 'Success',
@@ -215,6 +224,7 @@ const AdminUsersPage = () => {
                         <Select
                           value={user.roles[0] || 'user'}
                           onValueChange={(value) => updateUserRole(user.id, value as 'admin' | 'user')}
+                          disabled={user.id === currentUserId}
                         >
                           <SelectTrigger className="w-[140px]">
                             <SelectValue placeholder="Change role" />

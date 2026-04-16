@@ -3,14 +3,16 @@ import { Mail, Search } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { getAdminSubscribers, type NewsletterSubscriberRow } from "@/lib/newsletter";
+import { deleteSubscriber, getAdminSubscribers, type NewsletterSubscriberRow } from "@/lib/newsletter";
 
 const AdminSubscribersPage = () => {
   const { toast } = useToast();
   const [subscribers, setSubscribers] = useState<NewsletterSubscriberRow[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [deletingSubscriberId, setDeletingSubscriberId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSubscribers = async () => {
@@ -35,6 +37,26 @@ const AdminSubscribersPage = () => {
   const filteredSubscribers = subscribers.filter((subscriber) =>
     subscriber.email.toLowerCase().includes(searchTerm.trim().toLowerCase())
   );
+
+  const handleDeleteSubscriber = async (subscriber: NewsletterSubscriberRow) => {
+    const confirmed = window.confirm(`Delete subscriber ${subscriber.email} permanently?`);
+    if (!confirmed) return;
+
+    setDeletingSubscriberId(subscriber.id);
+    try {
+      await deleteSubscriber(subscriber.id);
+      setSubscribers((prev) => prev.filter((row) => row.id !== subscriber.id));
+      toast({ title: "Subscriber deleted", description: "Subscriber removed successfully." });
+    } catch (error) {
+      toast({
+        title: "Delete failed",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingSubscriberId(null);
+    }
+  };
 
   return (
     <AdminLayout title="Subscribers" icon={Mail} desktopMenuMode="hamburger">
@@ -78,6 +100,14 @@ const AdminSubscribersPage = () => {
                       Joined {new Date(subscriber.created_at).toLocaleString()}
                     </p>
                   </div>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDeleteSubscriber(subscriber)}
+                    disabled={deletingSubscriberId === subscriber.id}
+                  >
+                    {deletingSubscriberId === subscriber.id ? "Deleting..." : "Delete"}
+                  </Button>
                 </div>
               ))}
             </div>

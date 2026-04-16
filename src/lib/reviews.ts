@@ -106,6 +106,41 @@ export async function updateReview(
   return data;
 }
 
+function extractReviewImageStoragePath(url: string): string | null {
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  const marker = `/storage/v1/object/public/${REVIEW_IMAGES_BUCKET}/`;
+  const markerIndex = trimmed.indexOf(marker);
+  if (markerIndex === -1) return null;
+
+  const rawPath = trimmed.slice(markerIndex + marker.length).split("?")[0].split("#")[0];
+  if (!rawPath) return null;
+
+  try {
+    return decodeURIComponent(rawPath);
+  } catch {
+    return rawPath;
+  }
+}
+
+export async function deleteReview(id: string, imageUrl?: string | null): Promise<void> {
+  const storagePath = imageUrl ? extractReviewImageStoragePath(imageUrl) : null;
+  if (storagePath) {
+    const { error: storageError } = await supabase.storage
+      .from(REVIEW_IMAGES_BUCKET)
+      .remove([storagePath]);
+    if (storageError) throw storageError;
+  }
+
+  const { error } = await supabase
+    .from("reviews")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
 export async function getDefaultReviewerCity(): Promise<string> {
   const { data: authData } = await supabase.auth.getUser();
   const userId = authData.user?.id;

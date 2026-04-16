@@ -13,6 +13,7 @@ import { fetchProductsWithFallback } from "@/lib/productQueries";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import { useAuth } from "@/contexts/AuthContext";
+import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,7 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const { toast } = useToast();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -29,6 +31,15 @@ const ProductPage = () => {
   useEffect(() => {
     if (id) fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    if (!product) {
+      setSelectedImage("");
+      return;
+    }
+    const images = resolveProductImageUrls(product);
+    setSelectedImage(images[0] ?? resolvePrimaryProductImage(product));
+  }, [product]);
 
   const fetchProduct = async () => {
     if (!id) return;
@@ -52,7 +63,7 @@ const ProductPage = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    const imageUrl = product.image_url || "";
+    const imageUrl = selectedImage || resolvePrimaryProductImage(product);
     const basePrice = Number(product.price);
     const salePrice = product.sale_percentage
       ? basePrice - (basePrice * product.sale_percentage / 100)
@@ -110,6 +121,8 @@ const ProductPage = () => {
     ? `Rs ${salePrice.toFixed(0)}`
     : `Rs ${basePrice.toLocaleString()}`;
   const inWishlist = isInWishlist(product.id);
+  const productImages = resolveProductImageUrls(product);
+  const mainImage = selectedImage || resolvePrimaryProductImage(product);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -127,12 +140,34 @@ const ProductPage = () => {
             </Link>
 
             <div className="grid md:grid-cols-2 gap-6 sm:gap-12">
-              <div className="aspect-square overflow-hidden rounded-2xl bg-muted">
-                <img
-                  src={product.image_url}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
+              <div>
+                <div className="aspect-square overflow-hidden rounded-2xl bg-muted">
+                  <img
+                    src={mainImage}
+                    alt={product.name}
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+                {productImages.length > 1 && (
+                  <div className="mt-3">
+                    <div className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-5 md:overflow-visible">
+                      {productImages.map((imageUrl, index) => (
+                        <button
+                          key={`${product.id}-thumb-${index}`}
+                          type="button"
+                          onClick={() => setSelectedImage(imageUrl)}
+                          className={`rounded-md overflow-hidden border shrink-0 w-16 md:w-auto ${mainImage === imageUrl ? "border-primary" : "border-border"}`}
+                        >
+                          <img
+                            src={imageUrl}
+                            alt={`${product.name} thumbnail ${index + 1}`}
+                            className="w-16 h-16 md:w-full md:h-16 object-cover object-center"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>

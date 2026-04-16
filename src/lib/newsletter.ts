@@ -42,3 +42,14 @@ export async function getAdminSubscribers(): Promise<NewsletterSubscriberRow[]> 
 
   return data ?? [];
 }
+
+export async function deleteSubscriber(id: string): Promise<void> {
+  const { error } = await supabase
+    .from("newsletter_subscribers")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw error;
+  }
+}

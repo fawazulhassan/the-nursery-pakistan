@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { slugToCategory } from "@/lib/constants";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useWishlist } from "@/context/WishlistContext";
+import { resolvePrimaryProductImage } from "@/lib/productImages";
 
 const CategoryPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -165,6 +166,7 @@ const CategoryPage = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {filteredProducts.map((product, index) => {
                   const inWishlist = isInWishlist(product.id);
+                  const productImage = resolvePrimaryProductImage(product);
                   return (
                   <Card
                     key={product.id}
@@ -173,9 +175,9 @@ const CategoryPage = () => {
                   >
                     <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-muted">
                       <img
-                        src={product.image_url}
+                        src={productImage}
                         alt={product.name}
-                        className="w-full h-40 sm:h-52 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-40 sm:h-52 lg:h-64 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                       />
                       <Button
                         size="icon"

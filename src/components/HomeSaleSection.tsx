@@ -7,6 +7,7 @@ import { ShoppingCart, Tag, ArrowRight } from "lucide-react";
 import ProductDetailDialog from "./ProductDetailDialog";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
+import { resolvePrimaryProductImage } from "@/lib/productImages";
 
 const HomeSaleSection = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -75,16 +76,18 @@ const HomeSaleSection = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-          {products.map((product, index) => (
+          {products.map((product, index) => {
+            const productImage = resolvePrimaryProductImage(product);
+            return (
             <Card
               key={product.id}
               className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-border"
             >
               <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-muted">
                 <img
-                  src={product.image_url}
+                  src={productImage}
                   alt={product.name}
-                  className="w-full h-40 sm:h-48 lg:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-40 sm:h-48 lg:h-56 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-red-500 text-white text-sm px-3 py-1">
@@ -120,7 +123,8 @@ const HomeSaleSection = () => {
                 </Button>
               </CardFooter>
             </Card>
-          ))}
+            );
+          })}
         </div>
       </div>
 

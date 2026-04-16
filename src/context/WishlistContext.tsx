@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
+import { resolvePrimaryProductImage } from "@/lib/productImages";
 
 const WISHLIST_STORAGE_KEY = "leafy-luxe-wishlist";
 
@@ -16,7 +17,7 @@ export interface WishlistItem {
 
 interface WishlistContextType {
   wishlistItems: WishlistItem[];
-  toggleWishlist: (product: Partial<WishlistItem> & { id: string; name: string }) => void;
+  toggleWishlist: (product: (Partial<WishlistItem> & { id: string; name: string }) & { image_urls?: string[] | null }) => void;
   isInWishlist: (productId: string) => boolean;
   removeFromWishlist: (productId: string) => void;
   clearWishlist: () => void;
@@ -25,11 +26,11 @@ interface WishlistContextType {
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
-const mapToWishlistItem = (product: Partial<WishlistItem> & { id: string; name: string }): WishlistItem => ({
+const mapToWishlistItem = (product: (Partial<WishlistItem> & { id: string; name: string }) & { image_urls?: string[] | null }): WishlistItem => ({
   id: product.id,
   name: product.name,
   price: Number(product.price ?? 0),
-  image_url: product.image_url ?? "",
+  image_url: resolvePrimaryProductImage(product),
   category: product.category ?? "Uncategorized",
   description: product.description,
   sale_percentage: product.sale_percentage,
@@ -61,7 +62,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const isInWishlist = (productId: string) =>
     wishlistItems.some((item) => item.id === productId);
 
-  const toggleWishlist = (product: Partial<WishlistItem> & { id: string; name: string }) => {
+  const toggleWishlist = (product: (Partial<WishlistItem> & { id: string; name: string }) & { image_urls?: string[] | null }) => {
     const mappedItem = mapToWishlistItem(product);
 
     setWishlistItems((prev) => {

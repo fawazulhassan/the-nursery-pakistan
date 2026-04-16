@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Upload, Leaf, Package, AlertTriangle, Edit, Eye, EyeOff, Tag } from 'lucide-react';
+import { Upload, Leaf, Package, AlertTriangle, Edit, Eye, EyeOff, Tag, ArrowUp, ArrowDown, X, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { CATEGORIES } from '@/lib/constants';
+import { MAX_PRODUCT_IMAGES, deleteProductImagesFromStorage, resolvePrimaryProductImage, resolveProductImageUrls, uploadProductImage, validateProductImageFile } from '@/lib/productImages';
 import AdminLayout from '@/components/admin/AdminLayout';
 
 interface Product {
@@ -19,6 +19,7 @@ interface Product {
   stock_quantity: number;
   in_stock: boolean;
   image_url: string;
+  image_urls?: string[] | null;
   category: string;
   plant_type?: string;
   sale_percentage?: number | null;
@@ -26,6 +27,14 @@ interface Product {
   sale_end_at?: string | null;
   sale_quantity_limit?: number | null;
   is_visible?: boolean;
+}
+
+interface DraftImage {
+  id: string;
+  source: 'existing' | 'file' | 'url';
+  url: string;
+  file?: File;
+  error?: string | null;
 }
 
 const AdminDashboard = () => {
@@ -39,15 +48,16 @@ const AdminDashboard = () => {
   const [saleEndAt, setSaleEndAt] = useState('');
   const [saleQuantityLimit, setSaleQuantityLimit] = useState('');
   const [stockQuantity, setStockQuantity] = useState('10');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [draftImages, setDraftImages] = useState<DraftImage[]>([]);
+  const [manualImageUrlInput, setManualImageUrlInput] = useState('');
+  const [imageFormError, setImageFormError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingStockProductId, setEditingStockProductId] = useState<string | null>(null);
   const [editStockQuantity, setEditStockQuantity] = useState('');
-  const [manualImageUrl, setManualImageUrl] = useState('');
-  
+  const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -57,9 +67,73 @@ const AdminDashboard = () => {
   const fetchProducts = async () => {
     const { data } = await supabase
       .from('products')
-      .select('id, name, description, price, stock_quantity, in_stock, image_url, category, plant_type, sale_percentage, sale_start_at, sale_end_at, sale_quantity_limit, is_visible')
+      .select('id, name, description, price, stock_quantity, in_stock, image_url, image_urls, category, plant_type, sale_percentage, sale_start_at, sale_end_at, sale_quantity_limit, is_visible')
       .order('created_at', { ascending: false });
     if (data) setProducts(data);
+  };
+
+  const hasImageErrors = draftImages.some((item) => !!item.error);
+
+  const addFilesToDraftImages = (files: File[]) => {
+    if (!files.length) return;
+
+    setDraftImages((prev) => {
+      const next = [...prev];
+      for (const file of files) {
+        if (next.length >= MAX_PRODUCT_IMAGES) break;
+        next.push({
+          id: `${crypto.randomUUID()}-${Date.now()}`,
+          source: 'file',
+          file,
+          url: URL.createObjectURL(file),
+          error: validateProductImageFile(file),
+        });
+      }
+      return next;
+    });
+  };
+
+  const handleImageFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    addFilesToDraftImages(files);
+    e.target.value = '';
+  };
+
+  const handleAddManualImage = () => {
+    const trimmed = manualImageUrlInput.trim();
+    if (!trimmed) return;
+
+    if (draftImages.length >= MAX_PRODUCT_IMAGES) {
+      setImageFormError('Maximum 5 images allowed');
+      return;
+    }
+
+    setDraftImages((prev) => [
+      ...prev,
+      {
+        id: `${crypto.randomUUID()}-${Date.now()}`,
+        source: 'url',
+        url: trimmed,
+        error: null,
+      },
+    ]);
+    setManualImageUrlInput('');
+    setImageFormError('');
+  };
+
+  const handleRemoveDraftImage = (id: string) => {
+    setDraftImages((prev) => prev.filter((item) => item.id !== id));
+    setImageFormError('');
+  };
+
+  const moveDraftImage = (index: number, direction: 'up' | 'down') => {
+    setDraftImages((prev) => {
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= prev.length) return prev;
+      const next = [...prev];
+      [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+      return next;
+    });
   };
 
   const startEditProduct = (product: Product) => {
@@ -74,9 +148,16 @@ const AdminDashboard = () => {
     setSaleEndAt(product.sale_end_at ? product.sale_end_at.slice(0, 16) : '');
     setSaleQuantityLimit(product.sale_quantity_limit?.toString() || '');
     setStockQuantity(product.stock_quantity.toString());
-    setImageFile(null);
-    setImagePreview(product.image_url || '');
-    setManualImageUrl(product.image_url || '');
+    setManualImageUrlInput('');
+    setImageFormError('');
+    setDraftImages(
+      resolveProductImageUrls(product).map((url) => ({
+        id: `${crypto.randomUUID()}-${Date.now()}`,
+        source: 'existing' as const,
+        url,
+        error: null,
+      }))
+    );
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -92,9 +173,9 @@ const AdminDashboard = () => {
     setSaleEndAt('');
     setSaleQuantityLimit('');
     setStockQuantity('10');
-    setImageFile(null);
-    setImagePreview('');
-    setManualImageUrl('');
+    setDraftImages([]);
+    setManualImageUrlInput('');
+    setImageFormError('');
   };
 
   const handleEndSale = async (productId: string) => {
@@ -128,6 +209,71 @@ const AdminDashboard = () => {
         description: currentVisible ? 'Product is hidden from the storefront.' : 'Product is now visible.',
       });
       fetchProducts();
+    }
+  };
+
+  const toProductSlug = (value: string) =>
+    value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const handleDeleteProduct = async (product: Product) => {
+    const confirmed = window.confirm(`Delete "${product.name}" permanently? This action cannot be undone.`);
+    if (!confirmed) return;
+
+    setDeletingProductId(product.id);
+    try {
+      const [{ count: orderItemCount, error: orderItemsError }, { count: reviewCount, error: reviewsError }] = await Promise.all([
+        supabase
+          .from('order_items')
+          .select('id', { head: true, count: 'exact' })
+          .eq('product_id', product.id),
+        supabase
+          .from('reviews')
+          .select('id', { head: true, count: 'exact' })
+          .in('product_slug', [product.id, toProductSlug(product.name)]),
+      ]);
+
+      if (orderItemsError) throw orderItemsError;
+      if (reviewsError) throw reviewsError;
+
+      if ((orderItemCount ?? 0) > 0 || (reviewCount ?? 0) > 0) {
+        toast({
+          title: 'Cannot delete product',
+          description: 'Cannot delete product with existing orders or reviews.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      await deleteProductImagesFromStorage(product);
+
+      const { error: deleteError } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', product.id);
+
+      if (deleteError) throw deleteError;
+
+      if (editingProduct?.id === product.id) {
+        cancelEdit();
+      }
+
+      toast({
+        title: 'Product deleted',
+        description: 'Product and its images were deleted successfully.',
+      });
+      fetchProducts();
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setDeletingProductId(null);
     }
   };
 
@@ -168,52 +314,35 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const isEditMode = !!editingProduct;
-    if (!isEditMode && !imageFile && !manualImageUrl) {
+
+    if (draftImages.length === 0) {
       toast({
         title: 'Error',
-        description: 'Please select an image or enter an image URL',
+        description: 'Please add at least one product image',
         variant: 'destructive',
       });
       return;
     }
 
+    if (hasImageErrors) {
+      setImageFormError('Fix image errors before saving.');
+      return;
+    }
+
+    const isEditMode = !!editingProduct;
     setIsLoading(true);
 
     try {
-      let imageUrl = editingProduct?.image_url;
-      
-      if (manualImageUrl) {
-        imageUrl = manualImageUrl;
-      }
+      const uploadedImageUrls = await Promise.all(
+        draftImages.map(async (item) => {
+          if (item.source === 'file' && item.file) return uploadProductImage(item.file);
+          return item.url;
+        })
+      );
 
-      if (imageFile) {
-        const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-        const filePath = `${fileName}`;
-        const { error: uploadError } = await supabase.storage
-          .from('product-images')
-          .upload(filePath, imageFile, { cacheControl: '3600', upsert: false });
-        if (uploadError) throw uploadError;
-        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(filePath);
-        imageUrl = publicUrl;
-      }
+      const primaryImage = uploadedImageUrls[0] ?? '';
 
       const stockQty = parseInt(stockQuantity) || 0;
       const salePct = salePercentage ? parseFloat(salePercentage) : null;
@@ -231,8 +360,9 @@ const AdminDashboard = () => {
           sale_start_at: saleStartAt ? new Date(saleStartAt).toISOString() : null,
           sale_end_at: saleEndAt ? new Date(saleEndAt).toISOString() : null,
           sale_quantity_limit: saleQuantityLimit ? parseInt(saleQuantityLimit, 10) : null,
+          image_url: primaryImage,
+          image_urls: uploadedImageUrls,
         };
-        if (imageUrl) updateData.image_url = imageUrl;
 
         const { error } = await supabase.from('products').update(updateData).eq('id', editingProduct.id);
         if (error) throw error;
@@ -244,7 +374,8 @@ const AdminDashboard = () => {
           description,
           category,
           plant_type: plantType || "N/A",
-          image_url: imageUrl,
+          image_url: primaryImage,
+          image_urls: uploadedImageUrls,
           in_stock: stockQty > 0,
           stock_quantity: stockQty,
           sale_percentage: salePct,
@@ -423,42 +554,91 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image">Product Image {editingProduct ? '(Optional - keep current)' : '*'}</Label>
+            <div className="space-y-3">
+              <Label htmlFor="images">Product Images *</Label>
               <Input
-                id="image"
+                id="images"
                 type="file"
                 accept="image/*"
-                onChange={handleImageChange}
-                required={!editingProduct && !manualImageUrl}
+                multiple
+                onChange={handleImageFilesChange}
                 className="cursor-pointer"
+                disabled={draftImages.length >= MAX_PRODUCT_IMAGES}
               />
-              {imagePreview && (
-                <div className="mt-4">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full max-w-md h-48 object-cover rounded-lg border border-border"
-                  />
+
+              <div className="flex gap-2">
+                <Input
+                  id="manualImage"
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  value={manualImageUrlInput}
+                  onChange={(e) => setManualImageUrlInput(e.target.value)}
+                  disabled={draftImages.length >= MAX_PRODUCT_IMAGES}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleAddManualImage}
+                  disabled={draftImages.length >= MAX_PRODUCT_IMAGES}
+                >
+                  Add Image
+                </Button>
+              </div>
+
+              {draftImages.length >= MAX_PRODUCT_IMAGES && (
+                <p className="text-sm text-muted-foreground">Maximum 5 images allowed</p>
+              )}
+
+              {imageFormError && (
+                <p className="text-sm text-destructive">{imageFormError}</p>
+              )}
+
+              {draftImages.length > 0 && (
+                <div className="space-y-2">
+                  {draftImages.map((item, index) => (
+                    <div key={item.id} className="flex gap-3 items-center border border-border rounded-md p-2">
+                      <img
+                        src={item.url}
+                        alt={`Product preview ${index + 1}`}
+                        className="w-16 h-16 rounded object-cover object-center border border-border"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm truncate">{item.url}</p>
+                        {index === 0 && <p className="text-xs text-muted-foreground">Primary image</p>}
+                        {item.error && <p className="text-xs text-destructive">{item.error}</p>}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="outline"
+                          onClick={() => moveDraftImage(index, 'up')}
+                          disabled={index === 0}
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="outline"
+                          onClick={() => moveDraftImage(index, 'down')}
+                          disabled={index === draftImages.length - 1}
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="destructive"
+                          onClick={() => handleRemoveDraftImage(item.id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="manualImage">Or Image URL</Label>
-              <Input
-                id="manualImage"
-                type="url"
-                placeholder="https://example.com/image.jpg"
-                value={manualImageUrl}
-                onChange={(e) => {
-                  setManualImageUrl(e.target.value);
-                  if (!imageFile) {
-                    setImagePreview(e.target.value);
-                  }
-                }}
-              />
-              <p className="text-sm text-muted-foreground">Useful if you want to reuse an image from another product.</p>
             </div>
 
             <div className="space-y-2">
@@ -495,7 +675,7 @@ const AdminDashboard = () => {
                   className={`flex items-center justify-between p-3 rounded-lg border ${!isVisible ? 'bg-muted/50 border-muted' : 'border-border'}`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover rounded flex-shrink-0" />
+                    <img src={resolvePrimaryProductImage(product)} alt={product.name} className="w-10 h-10 object-cover object-center rounded flex-shrink-0" />
                     <div className="min-w-0">
                       <p className="font-medium truncate">{product.name}</p>
                       <p className="text-sm text-muted-foreground">
@@ -531,6 +711,15 @@ const AdminDashboard = () => {
                         End Sale
                       </Button>
                     )}
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDeleteProduct(product)}
+                      disabled={deletingProductId === product.id}
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      {deletingProductId === product.id ? 'Deleting...' : 'Delete'}
+                    </Button>
                   </div>
                 </div>
               );
@@ -553,7 +742,7 @@ const AdminDashboard = () => {
                   {outOfStockProducts.map(product => (
                     <div key={product.id} className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg border border-destructive/20">
                       <div className="flex items-center gap-3">
-                        <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover rounded" />
+                        <img src={resolvePrimaryProductImage(product)} alt={product.name} className="w-10 h-10 object-cover object-center rounded" />
                         <div>
                           <p className="font-medium">{product.name}</p>
                           <p className="text-sm text-muted-foreground">Stock: 0</p>
@@ -596,7 +785,7 @@ const AdminDashboard = () => {
                   {lowStockProducts.map(product => (
                     <div key={product.id} className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                       <div className="flex items-center gap-3">
-                        <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover rounded" />
+                        <img src={resolvePrimaryProductImage(product)} alt={product.name} className="w-10 h-10 object-cover object-center rounded" />
                         <div>
                           <p className="font-medium">{product.name}</p>
                           <p className="text-sm text-yellow-600">Stock: {product.stock_quantity}</p>

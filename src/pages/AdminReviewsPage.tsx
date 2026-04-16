@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { getAdminReviews, updateReview, type ReviewRow, type ReviewStatus } from "@/lib/reviews";
+import { deleteReview, getAdminReviews, updateReview, type ReviewRow, type ReviewStatus } from "@/lib/reviews";
 import AdminLayout from "@/components/admin/AdminLayout";
 import StarRating from "@/components/StarRating";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
@@ -107,6 +107,23 @@ const AdminReviewsPage = () => {
   const handleToggleHomepage = async (review: ReviewRow, checked: boolean) => {
     const effectiveStatus: "approved" | "rejected" = review.status === "approved" ? "approved" : "rejected";
     await updateSingleReview(review.id, effectiveStatus, checked);
+  };
+
+  const handleDeleteReview = async (review: ReviewRow) => {
+    const confirmed = window.confirm("Delete this review permanently? This action cannot be undone.");
+    if (!confirmed) return;
+
+    try {
+      await deleteReview(review.id, review.image_url as string | null);
+      setReviews((prev) => prev.filter((item) => item.id !== review.id));
+      toast({ title: "Review deleted", description: "Review removed successfully." });
+    } catch (error: unknown) {
+      toast({
+        title: "Delete failed",
+        description: getErrorMessage(error),
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -242,6 +259,13 @@ const AdminReviewsPage = () => {
                           onClick={() => updateSingleReview(review.id, "rejected", false)}
                         >
                           Reject
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDeleteReview(review)}
+                        >
+                          Delete
                         </Button>
                       </div>
                     </div>

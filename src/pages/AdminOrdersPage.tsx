@@ -40,6 +40,8 @@ interface Order {
   order_items: OrderItem[];
 }
 
+type PaymentStatus = "unpaid" | "paid";
+
 const AdminOrdersPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -172,6 +174,33 @@ const AdminOrdersPage = () => {
     }
   };
 
+  const updatePaymentStatus = async (orderId: string, newPaymentStatus: PaymentStatus) => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ payment_status: newPaymentStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: `Payment status updated to "${newPaymentStatus}"`,
+      });
+
+      fetchOrders();
+      if (selectedOrder?.id === orderId) {
+        setSelectedOrder({ ...selectedOrder, payment_status: newPaymentStatus });
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
       case 'pending':
@@ -196,6 +225,9 @@ const AdminOrdersPage = () => {
   const getPaymentStatusBadgeVariant = (status: string) => {
     return status === 'paid' ? 'default' : 'secondary';
   };
+
+  const normalizePaymentStatus = (status: string): PaymentStatus =>
+    status === "paid" ? "paid" : "unpaid";
 
   const viewOrderDetails = (order: Order) => {
     setSelectedOrder(order);
@@ -314,6 +346,20 @@ const AdminOrdersPage = () => {
                           <Eye className="h-4 w-4 mr-2" />
                           View Details
                         </Button>
+                        <Select
+                          value={normalizePaymentStatus(order.payment_status)}
+                          onValueChange={(value) =>
+                            updatePaymentStatus(order.id, value as PaymentStatus)
+                          }
+                        >
+                          <SelectTrigger className="w-[160px]">
+                            <SelectValue placeholder="Payment Status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="unpaid">Mark Unpaid</SelectItem>
+                            <SelectItem value="paid">Mark Paid</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
                   </CardContent>

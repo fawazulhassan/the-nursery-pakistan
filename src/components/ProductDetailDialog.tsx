@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { resolveProductImageUrls } from "@/lib/productImages";
 
 interface ProductDetailDialogProps {
   open: boolean;
@@ -19,6 +20,7 @@ interface ProductDetailDialogProps {
     price: string | number;
     image?: string;
     image_url?: string;
+    image_urls?: string[] | null;
     description?: string;
     sale_percentage?: number | null;
   };
@@ -32,7 +34,9 @@ const ProductDetailDialog = ({
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
-  const imageUrl = product.image_url || product.image || "";
+  const productImages = resolveProductImageUrls(product);
+  const fallbackImage = product.image_url || product.image || "";
+  const [selectedImage, setSelectedImage] = useState(productImages[0] ?? fallbackImage);
   const basePrice = typeof product.price === "string"
     ? parseInt(product.price.replace(/[^0-9]/g, ""), 10)
     : Number(product.price);
@@ -42,6 +46,10 @@ const ProductDetailDialog = ({
   const effectivePrice = salePrice ?? basePrice;
   const displayPrice = typeof product.price === "string" ? product.price : `Rs ${effectivePrice.toLocaleString()}`;
 
+  useEffect(() => {
+    setSelectedImage(productImages[0] ?? fallbackImage);
+  }, [product.id, fallbackImage, productImages]);
+
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
 
@@ -50,7 +58,7 @@ const ProductDetailDialog = ({
       id: product.id,
       name: product.name,
       price: `Rs ${effectivePrice.toLocaleString()}`,
-      image: imageUrl,
+      image: selectedImage,
       description: product.description,
     };
     addToCart(cartItem, quantity);
@@ -66,12 +74,30 @@ const ProductDetailDialog = ({
         </DialogHeader>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div className="aspect-square overflow-hidden rounded-lg bg-muted">
-            <img
-              src={imageUrl}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+          <div>
+            <div className="aspect-square overflow-hidden rounded-lg bg-muted">
+              <img
+                src={selectedImage}
+                alt={product.name}
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+            {productImages.length > 1 && (
+              <div className="mt-3">
+                <div className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-5 md:overflow-visible">
+                  {productImages.map((imageUrl, index) => (
+                    <button
+                      key={`${product.id}-${index}`}
+                      type="button"
+                      className={`border rounded overflow-hidden shrink-0 w-16 md:w-auto ${selectedImage === imageUrl ? "border-primary" : "border-border"}`}
+                      onClick={() => setSelectedImage(imageUrl)}
+                    >
+                      <img src={imageUrl} alt={`${product.name} thumbnail ${index + 1}`} className="w-16 h-16 md:w-full md:h-16 object-cover object-center" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           
           <div className="flex flex-col gap-4">
