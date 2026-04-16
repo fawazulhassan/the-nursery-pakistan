@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, BookOpenText, ImagePlus, Loader2, Pencil, Plus, Save, Trash2 } from "lucide-react";
+import { BookOpenText, ImagePlus, Loader2, Pencil, Plus, Save, Trash2 } from "lucide-react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
@@ -23,7 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import AdminLayout from "@/components/admin/AdminLayout";
 import {
   BLOG_CATEGORIES,
   createBlog,
@@ -59,9 +58,7 @@ const RichEditorToolbar = ({
 );
 
 const AdminBlogsPage = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
-  const { signOut } = useAuth();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const featuredImageInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -312,32 +309,13 @@ const AdminBlogsPage = () => {
     [blogs.length]
   );
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/auth");
-  };
-
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <BookOpenText className="h-8 w-8" />
-            <h1 className="text-2xl font-bold">Blog Management</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="secondary" onClick={() => navigate("/admin")} className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Dashboard
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto py-8 px-6 grid gap-6">
+    <AdminLayout
+      title="Blog Management"
+      icon={BookOpenText}
+      contentClassName="max-w-7xl grid gap-6"
+      desktopMenuMode="hamburger"
+    >
         <Card>
           <CardHeader>
             <CardTitle>{editingBlogId ? "Edit Blog" : "Create Blog"}</CardTitle>
@@ -600,8 +578,6 @@ const AdminBlogsPage = () => {
             )}
           </CardContent>
         </Card>
-      </main>
-
       <AlertDialog open={!!deleteTargetId} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -616,7 +592,7 @@ const AdminBlogsPage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </AdminLayout>
   );
 };
 

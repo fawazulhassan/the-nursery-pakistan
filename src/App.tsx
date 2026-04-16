@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import ProductsPage from "./pages/ProductsPage";
 import GuidePage from "./pages/GuidePage";
+import AboutPage from "./pages/AboutPage";
 import SearchPage from "./pages/SearchPage";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
@@ -23,6 +24,7 @@ import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import AdminReviewsPage from "./pages/AdminReviewsPage";
 import AdminBlogsPage from "./pages/AdminBlogsPage";
+import AdminSubscribersPage from "./pages/AdminSubscribersPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import AccountPage from "./pages/AccountPage";
 import LandscapingServicesPage from "./pages/LandscapingServicesPage";
@@ -30,6 +32,7 @@ import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
 import BlogsPage from "./pages/BlogsPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import NotFound from "./pages/NotFound";
+import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +69,7 @@ const AppRoutes = () => {
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/guide" element={<GuidePage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/landscaping-services" element={<LandscapingServicesPage />} />
       <Route path="/flower-workshop" element={<FlowerWorkshopPage />} />
       <Route path="/search" element={<SearchPage />} />
@@ -86,6 +90,7 @@ const AppRoutes = () => {
       <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrdersPage /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute adminOnly><AdminReviewsPage /></ProtectedRoute>} />
       <Route path="/admin/blogs" element={<ProtectedRoute adminOnly><AdminBlogsPage /></ProtectedRoute>} />
+      <Route path="/admin/subscribers" element={<ProtectedRoute adminOnly><AdminSubscribersPage /></ProtectedRoute>} />
       
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -102,6 +107,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <AppRoutes />
+              <WhatsAppFloatingButton />
             </BrowserRouter>
             <Analytics />
             <SpeedInsights />

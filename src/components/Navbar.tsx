@@ -155,6 +155,11 @@ const Navbar = () => {
             )}
             {user && (
               <div className="flex flex-col md:hidden border-b border-border pb-2 mb-2 gap-1">
+                <Link to="/about" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-sm hover:text-primary">
+                    About Us
+                  </Button>
+                </Link>
                 <Link to="/account" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start text-sm hover:text-primary">
                     <User className="h-4 w-4 mr-2" />
@@ -180,6 +185,24 @@ const Navbar = () => {
                 </Button>
               </div>
             )}
+            {!user && (
+              <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block md:hidden">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-sm hover:text-primary"
+                >
+                  About Us
+                </Button>
+              </Link>
+            )}
+            <Link to="/about" className="hidden md:block">
+              <Button
+                variant="ghost"
+                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
+              >
+                About Us
+              </Button>
+            </Link>
             {CATEGORIES.map((category) => (
               <Link
                 key={category.slug}
@@ -194,6 +217,24 @@ const Navbar = () => {
                 </Button>
               </Link>
             ))}
+            <Link to="/landscaping-services" className="block">
+              <Button
+                variant="ghost"
+                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Landscaping
+              </Button>
+            </Link>
+            <Link to="/flower-workshop" className="block">
+              <Button
+                variant="ghost"
+                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Workshop
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

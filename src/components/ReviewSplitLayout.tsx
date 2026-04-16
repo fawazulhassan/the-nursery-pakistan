@@ -51,8 +51,14 @@ const ReviewSplitLayout = ({
       </div>
 
       <div className="hidden lg:block">
+        <div className={desktopMainGridClassName}>
+          {visibleItems.map((item, index) => (
+            <div key={`main-${index}`}>{item}</div>
+          ))}
+        </div>
+
         {showArrows && (
-          <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="flex items-center justify-center gap-3 mt-4">
             <Button
               type="button"
               variant="outline"
@@ -78,12 +84,6 @@ const ReviewSplitLayout = ({
             </Button>
           </div>
         )}
-
-        <div className={desktopMainGridClassName}>
-          {visibleItems.map((item, index) => (
-            <div key={`main-${index}`}>{item}</div>
-          ))}
-        </div>
       </div>
     </>
   );

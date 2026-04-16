@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +9,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
 import { getAdminReviews, updateReview, type ReviewRow, type ReviewStatus } from "@/lib/reviews";
+import AdminLayout from "@/components/admin/AdminLayout";
 import StarRating from "@/components/StarRating";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
 
@@ -24,9 +23,7 @@ const statusBadgeVariant = (status: string): "outline" | "secondary" | "default"
 };
 
 const AdminReviewsPage = () => {
-  const { signOut } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -112,32 +109,8 @@ const AdminReviewsPage = () => {
     await updateSingleReview(review.id, effectiveStatus, checked);
   };
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/auth");
-  };
-
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <MessageSquare className="h-8 w-8" />
-            <h1 className="text-2xl font-bold">Review Management</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="secondary" onClick={() => navigate("/admin")} className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Dashboard
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto py-10 px-6">
+    <AdminLayout title="Review Management" icon={MessageSquare} desktopMenuMode="hamburger">
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Filters</CardTitle>
@@ -278,15 +251,13 @@ const AdminReviewsPage = () => {
             })}
           </div>
         )}
-      </main>
-
       <ReviewImageLightbox
         open={!!lightboxImage}
         imageUrl={lightboxImage?.url ?? ""}
         alt={lightboxImage?.alt ?? "Review image"}
         onOpenChange={(open) => !open && setLightboxImage(null)}
       />
-    </div>
+    </AdminLayout>
   );
 };
 

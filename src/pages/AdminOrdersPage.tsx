@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Package, Search, Eye } from 'lucide-react';
+import { Package, Search, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import AdminLayout from '@/components/admin/AdminLayout';
 
 interface OrderItem {
   id: string;
@@ -51,8 +50,6 @@ const AdminOrdersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   
   const { toast } = useToast();
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrders();
@@ -200,11 +197,6 @@ const AdminOrdersPage = () => {
     return status === 'paid' ? 'default' : 'secondary';
   };
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/auth');
-  };
-
   const viewOrderDetails = (order: Order) => {
     setSelectedOrder(order);
     setIsDialogOpen(true);
@@ -217,30 +209,7 @@ const AdminOrdersPage = () => {
     order.profiles?.email || order.customer_email || 'N/A';
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Package className="h-8 w-8" />
-            <h1 className="text-2xl font-bold">Orders Management</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/admin')}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Dashboard
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto py-12 px-6">
+    <AdminLayout title="Orders Management" icon={Package} desktopMenuMode="hamburger">
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -353,8 +322,6 @@ const AdminOrdersPage = () => {
             )}
           </div>
         )}
-      </main>
-
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
@@ -421,7 +388,7 @@ const AdminOrdersPage = () => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </AdminLayout>
   );
 };
 

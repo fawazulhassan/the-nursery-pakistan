@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, Leaf, Users, Package, AlertTriangle, Edit, Eye, EyeOff, Tag, MessageSquare, BookOpenText } from 'lucide-react';
+import { Upload, Leaf, Package, AlertTriangle, Edit, Eye, EyeOff, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,8 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 import { CATEGORIES } from '@/lib/constants';
+import AdminLayout from '@/components/admin/AdminLayout';
 
 interface Product {
   id: string;
@@ -50,8 +49,6 @@ const AdminDashboard = () => {
   const [manualImageUrl, setManualImageUrl] = useState('');
   
   const { toast } = useToast();
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -272,68 +269,13 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/auth');
-  };
-
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Leaf className="h-8 w-8" />
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/admin/orders')}
-              className="flex items-center gap-2"
-            >
-              <Package className="h-4 w-4" />
-              View Orders
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/admin/users')}
-              className="flex items-center gap-2"
-            >
-              <Users className="h-4 w-4" />
-              Manage Users
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/admin/reviews')}
-              className="flex items-center gap-2"
-            >
-              <MessageSquare className="h-4 w-4" />
-              Manage Reviews
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/admin/blogs')}
-              className="flex items-center gap-2"
-            >
-              <BookOpenText className="h-4 w-4" />
-              Manage Blogs
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/')}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Store
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto py-12 px-6">
+    <AdminLayout
+      title="Admin Dashboard"
+      icon={Leaf}
+      contentClassName="max-w-4xl"
+      desktopMenuMode="hamburger"
+    >
         <div className="bg-card rounded-lg shadow-lg p-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
@@ -691,8 +633,7 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 

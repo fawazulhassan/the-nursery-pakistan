@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Package, ArrowLeft, Eye, MapPin, XCircle, User } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -49,6 +49,9 @@ const AccountPage = () => {
   const { toast } = useToast();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeTab = searchParams.get("tab") === "addresses" ? "addresses" : "orders";
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -223,7 +226,11 @@ const AccountPage = () => {
 
         <section className="py-12">
           <div className="container mx-auto px-4">
-            <Tabs defaultValue="orders" className="space-y-6">
+            <Tabs
+              value={activeTab}
+              onValueChange={(value) => setSearchParams({ tab: value })}
+              className="space-y-6"
+            >
               <TabsList className="grid w-full grid-cols-2 max-w-md">
                 <TabsTrigger value="orders" className="flex items-center gap-2">
                   <Package className="h-4 w-4" />
