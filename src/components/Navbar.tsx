@@ -40,7 +40,7 @@ const Navbar = () => {
             <div className="text-2xl font-bold text-primary">
               The Nursery
             </div>
-            <div className="hidden sm:block text-sm text-muted-foreground">Pakistan</div>
+            <div className="text-sm text-muted-foreground">Pakistan</div>
           </Link>
 
           {/* Search Bar */}

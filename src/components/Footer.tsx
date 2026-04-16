@@ -9,7 +9,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* About */}
           <div>
-            <h3 className="text-xl font-bold text-primary mb-4">The Nursery Pakistan</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="text-2xl font-bold text-primary">The Nursery</div>
+              <div className="text-sm text-muted-foreground">Pakistan</div>
+            </div>
             <p className="text-muted-foreground mb-4">
               Your trusted source for premium plants and gardening supplies across Pakistan.
             </p>
