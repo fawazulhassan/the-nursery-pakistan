@@ -7,12 +7,14 @@ import { Heart, ShoppingCart, Tag } from "lucide-react";
 import ProductDetailDialog from "./ProductDetailDialog";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
+import { useWishlist } from "@/context/WishlistContext";
 
 const FeaturedProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { toggleWishlist, isInWishlist } = useWishlist();
 
   useEffect(() => {
     fetchProducts();
@@ -65,7 +67,9 @@ const FeaturedProducts = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          {products.map((product, index) => (
+          {products.map((product, index) => {
+            const inWishlist = isInWishlist(product.id);
+            return (
             <Card
               key={product.id}
               className="group hover:shadow-xl transition-all duration-300 animate-fade-in overflow-hidden border-border"
@@ -80,9 +84,17 @@ const FeaturedProducts = () => {
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    toggleWishlist(product);
+                  }}
+                  aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                  className={`absolute top-4 right-4 transition-opacity ${
+                    inWishlist ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                  }`}
                 >
-                  <Heart className="h-4 w-4" />
+                  <Heart className={`h-4 w-4 ${inWishlist ? "fill-current text-red-500" : ""}`} />
                 </Button>
                 <div className="absolute top-4 left-4 flex gap-2">
                   {product.stock_quantity === 0 ? (
@@ -155,7 +167,8 @@ const FeaturedProducts = () => {
                 </Button>
               </CardFooter>
             </Card>
-          ))}
+            );
+          })}
         </div>
 
         <div className="text-center mt-12">

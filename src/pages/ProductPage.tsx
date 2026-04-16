@@ -4,10 +4,11 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
@@ -22,6 +23,7 @@ const ProductPage = () => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const { toast } = useToast();
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -107,6 +109,7 @@ const ProductPage = () => {
   const displayPrice = salePrice
     ? `Rs ${salePrice.toFixed(0)}`
     : `Rs ${basePrice.toLocaleString()}`;
+  const inWishlist = isInWishlist(product.id);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -192,15 +195,26 @@ const ProductPage = () => {
                   )}
                 </div>
 
-                <Button
-                  size="lg"
-                  className="w-full md:w-auto"
-                  onClick={handleAddToCart}
-                  disabled={product.stock_quantity === 0}
-                >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    size="lg"
+                    className="w-full md:w-auto"
+                    onClick={handleAddToCart}
+                    disabled={product.stock_quantity === 0}
+                  >
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant={inWishlist ? "default" : "outline"}
+                    className="w-full sm:w-auto"
+                    onClick={() => toggleWishlist(product)}
+                  >
+                    <Heart className={`h-4 w-4 mr-2 ${inWishlist ? "fill-current" : ""}`} />
+                    {inWishlist ? "Wishlisted" : "Add to Wishlist"}
+                  </Button>
+                </div>
               </div>
             </div>
 

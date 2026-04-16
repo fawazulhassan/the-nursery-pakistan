@@ -10,6 +10,7 @@ import ProductDetailDialog from "@/components/ProductDetailDialog";
 import { useToast } from "@/hooks/use-toast";
 import { CATEGORIES as CATEGORY_LIST } from "@/lib/constants";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
+import { useWishlist } from "@/context/WishlistContext";
 
 const CATEGORIES = [
   { name: "All", value: "all" },
@@ -23,6 +24,7 @@ const ProductsPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { toggleWishlist, isInWishlist } = useWishlist();
 
   useEffect(() => {
     fetchProducts();
@@ -156,7 +158,9 @@ const ProductsPage = () => {
               </div>
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                {filteredProducts.map((product, index) => (
+                {filteredProducts.map((product, index) => {
+                  const inWishlist = isInWishlist(product.id);
+                  return (
                   <Card
                     key={product.id}
                     className="group hover:shadow-xl transition-all duration-300 animate-fade-in overflow-hidden border-border"
@@ -171,9 +175,17 @@ const ProductsPage = () => {
                       <Button
                         size="icon"
                         variant="secondary"
-                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleWishlist(product);
+                        }}
+                        aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                        className={`absolute top-4 right-4 transition-opacity ${
+                          inWishlist ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                        }`}
                       >
-                        <Heart className="h-4 w-4" />
+                        <Heart className={`h-4 w-4 ${inWishlist ? "fill-current text-red-500" : ""}`} />
                       </Button>
                       <div className="absolute top-4 left-4 flex gap-2">
                         {product.stock_quantity === 0 ? (
@@ -246,7 +258,8 @@ const ProductsPage = () => {
                       </Button>
                     </CardFooter>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-16">

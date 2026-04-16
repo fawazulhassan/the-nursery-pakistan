@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
@@ -14,6 +15,7 @@ import GuidePage from "./pages/GuidePage";
 import SearchPage from "./pages/SearchPage";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
+import WishlistPage from "@/pages/WishlistPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import AuthPage from "./pages/AuthPage";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -70,6 +72,7 @@ const AppRoutes = () => {
       <Route path="/blogs" element={<BlogsPage />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="/cart" element={<CartPage />} />
+      <Route path="/wishlist" element={<WishlistPage />} />
       <Route path="/auth" element={<AuthPage />} />
       
       {/* Protected routes - require authentication */}
@@ -93,15 +96,17 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <CartProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-          <Analytics />
-          <SpeedInsights />
-        </CartProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+            <Analytics />
+            <SpeedInsights />
+          </CartProvider>
+        </WishlistProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

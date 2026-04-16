@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Search, ShoppingCart, User, Menu, LogOut } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, LogOut, Heart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { CATEGORIES } from "@/lib/constants";
 
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { getCartCount } = useCart();
+  const { getWishlistCount } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -57,6 +59,26 @@ const Navbar = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            <Link to="/wishlist">
+              <Button variant="ghost" size="icon" className="relative" title="Wishlist">
+                <Heart className="h-5 w-5" />
+                {getWishlistCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {getWishlistCount()}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            <Link to="/cart">
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {getCartCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {getCartCount()}
+                  </span>
+                )}
+              </Button>
+            </Link>
             {user ? (
               <>
                 <Link to="/account" className="flex">
@@ -91,16 +113,6 @@ const Navbar = () => {
                 </Button>
               </Link>
             )}
-            <Link to="/cart">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
-                {getCartCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {getCartCount()}
-                  </span>
-                )}
-              </Button>
-            </Link>
             <Button
               variant="ghost"
               size="icon"
