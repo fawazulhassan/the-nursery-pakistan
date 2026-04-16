@@ -126,7 +126,7 @@ const LandscapingServicesPage = () => {
                       {featuredProject.gallery_image_urls?.length ? (
                         <div>
                           <p className="font-medium text-sm mb-2">Gallery</p>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div className="grid grid-cols-3 gap-2">
                             {featuredProject.gallery_image_urls.map((imageUrl, index) => (
                               <div
                                 key={`${featuredProject.id}-gallery-${index}`}
@@ -160,7 +160,7 @@ const LandscapingServicesPage = () => {
                         {project.gallery_image_urls?.length ? (
                           <div>
                             <p className="font-medium text-sm mb-2">Gallery</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="grid grid-cols-3 gap-2">
                               {project.gallery_image_urls.map((imageUrl, index) => (
                                 <div
                                   key={`${project.id}-gallery-${index}`}
