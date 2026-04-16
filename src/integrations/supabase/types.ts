@@ -1,9 +1,9 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 type GenericTable = {
-  Row: Record<string, any>;
-  Insert: Record<string, any>;
-  Update: Record<string, any>;
+  Row: Record<string, unknown>;
+  Insert: Record<string, unknown>;
+  Update: Record<string, unknown>;
   Relationships: [];
 };
 
@@ -65,6 +65,72 @@ export type Database = {
           sale_end_at?: string | null;
           sale_quantity_limit?: number | null;
           is_visible?: boolean | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      completed_projects: {
+        Row: {
+          id: string;
+          title: string;
+          description: string;
+          cover_image_url: string;
+          gallery_image_urls: string[];
+          display_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          description: string;
+          cover_image_url: string;
+          gallery_image_urls?: string[];
+          display_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          description?: string;
+          cover_image_url?: string;
+          gallery_image_urls?: string[];
+          display_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      consultation_requests: {
+        Row: {
+          id: string;
+          full_name: string;
+          email: string;
+          phone_number: string;
+          message: string | null;
+          status: "new" | "contacted" | "closed";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          full_name: string;
+          email: string;
+          phone_number: string;
+          message?: string | null;
+          status?: "new" | "contacted" | "closed";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          full_name?: string;
+          email?: string;
+          phone_number?: string;
+          message?: string | null;
+          status?: "new" | "contacted" | "closed";
           created_at?: string;
           updated_at?: string;
         };

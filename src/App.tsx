@@ -28,9 +28,12 @@ import AdminSubscribersPage from "./pages/AdminSubscribersPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import AccountPage from "./pages/AccountPage";
 import LandscapingServicesPage from "./pages/LandscapingServicesPage";
+import ConsultationRequestPage from "./pages/ConsultationRequestPage";
 import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
 import BlogsPage from "./pages/BlogsPage";
 import BlogPostPage from "./pages/BlogPostPage";
+import AdminLandscapingProjectsPage from "./pages/AdminLandscapingProjectsPage";
+import AdminConsultationRequestsPage from "./pages/AdminConsultationRequestsPage";
 import NotFound from "./pages/NotFound";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 
@@ -71,6 +74,7 @@ const AppRoutes = () => {
       <Route path="/guide" element={<GuidePage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/landscaping-services" element={<LandscapingServicesPage />} />
+      <Route path="/landscaping-services/request-consultation" element={<ConsultationRequestPage />} />
       <Route path="/flower-workshop" element={<FlowerWorkshopPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/blogs" element={<BlogsPage />} />
@@ -89,6 +93,8 @@ const AppRoutes = () => {
       <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsersPage /></ProtectedRoute>} />
       <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrdersPage /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute adminOnly><AdminReviewsPage /></ProtectedRoute>} />
+      <Route path="/admin/landscaping-projects" element={<ProtectedRoute adminOnly><AdminLandscapingProjectsPage /></ProtectedRoute>} />
+      <Route path="/admin/consultation-requests" element={<ProtectedRoute adminOnly><AdminConsultationRequestsPage /></ProtectedRoute>} />
       <Route path="/admin/blogs" element={<ProtectedRoute adminOnly><AdminBlogsPage /></ProtectedRoute>} />
       <Route path="/admin/subscribers" element={<ProtectedRoute adminOnly><AdminSubscribersPage /></ProtectedRoute>} />
       

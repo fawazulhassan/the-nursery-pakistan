@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
+  BriefcaseBusiness,
   BookOpenText,
   Leaf,
   Menu,
   MessageSquare,
   Package,
+  PhoneCall,
   Users,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -32,6 +34,8 @@ const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: "Orders", to: "/admin/orders", icon: Package },
   { label: "Users", to: "/admin/users", icon: Users },
   { label: "Reviews", to: "/admin/reviews", icon: MessageSquare },
+  { label: "Projects", to: "/admin/landscaping-projects", icon: BriefcaseBusiness },
+  { label: "Consultations", to: "/admin/consultation-requests", icon: PhoneCall },
   { label: "Blogs", to: "/admin/blogs", icon: BookOpenText },
   { label: "Subscribers", to: "/admin/subscribers", icon: Users },
 ];
