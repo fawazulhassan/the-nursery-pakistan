@@ -30,12 +30,17 @@ import AccountPage from "./pages/AccountPage";
 import LandscapingServicesPage from "./pages/LandscapingServicesPage";
 import ConsultationRequestPage from "./pages/ConsultationRequestPage";
 import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
+import WorkshopsPage from "./pages/WorkshopsPage";
+import WorkshopPostPage from "./pages/WorkshopPostPage";
 import BlogsPage from "./pages/BlogsPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProjectPostPage from "./pages/ProjectPostPage";
 import AdminLandscapingProjectsPage from "./pages/AdminLandscapingProjectsPage";
 import AdminConsultationRequestsPage from "./pages/AdminConsultationRequestsPage";
+import AdminWorkshopsPage from "./pages/AdminWorkshopsPage";
+import AdminWorkshopSlotsPage from "./pages/AdminWorkshopSlotsPage";
+import AdminWorkshopBookingsPage from "./pages/AdminWorkshopBookingsPage";
 import NotFound from "./pages/NotFound";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 
@@ -78,6 +83,8 @@ const AppRoutes = () => {
       <Route path="/landscaping-services" element={<LandscapingServicesPage />} />
       <Route path="/landscaping-services/request-consultation" element={<ConsultationRequestPage />} />
       <Route path="/flower-workshop" element={<FlowerWorkshopPage />} />
+      <Route path="/workshops" element={<WorkshopsPage />} />
+      <Route path="/workshop/:slug" element={<WorkshopPostPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/blogs" element={<BlogsPage />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
@@ -99,6 +106,9 @@ const AppRoutes = () => {
       <Route path="/admin/reviews" element={<ProtectedRoute adminOnly><AdminReviewsPage /></ProtectedRoute>} />
       <Route path="/admin/landscaping-projects" element={<ProtectedRoute adminOnly><AdminLandscapingProjectsPage /></ProtectedRoute>} />
       <Route path="/admin/consultation-requests" element={<ProtectedRoute adminOnly><AdminConsultationRequestsPage /></ProtectedRoute>} />
+      <Route path="/admin/workshops" element={<ProtectedRoute adminOnly><AdminWorkshopsPage /></ProtectedRoute>} />
+      <Route path="/admin/workshop-slots" element={<ProtectedRoute adminOnly><AdminWorkshopSlotsPage /></ProtectedRoute>} />
+      <Route path="/admin/workshop-bookings" element={<ProtectedRoute adminOnly><AdminWorkshopBookingsPage /></ProtectedRoute>} />
       <Route path="/admin/blogs" element={<ProtectedRoute adminOnly><AdminBlogsPage /></ProtectedRoute>} />
       <Route path="/admin/subscribers" element={<ProtectedRoute adminOnly><AdminSubscribersPage /></ProtectedRoute>} />
       

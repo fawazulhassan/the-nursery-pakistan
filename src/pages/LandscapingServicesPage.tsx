@@ -120,14 +120,9 @@ const LandscapingServicesPage = () => {
                       alt={featuredProject.title}
                       className="w-full h-64 md:h-72 object-cover rounded-lg"
                     />
-                    <div className="space-y-3">
+                    <div className="flex flex-col h-full space-y-3">
                       <h3 className="text-2xl font-semibold">{featuredProject.title}</h3>
                       <p className="text-muted-foreground">{featuredProject.description}</p>
-                      <Link to={`/project/${featuredProject.slug}`}>
-                        <Button variant="outline" size="sm">
-                          View Project →
-                        </Button>
-                      </Link>
                       {featuredProject.gallery_image_urls?.length ? (
                         <div>
                           <p className="font-medium text-sm mb-2">Gallery</p>
@@ -147,6 +142,13 @@ const LandscapingServicesPage = () => {
                           </div>
                         </div>
                       ) : null}
+                      <div className="mt-auto flex justify-end pt-2">
+                        <Link to={`/project/${featuredProject.slug}`}>
+                          <Button variant="outline" size="sm">
+                            View Project →
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   </article>
                 )}
@@ -154,7 +156,7 @@ const LandscapingServicesPage = () => {
                 {remainingProjects.length > 0 && (
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {remainingProjects.map((project) => (
-                      <article key={project.id} className="rounded-xl border bg-card p-4 space-y-3">
+                      <article key={project.id} className="rounded-xl border bg-card p-4 flex flex-col h-full space-y-3">
                         <img
                           src={project.cover_image_url}
                           alt={project.title}
@@ -162,11 +164,6 @@ const LandscapingServicesPage = () => {
                         />
                         <h3 className="text-xl font-semibold">{project.title}</h3>
                         <p className="text-sm text-muted-foreground">{project.description}</p>
-                        <Link to={`/project/${project.slug}`}>
-                          <Button variant="outline" size="sm">
-                            View Project →
-                          </Button>
-                        </Link>
                         {project.gallery_image_urls?.length ? (
                           <div>
                             <p className="font-medium text-sm mb-2">Gallery</p>
@@ -186,6 +183,13 @@ const LandscapingServicesPage = () => {
                             </div>
                           </div>
                         ) : null}
+                        <div className="mt-auto flex justify-end pt-2">
+                          <Link to={`/project/${project.slug}`}>
+                            <Button variant="outline" size="sm">
+                              View Project →
+                            </Button>
+                          </Link>
+                        </div>
                       </article>
                     ))}
                   </div>

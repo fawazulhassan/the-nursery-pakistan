@@ -139,6 +139,123 @@ export type Database = {
         };
         Relationships: [];
       };
+      workshops: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          description: string;
+          workshop_date: string;
+          cover_image_url: string;
+          gallery_image_urls: string[];
+          display_order: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug?: string;
+          title: string;
+          description: string;
+          workshop_date: string;
+          cover_image_url: string;
+          gallery_image_urls?: string[];
+          display_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          description?: string;
+          workshop_date?: string;
+          cover_image_url?: string;
+          gallery_image_urls?: string[];
+          display_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      workshop_slots: {
+        Row: {
+          id: string;
+          workshop_id: string;
+          slot_label: string;
+          slot_start_at: string;
+          slot_end_at: string;
+          capacity: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          workshop_id: string;
+          slot_label: string;
+          slot_start_at: string;
+          slot_end_at: string;
+          capacity: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          workshop_id?: string;
+          slot_label?: string;
+          slot_start_at?: string;
+          slot_end_at?: string;
+          capacity?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      workshop_bookings: {
+        Row: {
+          id: string;
+          workshop_id: string;
+          slot_id: string;
+          full_name: string;
+          email: string;
+          phone_number: string;
+          notes: string | null;
+          status: "new" | "confirmed" | "completed" | "cancelled";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          workshop_id: string;
+          slot_id: string;
+          full_name: string;
+          email: string;
+          phone_number: string;
+          notes?: string | null;
+          status?: "new" | "confirmed" | "completed" | "cancelled";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          workshop_id?: string;
+          slot_id?: string;
+          full_name?: string;
+          email?: string;
+          phone_number?: string;
+          notes?: string | null;
+          status?: "new" | "confirmed" | "completed" | "cancelled";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       blogs: GenericTable;
       reviews: GenericTable;
       newsletter_subscribers: GenericTable;
@@ -149,7 +266,16 @@ export type Database = {
       [key: string]: GenericTable;
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      create_booking_if_available: {
+        Args: {
+          p_slot_id: string;
+          p_booking_data: Json;
+        };
+        Returns: Database["public"]["Tables"]["workshop_bookings"]["Row"];
+      };
+      [key: string]: { Args: Record<string, Json | undefined>; Returns: Json };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

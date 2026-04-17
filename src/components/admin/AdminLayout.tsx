@@ -3,6 +3,9 @@ import type { LucideIcon } from "lucide-react";
 import {
   BriefcaseBusiness,
   BookOpenText,
+  CalendarCheck2,
+  CalendarDays,
+  Clock3,
   Leaf,
   Menu,
   MessageSquare,
@@ -36,6 +39,9 @@ const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: "Reviews", to: "/admin/reviews", icon: MessageSquare },
   { label: "Projects", to: "/admin/landscaping-projects", icon: BriefcaseBusiness },
   { label: "Consultations", to: "/admin/consultation-requests", icon: PhoneCall },
+  { label: "Workshops", to: "/admin/workshops", icon: CalendarDays },
+  { label: "Workshop Slots", to: "/admin/workshop-slots", icon: Clock3 },
+  { label: "Workshop Bookings", to: "/admin/workshop-bookings", icon: CalendarCheck2 },
   { label: "Blogs", to: "/admin/blogs", icon: BookOpenText },
   { label: "Subscribers", to: "/admin/subscribers", icon: Users },
 ];

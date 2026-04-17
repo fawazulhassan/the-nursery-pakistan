@@ -5,13 +5,16 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getPublishedProjects, type CompletedProjectRow } from "@/lib/landscapingProjects";
+import { getPublishedWorkshops, type WorkshopRow } from "@/lib/workshops";
 
 const PAGE_SIZE = 12;
 
-const ProjectsPage = () => {
+const formatWorkshopDate = (value: string) =>
+  new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(value));
+
+const WorkshopsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [projects, setProjects] = useState<CompletedProjectRow[]>([]);
+  const [workshops, setWorkshops] = useState<WorkshopRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const page = useMemo(() => {
@@ -23,8 +26,8 @@ const ProjectsPage = () => {
     const load = async () => {
       setIsLoading(true);
       try {
-        const data = await getPublishedProjects();
-        setProjects(data);
+        const data = await getPublishedWorkshops();
+        setWorkshops(data);
       } finally {
         setIsLoading(false);
       }
@@ -32,12 +35,12 @@ const ProjectsPage = () => {
     load();
   }, []);
 
-  const shouldPaginate = projects.length > PAGE_SIZE;
-  const totalPages = shouldPaginate ? Math.max(1, Math.ceil(projects.length / PAGE_SIZE)) : 1;
+  const shouldPaginate = workshops.length > PAGE_SIZE;
+  const totalPages = shouldPaginate ? Math.max(1, Math.ceil(workshops.length / PAGE_SIZE)) : 1;
   const currentPage = shouldPaginate ? Math.min(page, totalPages) : 1;
-  const visibleProjects = shouldPaginate
-    ? projects.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-    : projects;
+  const visibleWorkshops = shouldPaginate
+    ? workshops.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+    : workshops;
 
   const updatePage = (nextPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -55,43 +58,44 @@ const ProjectsPage = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold">Completed Projects</h1>
-            <p className="text-muted-foreground mt-1">Explore our landscaping transformations and project showcases.</p>
+            <h1 className="text-3xl md:text-4xl font-bold">Workshops</h1>
+            <p className="text-muted-foreground mt-1">Explore completed sessions and workshop highlights.</p>
           </div>
-          <Link to="/landscaping-services">
+          <Link to="/flower-workshop">
             <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Landscaping Services
+              Back to Flower Workshop
             </Button>
           </Link>
         </div>
 
         <div className="flex gap-2 mb-6">
-          <Button asChild size="sm">
+          <Button asChild variant="outline" size="sm">
             <Link to="/projects">Completed Projects</Link>
           </Button>
-          <Button asChild variant="outline" size="sm">
+          <Button asChild size="sm">
             <Link to="/workshops">Previous Workshops</Link>
           </Button>
         </div>
 
         {isLoading ? (
-          <div className="text-center py-10 text-muted-foreground">Loading projects...</div>
-        ) : visibleProjects.length === 0 ? (
+          <div className="text-center py-10 text-muted-foreground">Loading workshops...</div>
+        ) : visibleWorkshops.length === 0 ? (
           <div className="text-center py-12 border rounded-lg bg-muted/20">
-            <h2 className="text-xl font-semibold mb-2">Projects coming soon — check back shortly.</h2>
+            <h2 className="text-xl font-semibold mb-2">No upcoming workshops at the moment — check back soon!</h2>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleProjects.map((project) => (
-              <Card key={project.id} className="overflow-hidden">
-                <img src={project.cover_image_url} alt={project.title} className="h-44 w-full object-cover" />
+            {visibleWorkshops.map((workshop) => (
+              <Card key={workshop.id} className="overflow-hidden">
+                <img src={workshop.cover_image_url} alt={workshop.title} className="h-44 w-full object-cover" />
                 <CardContent className="p-5">
-                  <h2 className="font-bold text-lg mb-2 line-clamp-2">{project.title}</h2>
-                  <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{project.description}</p>
-                  <Link to={`/project/${project.slug}`}>
+                  <p className="text-xs text-muted-foreground mb-2">{formatWorkshopDate(workshop.workshop_date)}</p>
+                  <h2 className="font-bold text-lg mb-2 line-clamp-2">{workshop.title}</h2>
+                  <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{workshop.description}</p>
+                  <Link to={`/workshop/${workshop.slug}`}>
                     <Button variant="outline" size="sm">
-                      View Project →
+                      View Workshop →
                     </Button>
                   </Link>
                 </CardContent>
@@ -129,4 +133,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default WorkshopsPage;
