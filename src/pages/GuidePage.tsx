@@ -260,7 +260,7 @@ const GuidePage = () => {
 
               <section className="rounded-xl border border-border bg-card p-4 md:p-5">
                 <h2 className="text-2xl font-semibold text-foreground">Popular Plants &amp; Quick Care Stats</h2>
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4">
                   {popularPlants.map((plant) => {
                     const imageUrl = resolvePrimaryGuideImage(plant.imageCandidates);
                     const isFailed = failedPlantImages[plant.name];

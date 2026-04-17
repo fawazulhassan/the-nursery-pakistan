@@ -36,11 +36,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="text-2xl font-bold text-primary">
+          <Link to="/" className="flex items-center whitespace-nowrap">
+            <div className="text-xl md:text-2xl font-bold text-primary">
               The Nursery
+              <span className="ml-1 text-sm font-normal text-muted-foreground">Pakistan</span>
             </div>
-            <div className="text-sm text-muted-foreground">Pakistan</div>
           </Link>
 
           {/* Search Bar */}
