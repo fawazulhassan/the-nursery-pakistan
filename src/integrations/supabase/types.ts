@@ -73,6 +73,7 @@ export type Database = {
       completed_projects: {
         Row: {
           id: string;
+          slug: string;
           title: string;
           description: string;
           cover_image_url: string;
@@ -83,6 +84,7 @@ export type Database = {
         };
         Insert: {
           id?: string;
+          slug?: string;
           title: string;
           description: string;
           cover_image_url: string;
@@ -93,6 +95,7 @@ export type Database = {
         };
         Update: {
           id?: string;
+          slug?: string;
           title?: string;
           description?: string;
           cover_image_url?: string;

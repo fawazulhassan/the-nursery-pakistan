@@ -32,6 +32,8 @@ import ConsultationRequestPage from "./pages/ConsultationRequestPage";
 import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
 import BlogsPage from "./pages/BlogsPage";
 import BlogPostPage from "./pages/BlogPostPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import ProjectPostPage from "./pages/ProjectPostPage";
 import AdminLandscapingProjectsPage from "./pages/AdminLandscapingProjectsPage";
 import AdminConsultationRequestsPage from "./pages/AdminConsultationRequestsPage";
 import NotFound from "./pages/NotFound";
@@ -79,6 +81,8 @@ const AppRoutes = () => {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/blogs" element={<BlogsPage />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
+      <Route path="/projects" element={<ProjectsPage />} />
+      <Route path="/project/:slug" element={<ProjectPostPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/wishlist" element={<WishlistPage />} />
       <Route path="/auth" element={<AuthPage />} />

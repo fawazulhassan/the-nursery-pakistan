@@ -14,15 +14,61 @@ export interface CompletedProjectInput {
 const LANDSCAPING_IMAGES_BUCKET = "landscaping-images";
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
-export async function getCompletedProjects(): Promise<CompletedProjectRow[]> {
+export function generateProjectSlug(title: string): string {
+  const base = title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return base.slice(0, 80) || "project";
+}
+
+async function generateUniqueProjectSlug(title: string, ignoreId?: string): Promise<string> {
+  const baseSlug = generateProjectSlug(title);
+  let candidateSlug = baseSlug;
+  let suffix = 2;
+
+  // Suffix strategy: slug, slug-2, slug-3, ...
+  while (true) {
+    let query = supabase.from("completed_projects").select("id").eq("slug", candidateSlug).maybeSingle();
+    if (ignoreId) {
+      query = query.neq("id", ignoreId);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    if (!data?.id) return candidateSlug;
+
+    candidateSlug = `${baseSlug.slice(0, 75)}-${suffix}`;
+    suffix += 1;
+  }
+}
+
+export async function getPublishedProjects(): Promise<CompletedProjectRow[]> {
   const { data, error } = await supabase
     .from("completed_projects")
     .select("*")
-    .order("display_order", { ascending: true })
-    .order("created_at", { ascending: true });
+    .order("display_order", { ascending: true, nullsFirst: false })
+    .order("created_at", { ascending: false });
 
   if (error) throw error;
   return data ?? [];
+}
+
+export async function getCompletedProjects(): Promise<CompletedProjectRow[]> {
+  return getPublishedProjects();
+}
+
+export async function getProjectBySlug(slug: string): Promise<CompletedProjectRow> {
+  const { data, error } = await supabase
+    .from("completed_projects")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) throw error;
+  return data;
 }
 
 export async function getNextCompletedProjectOrder(): Promise<number> {
@@ -42,6 +88,7 @@ export async function createCompletedProject(input: CompletedProjectInput): Prom
     typeof input.display_order === "number" && Number.isFinite(input.display_order)
       ? Math.trunc(input.display_order)
       : await getNextCompletedProjectOrder();
+  const slug = await generateUniqueProjectSlug(input.title);
 
   const { data, error } = await supabase
     .from("completed_projects")
@@ -51,6 +98,7 @@ export async function createCompletedProject(input: CompletedProjectInput): Prom
       cover_image_url: input.cover_image_url,
       gallery_image_urls: input.gallery_image_urls,
       display_order: normalizedOrder,
+      slug,
     })
     .select("*")
     .single();

@@ -123,6 +123,11 @@ const LandscapingServicesPage = () => {
                     <div className="space-y-3">
                       <h3 className="text-2xl font-semibold">{featuredProject.title}</h3>
                       <p className="text-muted-foreground">{featuredProject.description}</p>
+                      <Link to={`/project/${featuredProject.slug}`}>
+                        <Button variant="outline" size="sm">
+                          View Project →
+                        </Button>
+                      </Link>
                       {featuredProject.gallery_image_urls?.length ? (
                         <div>
                           <p className="font-medium text-sm mb-2">Gallery</p>
@@ -157,6 +162,11 @@ const LandscapingServicesPage = () => {
                         />
                         <h3 className="text-xl font-semibold">{project.title}</h3>
                         <p className="text-sm text-muted-foreground">{project.description}</p>
+                        <Link to={`/project/${project.slug}`}>
+                          <Button variant="outline" size="sm">
+                            View Project →
+                          </Button>
+                        </Link>
                         {project.gallery_image_urls?.length ? (
                           <div>
                             <p className="font-medium text-sm mb-2">Gallery</p>

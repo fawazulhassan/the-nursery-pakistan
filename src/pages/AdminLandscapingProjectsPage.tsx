@@ -196,6 +196,19 @@ const AdminLandscapingProjectsPage = () => {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="projectSlug">Project Slug</Label>
+              <Input
+                id="projectSlug"
+                value={editingProject?.slug ?? "Generated on create"}
+                readOnly
+                className="bg-muted/40"
+              />
+              <p className="text-xs text-muted-foreground">
+                Slug is read-only after creation to avoid breaking project URLs.
+              </p>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="description">Description *</Label>
               <Textarea
                 id="description"
@@ -301,6 +314,7 @@ const AdminLandscapingProjectsPage = () => {
                       <p className="text-sm text-muted-foreground">
                         Order: {project.display_order} • Gallery: {((project.gallery_image_urls as string[] | null) ?? []).length}
                       </p>
+                      <p className="text-xs text-muted-foreground truncate">/{project.slug}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
