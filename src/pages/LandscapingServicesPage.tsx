@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useMemo, useState } from "react";
 import { getCompletedProjects, type CompletedProjectRow } from "@/lib/landscapingProjects";
 import { useToast } from "@/hooks/use-toast";
+import landscapingServicesHeroBanner from "@/assets/landscaping-services-hero-banner.png";
 
 const LandscapingServicesPage = () => {
   const { user } = useAuth();
@@ -75,11 +76,10 @@ const LandscapingServicesPage = () => {
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="space-y-5">
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight text-foreground">
-                  Welcome, I&apos;m Landscaping Services
+                  Welcome, Our Landscaping Services
                 </h1>
                 <p className="text-muted-foreground text-lg max-w-xl">
-                  Welcome, I&apos;m [Designer Name], Lead Landscape Architect at The Nursery. We specialize in crafting
-                  personalized outdoor sanctuaries that blend nature with your lifestyle.
+                With a passion for plants and a commitment to excellence, we offer comprehensive landscaping and plant maintenance services to our green community
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild>
@@ -92,8 +92,8 @@ const LandscapingServicesPage = () => {
               </div>
               <div className="rounded-2xl overflow-hidden border border-border shadow-sm bg-card">
                 <img
-                  src="https://images.unsplash.com/photo-1600240644455-3edc55c375fe?auto=format&fit=crop&w=1200&q=80"
-                  alt="Landscaped garden pathway"
+                  src={landscapingServicesHeroBanner}
+                  alt="Luxury residential garden with manicured lawn, stone path, pond, and pergola seating"
                   className="w-full h-[320px] md:h-[380px] object-cover"
                 />
               </div>
