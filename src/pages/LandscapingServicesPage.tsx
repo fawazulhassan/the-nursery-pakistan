@@ -12,6 +12,13 @@ import { getCompletedProjects, type CompletedProjectRow } from "@/lib/landscapin
 import { useToast } from "@/hooks/use-toast";
 import landscapingServicesHeroBanner from "@/assets/landscaping-services-hero-banner.png";
 
+const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
+
+const isVideoUrl = (url: string): boolean => {
+  const normalized = url.split("?")[0].toLowerCase();
+  return VIDEO_EXTENSIONS.some((extension) => normalized.endsWith(extension));
+};
+
 const LandscapingServicesPage = () => {
   const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
@@ -132,11 +139,22 @@ const LandscapingServicesPage = () => {
                                 key={`${featuredProject.id}-gallery-${index}`}
                                 className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden"
                               >
-                                <img
-                                  src={imageUrl}
-                                  alt={`${featuredProject.title} gallery ${index + 1}`}
-                                  className="w-full h-full object-cover"
-                                />
+                                {isVideoUrl(imageUrl) ? (
+                                  <video
+                                    src={imageUrl}
+                                    controls
+                                    muted
+                                    playsInline
+                                    title={`${featuredProject.title} gallery video ${index + 1}`}
+                                    className="w-full h-full object-cover bg-black"
+                                  />
+                                ) : (
+                                  <img
+                                    src={imageUrl}
+                                    alt={`${featuredProject.title} gallery ${index + 1}`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                )}
                               </div>
                             ))}
                           </div>
@@ -155,7 +173,10 @@ const LandscapingServicesPage = () => {
 
                 {remainingProjects.length > 0 && (
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {remainingProjects.map((project) => (
+                    {remainingProjects.map((project) => {
+                      const galleryItems = (project.gallery_image_urls ?? []).filter((item): item is string => Boolean(item));
+
+                      return (
                       <article key={project.id} className="rounded-xl border bg-card p-4 flex flex-col h-full space-y-3">
                         <img
                           src={project.cover_image_url}
@@ -164,20 +185,31 @@ const LandscapingServicesPage = () => {
                         />
                         <h3 className="text-xl font-semibold">{project.title}</h3>
                         <p className="text-sm text-muted-foreground">{project.description}</p>
-                        {project.gallery_image_urls?.length ? (
+                        {galleryItems.length ? (
                           <div>
                             <p className="font-medium text-sm mb-2">Gallery</p>
                             <div className="grid grid-cols-3 gap-2">
-                              {project.gallery_image_urls.map((imageUrl, index) => (
+                              {galleryItems.map((imageUrl, index) => (
                                 <div
                                   key={`${project.id}-gallery-${index}`}
                                   className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden"
                                 >
-                                  <img
-                                    src={imageUrl}
-                                    alt={`${project.title} gallery ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                  />
+                                  {isVideoUrl(imageUrl) ? (
+                                    <video
+                                      src={imageUrl}
+                                      controls
+                                      muted
+                                      playsInline
+                                      title={`${project.title} gallery video ${index + 1}`}
+                                      className="w-full h-full object-cover bg-black"
+                                    />
+                                  ) : (
+                                    <img
+                                      src={imageUrl}
+                                      alt={`${project.title} gallery ${index + 1}`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  )}
                                 </div>
                               ))}
                             </div>
@@ -191,7 +223,7 @@ const LandscapingServicesPage = () => {
                           </Link>
                         </div>
                       </article>
-                    ))}
+                    )})}
                   </div>
                 )}
               </div>

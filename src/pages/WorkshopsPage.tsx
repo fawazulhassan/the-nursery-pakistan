@@ -58,13 +58,16 @@ const WorkshopsPage = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold">Workshops</h1>
-            <p className="text-muted-foreground mt-1">Explore completed sessions and workshop highlights.</p>
+            <h1 className="text-3xl md:text-4xl font-bold">Our Floral Workshops</h1>
+            <p className="text-muted-foreground mt-1">
+              Learn the art of arrangement from our expert florists. A live, hands-on experience crafted for beginners
+              and enthusiasts alike.
+            </p>
           </div>
           <Link to="/flower-workshop">
             <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Flower Workshop
+              Back to Flower Workshop page
             </Button>
           </Link>
         </div>
@@ -74,7 +77,7 @@ const WorkshopsPage = () => {
             <Link to="/projects">Completed Projects</Link>
           </Button>
           <Button asChild size="sm">
-            <Link to="/workshops">Previous Workshops</Link>
+            <Link to="/workshops">Floral Workshops</Link>
           </Button>
         </div>
 
@@ -95,7 +98,7 @@ const WorkshopsPage = () => {
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{workshop.description}</p>
                   <Link to={`/workshop/${workshop.slug}`}>
                     <Button variant="outline" size="sm">
-                      View Workshop →
+                      Explore Workshop →
                     </Button>
                   </Link>
                 </CardContent>

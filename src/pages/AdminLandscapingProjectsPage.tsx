@@ -13,11 +13,17 @@ import {
   getCompletedProjects,
   getNextCompletedProjectOrder,
   updateCompletedProject,
-  uploadLandscapingImage,
+  uploadLandscapingMedia,
   type CompletedProjectRow,
 } from "@/lib/landscapingProjects";
 
 const MAX_GALLERY_IMAGES = 6;
+const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
+
+const isVideoUrl = (url: string): boolean => {
+  const normalized = url.split("?")[0].toLowerCase();
+  return VIDEO_EXTENSIONS.some((extension) => normalized.endsWith(extension));
+};
 
 const AdminLandscapingProjectsPage = () => {
   const { toast } = useToast();
@@ -85,7 +91,7 @@ const AdminLandscapingProjectsPage = () => {
   const handleCoverUpload = async (file: File) => {
     setIsUploadingCover(true);
     try {
-      const imageUrl = await uploadLandscapingImage(file);
+      const imageUrl = await uploadLandscapingMedia(file);
       setCoverImageUrl(imageUrl);
       toast({ title: "Cover uploaded", description: "Image uploaded successfully." });
     } catch (error: unknown) {
@@ -103,9 +109,10 @@ const AdminLandscapingProjectsPage = () => {
     const allowed = Array.from(files).slice(0, MAX_GALLERY_IMAGES - galleryImageUrls.length);
     setIsUploadingGallery(true);
     try {
-      const uploaded = await Promise.all(allowed.map((file) => uploadLandscapingImage(file)));
+      toast({ title: "Uploading media...", description: "Please wait while your files upload." });
+      const uploaded = await Promise.all(allowed.map((file) => uploadLandscapingMedia(file)));
       setGalleryImageUrls((prev) => [...prev, ...uploaded]);
-      toast({ title: "Gallery updated", description: "Images uploaded successfully." });
+      toast({ title: "Gallery updated", description: "Media uploaded successfully." });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Please try again.";
       toast({ title: "Upload failed", description: message, variant: "destructive" });
@@ -240,7 +247,7 @@ const AdminLandscapingProjectsPage = () => {
               <Label>Gallery Images (Max 6)</Label>
               <Input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/*"
                 multiple
                 onChange={(e) => {
                   handleGalleryUpload(e.target.files);
@@ -248,16 +255,30 @@ const AdminLandscapingProjectsPage = () => {
                 }}
                 disabled={isUploadingGallery || isGalleryAtLimit}
               />
-              {isGalleryAtLimit ? <p className="text-sm text-muted-foreground">Maximum 6 images allowed</p> : null}
+              <p className="text-xs text-muted-foreground">
+                Accepted: JPG, PNG, MP4, WebM · Images up to 5 MB · Videos up to 50 MB
+              </p>
+              {isGalleryAtLimit ? <p className="text-sm text-muted-foreground">Maximum 6 media files allowed</p> : null}
               {galleryImageUrls.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {galleryImageUrls.map((url, index) => (
                     <div key={`${url}-${index}`} className="relative">
-                      <img
-                        src={url}
-                        alt={`Gallery ${index + 1}`}
-                        className="w-full h-24 rounded-md border object-cover"
-                      />
+                      {isVideoUrl(url) ? (
+                        <video
+                          src={url}
+                          controls
+                          muted
+                          playsInline
+                          aria-label={`Gallery video ${index + 1}`}
+                          className="w-full h-24 rounded-md border object-cover bg-black"
+                        />
+                      ) : (
+                        <img
+                          src={url}
+                          alt={`Gallery ${index + 1}`}
+                          className="w-full h-24 rounded-md border object-cover"
+                        />
+                      )}
                       <Button
                         type="button"
                         size="icon"

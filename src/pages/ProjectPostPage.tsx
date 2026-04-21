@@ -7,6 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { getProjectBySlug, type CompletedProjectRow } from "@/lib/landscapingProjects";
 
+const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
+
+const isVideoUrl = (url: string): boolean => {
+  const normalized = url.split("?")[0].toLowerCase();
+  return VIDEO_EXTENSIONS.some((extension) => normalized.endsWith(extension));
+};
+
 const ProjectPostPage = () => {
   const { slug = "" } = useParams<{ slug: string }>();
   const [project, setProject] = useState<CompletedProjectRow | null>(null);
@@ -91,18 +98,29 @@ const ProjectPostPage = () => {
                 <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {galleryImages.map((imageUrl, index) => (
-                    <button
-                      key={`${project.id}-gallery-${index}`}
-                      type="button"
-                      className="w-full aspect-square rounded-md border overflow-hidden"
-                      onClick={() => setLightboxImage(imageUrl)}
-                    >
-                      <img
+                    isVideoUrl(imageUrl) ? (
+                      <video
+                        key={`${project.id}-gallery-${index}`}
                         src={imageUrl}
-                        alt={`${project.title} gallery ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        controls
+                        playsInline
+                        title={`${project.title} gallery video ${index + 1}`}
+                        className="w-full rounded-lg border object-cover bg-black"
                       />
-                    </button>
+                    ) : (
+                      <button
+                        key={`${project.id}-gallery-${index}`}
+                        type="button"
+                        className="w-full aspect-square rounded-md border overflow-hidden"
+                        onClick={() => setLightboxImage(imageUrl)}
+                      >
+                        <img
+                          src={imageUrl}
+                          alt={`${project.title} gallery ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    )
                   ))}
                 </div>
               </section>

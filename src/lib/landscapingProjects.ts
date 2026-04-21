@@ -13,6 +13,7 @@ export interface CompletedProjectInput {
 
 const LANDSCAPING_IMAGES_BUCKET = "landscaping-images";
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 
 export function generateProjectSlug(title: string): string {
   const base = title
@@ -128,21 +129,58 @@ export async function updateCompletedProject(
   return data;
 }
 
+function getBucketPathFromPublicUrl(publicUrl: string): string | null {
+  try {
+    const url = new URL(publicUrl);
+    const marker = `/storage/v1/object/public/${LANDSCAPING_IMAGES_BUCKET}/`;
+    const markerIndex = url.pathname.indexOf(marker);
+    if (markerIndex === -1) return null;
+    return decodeURIComponent(url.pathname.slice(markerIndex + marker.length));
+  } catch {
+    return null;
+  }
+}
+
 export async function deleteCompletedProject(id: string): Promise<void> {
+  const { data: project, error: fetchError } = await supabase
+    .from("completed_projects")
+    .select("cover_image_url, gallery_image_urls")
+    .eq("id", id)
+    .maybeSingle();
+  if (fetchError) throw fetchError;
+
+  const mediaPaths = [
+    getBucketPathFromPublicUrl(project?.cover_image_url ?? ""),
+    // Gallery removal is URL-based and therefore works for both images and videos.
+    ...((project?.gallery_image_urls ?? []) as string[]).map((url) => getBucketPathFromPublicUrl(url)),
+  ].filter((path): path is string => Boolean(path));
+
+  if (mediaPaths.length > 0) {
+    const { error: storageError } = await supabase.storage.from(LANDSCAPING_IMAGES_BUCKET).remove(mediaPaths);
+    if (storageError) throw storageError;
+  }
+
   const { error } = await supabase.from("completed_projects").delete().eq("id", id);
   if (error) throw error;
 }
 
-export async function uploadLandscapingImage(file: File): Promise<string> {
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Only image files are allowed.");
+export async function uploadLandscapingMedia(file: File): Promise<string> {
+  const isImage = file.type.startsWith("image/");
+  const isVideo = file.type.startsWith("video/");
+
+  if (!isImage && !isVideo) {
+    throw new Error("Only image and video files are allowed.");
   }
-  if (file.size > MAX_IMAGE_BYTES) {
+  if (isImage && file.size > MAX_IMAGE_BYTES) {
     throw new Error("Image must be 5MB or smaller.");
   }
+  if (isVideo && file.size > MAX_VIDEO_BYTES) {
+    throw new Error("Video must be under 50MB.");
+  }
 
-  const extension = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
-  const safeExtension = (extension ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const fallbackExtension = isVideo ? "mp4" : "jpg";
+  const extension = file.name.includes(".") ? file.name.split(".").pop() : fallbackExtension;
+  const safeExtension = (extension ?? fallbackExtension).toLowerCase().replace(/[^a-z0-9]/g, "") || fallbackExtension;
   const filePath = `projects/${crypto.randomUUID()}-${Date.now()}.${safeExtension}`;
 
   const { error: uploadError } = await supabase.storage

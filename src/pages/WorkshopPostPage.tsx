@@ -162,32 +162,8 @@ const WorkshopPostPage = () => {
           <article className="max-w-5xl mx-auto space-y-10">
             <section>
               <p className="text-sm text-muted-foreground mb-2">{formatDate(workshop.workshop_date)}</p>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{workshop.title}</h1>
-              <img src={workshop.cover_image_url} alt={workshop.title} className="w-full rounded-lg mb-8 max-h-[520px] object-cover" />
-              <p className="text-muted-foreground">{workshop.description}</p>
+              <h1 className="text-3xl md:text-4xl font-bold">{workshop.title}</h1>
             </section>
-
-            {galleryImages.length > 0 && (
-              <section>
-                <h2 className="text-2xl font-semibold mb-4">Previous Workshop Gallery</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {galleryImages.map((imageUrl, index) => (
-                    <button
-                      key={`${workshop.id}-gallery-${index}`}
-                      type="button"
-                      className="w-full aspect-square rounded-md border overflow-hidden"
-                      onClick={() => setLightboxImage(imageUrl)}
-                    >
-                      <img
-                        src={imageUrl}
-                        alt={`${workshop.title} gallery ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              </section>
-            )}
 
             <section className="grid lg:grid-cols-2 gap-6">
               <Card>
@@ -268,6 +244,33 @@ const WorkshopPostPage = () => {
                 </CardContent>
               </Card>
             </section>
+
+            <section>
+              <img src={workshop.cover_image_url} alt={workshop.title} className="w-full rounded-lg mb-8 max-h-[520px] object-cover" />
+              <p className="text-muted-foreground">{workshop.description}</p>
+            </section>
+
+            {galleryImages.length > 0 && (
+              <section>
+                <h2 className="text-2xl font-semibold mb-4">Previous Workshop Gallery</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {galleryImages.map((imageUrl, index) => (
+                    <button
+                      key={`${workshop.id}-gallery-${index}`}
+                      type="button"
+                      className="w-full aspect-square rounded-md border overflow-hidden"
+                      onClick={() => setLightboxImage(imageUrl)}
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={`${workshop.title} gallery ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
           </article>
         )}
       </main>
