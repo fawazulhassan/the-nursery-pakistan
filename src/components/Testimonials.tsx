@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getHomepageReviews, type ReviewRow } from "@/lib/reviews";
+import { getHomepageReviews, getReviewMediaItems, type ReviewMediaItem, type ReviewRow } from "@/lib/reviews";
 import StarRating from "@/components/StarRating";
 import ReviewSplitLayout from "@/components/ReviewSplitLayout";
+import ReviewImageLightbox from "@/components/ReviewImageLightbox";
 
 const fallbackTestimonials = [
   {
@@ -36,6 +37,10 @@ const Testimonials = () => {
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [activeLightbox, setActiveLightbox] = useState<{
+    items: { url: string; type: "image" | "video" }[];
+    currentIndex: number;
+  } | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -61,11 +66,19 @@ const Testimonials = () => {
   const testimonials = useMemo(() => {
     if (!reviews.length || fetchFailed) {
       return fallbackTestimonials.map((item) => ({
+        id: `fallback-${item.name}`,
+        product_slug: "homepage",
         reviewer_name: item.name,
+        reviewer_email: null,
         reviewer_city: item.reviewer_city,
         rating: item.rating,
         review_text: item.review_text,
         image_url: item.image_url,
+        media_urls: [],
+        media_types: [],
+        status: "approved" as const,
+        show_on_homepage: true,
+        created_at: new Date().toISOString(),
       }));
     }
     return reviews;
@@ -107,13 +120,40 @@ const Testimonials = () => {
                 <CardContent className="p-6">
                   <StarRating value={testimonial.rating} />
 
-                  {testimonial.image_url && (
-                    <img
-                      src={testimonial.image_url}
-                      alt={`Review by ${testimonial.reviewer_name}`}
-                      className="h-20 w-20 object-cover rounded-md border mt-4"
-                    />
-                  )}
+                  {(() => {
+                    const mediaItems = getReviewMediaItems(testimonial);
+                    if (!mediaItems.length) return null;
+                    return (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {mediaItems.map((item: ReviewMediaItem, mediaIndex: number) => (
+                          <button
+                            key={`${item.url}-${mediaIndex}`}
+                            type="button"
+                            className="rounded-md border overflow-hidden"
+                            onClick={() => setActiveLightbox({ items: mediaItems, currentIndex: mediaIndex })}
+                          >
+                            {item.type === "video" ? (
+                              <video
+                                src={item.url}
+                                className="h-20 w-20 object-cover pointer-events-none"
+                                muted
+                                playsInline
+                                autoPlay
+                                loop
+                                preload="metadata"
+                              />
+                            ) : (
+                              <img
+                                src={item.url}
+                                alt={`Review by ${testimonial.reviewer_name}`}
+                                className="h-20 w-20 object-cover"
+                              />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })()}
 
                   <p className="text-muted-foreground mb-6 mt-4 leading-relaxed">
                     "{testimonial.review_text}"
@@ -135,6 +175,17 @@ const Testimonials = () => {
             desktopMainGridClassName="grid gap-6 lg:grid-cols-3"
           />
         )}
+        <ReviewImageLightbox
+          open={!!activeLightbox}
+          items={activeLightbox?.items ?? []}
+          currentIndex={activeLightbox?.currentIndex ?? 0}
+          onNavigate={(nextIndex) =>
+            setActiveLightbox((current) => (current ? { ...current, currentIndex: nextIndex } : current))
+          }
+          onOpenChange={(open) => {
+            if (!open) setActiveLightbox(null);
+          }}
+        />
       </div>
     </section>
   );

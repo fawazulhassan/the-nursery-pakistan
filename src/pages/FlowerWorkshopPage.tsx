@@ -294,7 +294,7 @@ const FlowerWorkshopPage = () => {
       </main>
 
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="sm:max-w-xl">
+        <DialogContent className="sm:max-w-xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Write a Review</DialogTitle>
             <DialogDescription>

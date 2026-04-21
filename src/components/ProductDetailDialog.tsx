@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { resolveProductImageUrls } from "@/lib/productImages";
+import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 
 interface ProductDetailDialogProps {
   open: boolean;
@@ -23,6 +24,8 @@ interface ProductDetailDialogProps {
     image_urls?: string[] | null;
     description?: string;
     sale_percentage?: number | null;
+    sale_start_at?: string | null;
+    sale_end_at?: string | null;
   };
 }
 
@@ -37,13 +40,8 @@ const ProductDetailDialog = ({
   const productImages = resolveProductImageUrls(product);
   const fallbackImage = product.image_url || product.image || "";
   const [selectedImage, setSelectedImage] = useState(productImages[0] ?? fallbackImage);
-  const basePrice = typeof product.price === "string"
-    ? parseInt(product.price.replace(/[^0-9]/g, ""), 10)
-    : Number(product.price);
-  const salePrice = product.sale_percentage
-    ? basePrice - (basePrice * product.sale_percentage / 100)
-    : null;
-  const effectivePrice = salePrice ?? basePrice;
+  const saleActive = isSaleActive(product);
+  const effectivePrice = getEffectivePrice(product);
   const displayPrice = typeof product.price === "string" ? product.price : `Rs ${effectivePrice.toLocaleString()}`;
 
   useEffect(() => {
@@ -111,7 +109,7 @@ const ProductDetailDialog = ({
 
             <div className="border-t border-border pt-4">
               <p className="text-2xl sm:text-3xl font-bold text-primary mb-4">
-                {displayPrice}
+                {saleActive && typeof product.price !== "string" ? `Rs ${effectivePrice.toFixed(0)}` : displayPrice}
               </p>
               
               <div className="flex items-center gap-4 mb-6">

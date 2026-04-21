@@ -9,7 +9,15 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { deleteReview, getAdminReviews, updateReview, type ReviewRow, type ReviewStatus } from "@/lib/reviews";
+import {
+  deleteReview,
+  getAdminReviews,
+  getReviewMediaItems,
+  updateReview,
+  type ReviewMediaItem,
+  type ReviewRow,
+  type ReviewStatus,
+} from "@/lib/reviews";
 import AdminLayout from "@/components/admin/AdminLayout";
 import StarRating from "@/components/StarRating";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
@@ -31,7 +39,8 @@ const AdminReviewsPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
-  const [lightboxImage, setLightboxImage] = useState<{ url: string; alt: string } | null>(null);
+  const [lightboxItems, setLightboxItems] = useState<ReviewMediaItem[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const getErrorMessage = (error: unknown) => {
     const maybePostgrest = error as Partial<PostgrestError> | null;
@@ -227,23 +236,43 @@ const AdminReviewsPage = () => {
                       <div className="flex items-center gap-4 flex-wrap">
                         <p className="text-sm text-muted-foreground">City: {review.reviewer_city}</p>
 
-                        {review.image_url && (
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setLightboxImage({
-                                url: review.image_url as string,
-                                alt: `Review image by ${review.reviewer_name}`,
-                              })
-                            }
-                          >
-                            <img
-                              src={review.image_url}
-                              alt={`Review from ${review.reviewer_name}`}
-                              className="h-16 w-16 rounded-md object-cover border"
-                            />
-                          </button>
-                        )}
+                        {(() => {
+                          const mediaItems = getReviewMediaItems(review);
+                          if (!mediaItems.length) return null;
+                          return (
+                            <div className="flex flex-wrap items-center gap-2">
+                              {mediaItems.map((item, index) => (
+                                <button
+                                  key={`${item.url}-${index}`}
+                                  type="button"
+                                  className="rounded-md border overflow-hidden"
+                                  onClick={() => {
+                                    setLightboxItems(mediaItems);
+                                    setLightboxIndex(index);
+                                  }}
+                                >
+                                  {item.type === "video" ? (
+                                    <video
+                                      src={item.url}
+                                      className="h-16 w-16 object-cover pointer-events-none"
+                                      muted
+                                      playsInline
+                                      autoPlay
+                                      loop
+                                      preload="metadata"
+                                    />
+                                  ) : (
+                                    <img
+                                      src={item.url}
+                                      alt={`Review from ${review.reviewer_name}`}
+                                      className="h-16 w-16 object-cover"
+                                    />
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       <div className="flex items-center gap-2">
@@ -276,10 +305,16 @@ const AdminReviewsPage = () => {
           </div>
         )}
       <ReviewImageLightbox
-        open={!!lightboxImage}
-        imageUrl={lightboxImage?.url ?? ""}
-        alt={lightboxImage?.alt ?? "Review image"}
-        onOpenChange={(open) => !open && setLightboxImage(null)}
+        open={lightboxItems.length > 0}
+        items={lightboxItems}
+        currentIndex={lightboxIndex}
+        onNavigate={setLightboxIndex}
+        onOpenChange={(open) => {
+          if (!open) {
+            setLightboxItems([]);
+            setLightboxIndex(0);
+          }
+        }}
       />
     </AdminLayout>
   );

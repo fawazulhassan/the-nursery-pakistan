@@ -12,6 +12,7 @@ import { CATEGORIES as CATEGORY_LIST } from "@/lib/constants";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
+import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 
 const CATEGORIES = [
   { name: "All", value: "all" },
@@ -49,17 +50,9 @@ const ProductsPage = () => {
     }
   };
 
-  const calculateSalePrice = (price: number, salePercentage: number | null) => {
-    if (!salePercentage) return null;
-    return price - (price * salePercentage / 100);
-  };
-
   const filteredProducts = products.filter((product) => {
     if (categoryFilter === "Sale") {
-      if (!product.sale_percentage || product.sale_percentage <= 0) return false;
-      const now = new Date();
-      if (product.sale_start_at && new Date(product.sale_start_at) > now) return false;
-      if (product.sale_end_at && new Date(product.sale_end_at) < now) return false;
+      if (!isSaleActive(product)) return false;
     } else if (categoryFilter !== "all" && product.category !== categoryFilter) return false;
     if (priceFilter === "all") return true;
     const price = parseFloat(product.price);
@@ -162,6 +155,8 @@ const ProductsPage = () => {
                 {filteredProducts.map((product, index) => {
                   const inWishlist = isInWishlist(product.id);
                   const productImage = resolvePrimaryProductImage(product);
+                  const saleActive = isSaleActive(product);
+                  const effectivePrice = getEffectivePrice(product);
                   return (
                   <Card
                     key={product.id}
@@ -196,7 +191,7 @@ const ProductsPage = () => {
                           </Badge>
                         ) : product.stock_quantity < 5 ? (
                           <>
-                            {product.sale_percentage && (
+                            {saleActive && (
                               <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                                 <Tag className="h-3 w-3 mr-1" />
                                 {product.sale_percentage}% OFF
@@ -206,7 +201,7 @@ const ProductsPage = () => {
                               Only {product.stock_quantity} left
                             </Badge>
                           </>
-                        ) : product.sale_percentage ? (
+                        ) : saleActive ? (
                           <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                             <Tag className="h-3 w-3 mr-1" />
                             {product.sale_percentage}% OFF
@@ -232,13 +227,13 @@ const ProductsPage = () => {
                         {product.description}
                       </p>
                       <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
-                        {product.sale_percentage ? (
+                        {saleActive ? (
                           <>
                             <div className="text-sm sm:text-xl line-through text-muted-foreground">
                               Rs {product.price}
                             </div>
                             <div className="text-base sm:text-2xl font-bold text-red-500">
-                              Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
+                              Rs {effectivePrice.toFixed(0)}
                             </div>
                           </>
                         ) : (

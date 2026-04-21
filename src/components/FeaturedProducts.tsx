@@ -9,6 +9,7 @@ import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
+import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 
 const FeaturedProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -36,11 +37,6 @@ const FeaturedProducts = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const calculateSalePrice = (price: number, salePercentage: number | null) => {
-    if (!salePercentage) return null;
-    return price - (price * salePercentage / 100);
   };
 
   if (isLoading) {
@@ -71,6 +67,8 @@ const FeaturedProducts = () => {
           {products.map((product, index) => {
             const inWishlist = isInWishlist(product.id);
             const productImage = resolvePrimaryProductImage(product);
+            const saleActive = isSaleActive(product);
+            const effectivePrice = getEffectivePrice(product);
             return (
             <Card
               key={product.id}
@@ -105,7 +103,7 @@ const FeaturedProducts = () => {
                     </Badge>
                   ) : product.stock_quantity < 5 ? (
                     <>
-                      {product.sale_percentage && (
+                      {saleActive && (
                         <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                           <Tag className="h-3 w-3 mr-1" />
                           {product.sale_percentage}% OFF
@@ -115,7 +113,7 @@ const FeaturedProducts = () => {
                         Only {product.stock_quantity} left
                       </Badge>
                     </>
-                  ) : product.sale_percentage ? (
+                  ) : saleActive ? (
                     <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                       <Tag className="h-3 w-3 mr-1" />
                       {product.sale_percentage}% OFF
@@ -141,13 +139,13 @@ const FeaturedProducts = () => {
                   {product.description}
                 </p>
                 <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
-                  {product.sale_percentage ? (
+                  {saleActive ? (
                     <>
                       <div className="text-sm sm:text-xl line-through text-muted-foreground">
                         Rs {product.price}
                       </div>
                       <div className="text-base sm:text-2xl font-bold text-red-500">
-                        Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
+                        Rs {effectivePrice.toFixed(0)}
                       </div>
                     </>
                   ) : (

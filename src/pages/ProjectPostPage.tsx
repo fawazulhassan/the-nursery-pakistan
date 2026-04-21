@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ const ProjectPostPage = () => {
   const [project, setProject] = useState<CompletedProjectRow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [activeLightbox, setActiveLightbox] = useState<{ images: string[]; currentIndex: number } | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -69,6 +69,35 @@ const ProjectPostPage = () => {
     [project]
   );
 
+  useEffect(() => {
+    if (!activeLightbox) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        setActiveLightbox((current) => {
+          if (!current) return null;
+          return {
+            ...current,
+            currentIndex: (current.currentIndex - 1 + current.images.length) % current.images.length,
+          };
+        });
+      } else if (event.key === "ArrowRight") {
+        setActiveLightbox((current) => {
+          if (!current) return null;
+          return {
+            ...current,
+            currentIndex: (current.currentIndex + 1) % current.images.length,
+          };
+        });
+      } else if (event.key === "Escape") {
+        setActiveLightbox(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeLightbox]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -112,7 +141,12 @@ const ProjectPostPage = () => {
                         key={`${project.id}-gallery-${index}`}
                         type="button"
                         className="w-full aspect-square rounded-md border overflow-hidden"
-                        onClick={() => setLightboxImage(imageUrl)}
+                        onClick={() =>
+                          setActiveLightbox({
+                            images: galleryImages,
+                            currentIndex: index,
+                          })
+                        }
                       >
                         <img
                           src={imageUrl}
@@ -128,10 +162,68 @@ const ProjectPostPage = () => {
           </article>
         )}
       </main>
-      <Dialog open={!!lightboxImage} onOpenChange={(open) => !open && setLightboxImage(null)}>
-        <DialogContent className="max-w-4xl p-2">
-          {lightboxImage ? (
-            <img src={lightboxImage} alt="Project gallery fullscreen" className="w-full max-h-[80vh] object-contain rounded-md" />
+      <Dialog open={!!activeLightbox} onOpenChange={(open) => !open && setActiveLightbox(null)}>
+        <DialogContent className="max-w-5xl p-4 sm:p-6 [&>button]:hidden">
+          {activeLightbox ? (
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative w-full">
+                {isVideoUrl(activeLightbox.images[activeLightbox.currentIndex]) ? (
+                  <video
+                    src={activeLightbox.images[activeLightbox.currentIndex]}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    autoPlay
+                    className="max-h-[75vh] w-full object-contain rounded-lg bg-black"
+                  />
+                ) : (
+                  <img
+                    src={activeLightbox.images[activeLightbox.currentIndex]}
+                    alt={`Project gallery ${activeLightbox.currentIndex + 1}`}
+                    className="max-h-[75vh] w-full object-contain rounded-lg"
+                  />
+                )}
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={() =>
+                    setActiveLightbox((current) =>
+                      current
+                        ? {
+                            ...current,
+                            currentIndex: (current.currentIndex - 1 + current.images.length) % current.images.length,
+                          }
+                        : null
+                    )
+                  }
+                  aria-label="Previous image"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={() =>
+                    setActiveLightbox((current) =>
+                      current
+                        ? {
+                            ...current,
+                            currentIndex: (current.currentIndex + 1) % current.images.length,
+                          }
+                        : null
+                    )
+                  }
+                  aria-label="Next image"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground text-center">
+                {activeLightbox.currentIndex + 1} / {activeLightbox.images.length}
+              </p>
+            </div>
           ) : null}
         </DialogContent>
       </Dialog>

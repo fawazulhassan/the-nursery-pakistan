@@ -8,6 +8,7 @@ import ProductDetailDialog from "./ProductDetailDialog";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
+import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 
 const HomeSaleSection = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -21,7 +22,6 @@ const HomeSaleSection = () => {
 
   const fetchSaleProducts = async () => {
     try {
-      const now = new Date().toISOString();
       const { data, error } = await fetchProductsWithFallback({
         saleOnly: true,
         limit: 6,
@@ -29,12 +29,7 @@ const HomeSaleSection = () => {
 
       if (error) throw error;
 
-      const filtered = (data || []).filter((p) => {
-        if (!p.sale_percentage || p.sale_percentage <= 0) return false;
-        if (p.sale_start_at && new Date(p.sale_start_at) > new Date(now)) return false;
-        if (p.sale_end_at && new Date(p.sale_end_at) < new Date(now)) return false;
-        return true;
-      });
+      const filtered = (data || []).filter((p) => isSaleActive(p));
       setProducts(filtered);
     } catch (error: any) {
       toast({
@@ -46,11 +41,6 @@ const HomeSaleSection = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const calculateSalePrice = (price: number, salePercentage: number | null) => {
-    if (!salePercentage) return null;
-    return price - (price * salePercentage / 100);
   };
 
   if (isLoading || products.length === 0) return null;
@@ -78,6 +68,7 @@ const HomeSaleSection = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {products.map((product, index) => {
             const productImage = resolvePrimaryProductImage(product);
+            const effectivePrice = getEffectivePrice(product);
             return (
             <Card
               key={product.id}
@@ -108,7 +99,7 @@ const HomeSaleSection = () => {
                     Rs {product.price}
                   </span>
                   <span className="text-base sm:text-2xl font-bold text-red-500">
-                    Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
+                    Rs {effectivePrice.toFixed(0)}
                   </span>
                 </div>
               </CardContent>

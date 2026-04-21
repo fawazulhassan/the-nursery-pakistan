@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ const LandscapingServicesPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState<CompletedProjectRow[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
+  const [activeLightbox, setActiveLightbox] = useState<{ images: string[]; currentIndex: number } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -55,6 +56,35 @@ const LandscapingServicesPage = () => {
       isMounted = false;
     };
   }, [toast]);
+
+  useEffect(() => {
+    if (!activeLightbox) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        setActiveLightbox((current) => {
+          if (!current) return null;
+          return {
+            ...current,
+            currentIndex: (current.currentIndex - 1 + current.images.length) % current.images.length,
+          };
+        });
+      } else if (event.key === "ArrowRight") {
+        setActiveLightbox((current) => {
+          if (!current) return null;
+          return {
+            ...current,
+            currentIndex: (current.currentIndex + 1) % current.images.length,
+          };
+        });
+      } else if (event.key === "Escape") {
+        setActiveLightbox(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeLightbox]);
 
   const [featuredProject, remainingProjects] = useMemo(() => {
     if (!projects.length) return [null, [] as CompletedProjectRow[]];
@@ -134,11 +164,9 @@ const LandscapingServicesPage = () => {
                         <div>
                           <p className="font-medium text-sm mb-2">Gallery</p>
                           <div className="grid grid-cols-3 gap-2">
-                            {featuredProject.gallery_image_urls.map((imageUrl, index) => (
-                              <div
-                                key={`${featuredProject.id}-gallery-${index}`}
-                                className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden"
-                              >
+                            {featuredProject.gallery_image_urls.map((imageUrl, index) => {
+                              return (
+                              <div key={`${featuredProject.id}-gallery-${index}`} className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden">
                                 {isVideoUrl(imageUrl) ? (
                                   <video
                                     src={imageUrl}
@@ -149,14 +177,25 @@ const LandscapingServicesPage = () => {
                                     className="w-full h-full object-cover bg-black"
                                   />
                                 ) : (
-                                  <img
-                                    src={imageUrl}
-                                    alt={`${featuredProject.title} gallery ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                  />
+                                  <button
+                                    type="button"
+                                    className="w-full h-full"
+                                    onClick={() =>
+                                      setActiveLightbox({
+                                        images: featuredProject.gallery_image_urls ?? [],
+                                        currentIndex: index,
+                                      })
+                                    }
+                                  >
+                                    <img
+                                      src={imageUrl}
+                                      alt={`${featuredProject.title} gallery ${index + 1}`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </button>
                                 )}
                               </div>
-                            ))}
+                            )})}
                           </div>
                         </div>
                       ) : null}
@@ -189,11 +228,9 @@ const LandscapingServicesPage = () => {
                           <div>
                             <p className="font-medium text-sm mb-2">Gallery</p>
                             <div className="grid grid-cols-3 gap-2">
-                              {galleryItems.map((imageUrl, index) => (
-                                <div
-                                  key={`${project.id}-gallery-${index}`}
-                                  className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden"
-                                >
+                              {galleryItems.map((imageUrl, index) => {
+                                return (
+                                <div key={`${project.id}-gallery-${index}`} className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden">
                                   {isVideoUrl(imageUrl) ? (
                                     <video
                                       src={imageUrl}
@@ -204,14 +241,25 @@ const LandscapingServicesPage = () => {
                                       className="w-full h-full object-cover bg-black"
                                     />
                                   ) : (
-                                    <img
-                                      src={imageUrl}
-                                      alt={`${project.title} gallery ${index + 1}`}
-                                      className="w-full h-full object-cover"
-                                    />
+                                    <button
+                                      type="button"
+                                      className="w-full h-full"
+                                      onClick={() =>
+                                        setActiveLightbox({
+                                          images: galleryItems,
+                                          currentIndex: index,
+                                        })
+                                      }
+                                    >
+                                      <img
+                                        src={imageUrl}
+                                        alt={`${project.title} gallery ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </button>
                                   )}
                                 </div>
-                              ))}
+                              )})}
                             </div>
                           </div>
                         ) : null}
@@ -252,7 +300,7 @@ const LandscapingServicesPage = () => {
       </main>
 
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="sm:max-w-xl">
+        <DialogContent className="sm:max-w-xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Write a Review</DialogTitle>
             <DialogDescription>
@@ -260,6 +308,72 @@ const LandscapingServicesPage = () => {
             </DialogDescription>
           </DialogHeader>
           <ReviewForm productSlug="landscaping-services" onSuccess={() => setShowForm(false)} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!activeLightbox} onOpenChange={(open) => !open && setActiveLightbox(null)}>
+        <DialogContent className="max-w-5xl p-4 sm:p-6 [&>button]:hidden">
+          {activeLightbox ? (
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative w-full">
+                {isVideoUrl(activeLightbox.images[activeLightbox.currentIndex]) ? (
+                  <video
+                    src={activeLightbox.images[activeLightbox.currentIndex]}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    autoPlay
+                    className="max-h-[75vh] w-full object-contain rounded-lg bg-black"
+                  />
+                ) : (
+                  <img
+                    src={activeLightbox.images[activeLightbox.currentIndex]}
+                    alt={`Project gallery ${activeLightbox.currentIndex + 1}`}
+                    className="max-h-[75vh] w-full object-contain rounded-lg"
+                  />
+                )}
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={() =>
+                    setActiveLightbox((current) =>
+                      current
+                        ? {
+                            ...current,
+                            currentIndex: (current.currentIndex - 1 + current.images.length) % current.images.length,
+                          }
+                        : null
+                    )
+                  }
+                  aria-label="Previous image"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={() =>
+                    setActiveLightbox((current) =>
+                      current
+                        ? {
+                            ...current,
+                            currentIndex: (current.currentIndex + 1) % current.images.length,
+                          }
+                        : null
+                    )
+                  }
+                  aria-label="Next image"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground text-center">
+                {activeLightbox.currentIndex + 1} / {activeLightbox.images.length}
+              </p>
+            </div>
+          ) : null}
         </DialogContent>
       </Dialog>
 

@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft, ShoppingCart, Heart } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/context/CartContext";
@@ -14,6 +14,7 @@ import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import { useAuth } from "@/contexts/AuthContext";
 import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
+import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,11 +65,7 @@ const ProductPage = () => {
   const handleAddToCart = () => {
     if (!product) return;
     const imageUrl = selectedImage || resolvePrimaryProductImage(product);
-    const basePrice = Number(product.price);
-    const salePrice = product.sale_percentage
-      ? basePrice - (basePrice * product.sale_percentage / 100)
-      : null;
-    const effectivePrice = salePrice ?? basePrice;
+    const effectivePrice = getEffectivePrice(product);
 
     addToCart(
       {
@@ -113,16 +110,25 @@ const ProductPage = () => {
   }
 
   const basePrice = Number(product.price);
-  const salePrice = product.sale_percentage
-    ? basePrice - (basePrice * product.sale_percentage / 100)
-    : null;
-  const effectivePrice = salePrice ?? basePrice;
-  const displayPrice = salePrice
-    ? `Rs ${salePrice.toFixed(0)}`
-    : `Rs ${basePrice.toLocaleString()}`;
+  const saleActive = isSaleActive(product);
+  const effectivePrice = getEffectivePrice(product);
+  const displayPrice = saleActive ? `Rs ${effectivePrice.toFixed(0)}` : `Rs ${basePrice.toLocaleString()}`;
   const inWishlist = isInWishlist(product.id);
   const productImages = resolveProductImageUrls(product);
   const mainImage = selectedImage || resolvePrimaryProductImage(product);
+  const currentImageIndex = Math.max(0, productImages.findIndex((imageUrl) => imageUrl === mainImage));
+
+  const showPreviousImage = () => {
+    if (productImages.length <= 1) return;
+    const nextIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+    setSelectedImage(productImages[nextIndex]);
+  };
+
+  const showNextImage = () => {
+    if (productImages.length <= 1) return;
+    const nextIndex = (currentImageIndex + 1) % productImages.length;
+    setSelectedImage(productImages[nextIndex]);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -141,27 +147,49 @@ const ProductPage = () => {
 
             <div className="grid md:grid-cols-2 gap-6 sm:gap-12">
               <div>
-                <div className="aspect-square overflow-hidden rounded-2xl bg-muted">
+                <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
                   <img
                     src={mainImage}
                     alt={product.name}
                     className="w-full h-full object-cover object-center"
                   />
+                  {productImages.length > 1 && (
+                    <>
+                      <Button
+                        type="button"
+                        size="icon"
+                        onClick={showPreviousImage}
+                        aria-label="Previous product image"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        size="icon"
+                        onClick={showNextImage}
+                        aria-label="Next product image"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </>
+                  )}
                 </div>
                 {productImages.length > 1 && (
                   <div className="mt-3">
-                    <div className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-5 md:overflow-visible">
+                    <div className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-[repeat(auto-fit,4rem)] md:overflow-visible">
                       {productImages.map((imageUrl, index) => (
                         <button
                           key={`${product.id}-thumb-${index}`}
                           type="button"
                           onClick={() => setSelectedImage(imageUrl)}
-                          className={`rounded-md overflow-hidden border shrink-0 w-16 md:w-auto ${mainImage === imageUrl ? "border-primary" : "border-border"}`}
+                          className={`rounded-md overflow-hidden border shrink-0 w-16 h-16 ${mainImage === imageUrl ? "border-primary" : "border-border"}`}
                         >
                           <img
                             src={imageUrl}
                             alt={`${product.name} thumbnail ${index + 1}`}
-                            className="w-16 h-16 md:w-full md:h-16 object-cover object-center"
+                            className="w-16 h-16 object-cover object-center"
                           />
                         </button>
                       ))}
@@ -173,7 +201,7 @@ const ProductPage = () => {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Badge variant="secondary">{product.category}</Badge>
-                  {product.sale_percentage && (
+                  {saleActive && (
                     <Badge className="bg-red-500 text-white">
                       {product.sale_percentage}% OFF
                     </Badge>
@@ -186,7 +214,7 @@ const ProductPage = () => {
                   {product.name}
                 </h1>
                 <div className="flex items-center gap-3 mb-6 flex-wrap">
-                  {product.sale_percentage ? (
+                  {saleActive ? (
                     <>
                       <span className="text-xl sm:text-2xl line-through text-muted-foreground">
                         Rs {product.price}
@@ -276,7 +304,7 @@ const ProductPage = () => {
       </main>
 
       <Dialog open={showReviewForm} onOpenChange={setShowReviewForm}>
-        <DialogContent className="sm:max-w-xl">
+        <DialogContent className="sm:max-w-xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Write a Review</DialogTitle>
             <DialogDescription>

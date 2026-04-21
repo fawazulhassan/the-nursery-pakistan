@@ -10,6 +10,7 @@ import ProductDetailDialog from "@/components/ProductDetailDialog";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
+import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
@@ -49,11 +50,6 @@ const SearchPage = () => {
     }
   };
 
-  const calculateSalePrice = (price: number, salePercentage: number | null) => {
-    if (!salePercentage) return null;
-    return price - (price * salePercentage / 100);
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -90,6 +86,8 @@ const SearchPage = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {products.map((product, index) => {
                   const productImage = resolvePrimaryProductImage(product);
+                  const saleActive = isSaleActive(product);
+                  const effectivePrice = getEffectivePrice(product);
                   return (
                   <Card
                     key={product.id}
@@ -107,7 +105,7 @@ const SearchPage = () => {
                             <Badge variant="destructive" className="text-xs px-3 py-1">
                               Sold Out
                             </Badge>
-                          ) : product.sale_percentage ? (
+                          ) : saleActive ? (
                             <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                               <Tag className="h-3 w-3 mr-1" />
                               {product.sale_percentage}% OFF
@@ -127,13 +125,13 @@ const SearchPage = () => {
                         {product.description}
                       </p>
                       <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
-                        {product.sale_percentage ? (
+                        {saleActive ? (
                           <>
                             <div className="text-sm sm:text-xl line-through text-muted-foreground">
                               Rs {product.price}
                             </div>
                             <div className="text-base sm:text-2xl font-bold text-red-500">
-                              Rs {calculateSalePrice(product.price, product.sale_percentage)?.toFixed(0)}
+                              Rs {effectivePrice.toFixed(0)}
                             </div>
                           </>
                         ) : (

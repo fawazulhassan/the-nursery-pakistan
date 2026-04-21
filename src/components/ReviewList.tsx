@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getProductReviews, type ReviewRow } from "@/lib/reviews";
+import { getProductReviews, getReviewMediaItems, type ReviewMediaItem, type ReviewRow } from "@/lib/reviews";
 import StarRating from "@/components/StarRating";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
 import ReviewSplitLayout from "@/components/ReviewSplitLayout";
@@ -15,7 +15,8 @@ const ReviewList = ({ productSlug }: ReviewListProps) => {
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lightboxImage, setLightboxImage] = useState<{ url: string; alt: string } | null>(null);
+  const [lightboxItems, setLightboxItems] = useState<ReviewMediaItem[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const fetchReviews = useCallback(async () => {
     setLoading(true);
@@ -81,24 +82,43 @@ const ReviewList = ({ productSlug }: ReviewListProps) => {
 
               <p className="text-muted-foreground mt-3 leading-relaxed">"{review.review_text}"</p>
 
-              {review.image_url && (
-                <button
-                  type="button"
-                  className="mt-4"
-                  onClick={() =>
-                    setLightboxImage({
-                      url: review.image_url as string,
-                      alt: `Review by ${review.reviewer_name}`,
-                    })
-                  }
-                >
-                  <img
-                    src={review.image_url}
-                    alt={`Review from ${review.reviewer_name}`}
-                    className="h-24 w-24 object-cover rounded-md border"
-                  />
-                </button>
-              )}
+              {(() => {
+                const mediaItems = getReviewMediaItems(review);
+                if (!mediaItems.length) return null;
+                return (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {mediaItems.map((item, index) => (
+                      <button
+                        key={`${item.url}-${index}`}
+                        type="button"
+                        onClick={() => {
+                          setLightboxItems(mediaItems);
+                          setLightboxIndex(index);
+                        }}
+                        className="rounded-md border overflow-hidden"
+                      >
+                        {item.type === "video" ? (
+                          <video
+                            src={item.url}
+                            className="h-24 w-24 object-cover pointer-events-none"
+                            muted
+                            playsInline
+                            autoPlay
+                            loop
+                            preload="metadata"
+                          />
+                        ) : (
+                          <img
+                            src={item.url}
+                            alt={`Review from ${review.reviewer_name}`}
+                            className="h-24 w-24 object-cover"
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })()}
 
               <div className="mt-4 text-sm">
                 <p className="font-semibold text-foreground">
@@ -114,10 +134,16 @@ const ReviewList = ({ productSlug }: ReviewListProps) => {
       />
 
       <ReviewImageLightbox
-        open={!!lightboxImage}
-        imageUrl={lightboxImage?.url ?? ""}
-        alt={lightboxImage?.alt ?? "Review image"}
-        onOpenChange={(open) => !open && setLightboxImage(null)}
+        open={lightboxItems.length > 0}
+        items={lightboxItems}
+        currentIndex={lightboxIndex}
+        onNavigate={setLightboxIndex}
+        onOpenChange={(open) => {
+          if (!open) {
+            setLightboxItems([]);
+            setLightboxIndex(0);
+          }
+        }}
       />
     </>
   );

@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,12 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import {
+  MAX_REVIEW_MEDIA_FILES,
   getDefaultReviewerCity,
   submitReview,
-  uploadReviewImage,
+  uploadReviewMedia,
+  validateReviewMediaFile,
 } from "@/lib/reviews";
 import StarRating from "@/components/StarRating";
 import { useAuth } from "@/contexts/AuthContext";
+import { Button as IconButton } from "@/components/ui/button";
 
 interface ReviewFormProps {
   productSlug: string;
@@ -25,7 +28,7 @@ interface FormErrors {
   reviewer_city?: string;
   rating?: string;
   review_text?: string;
-  image?: string;
+  media?: string;
 }
 
 const getErrorMessage = (error: unknown) => {
@@ -48,10 +51,11 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
   const [reviewerCity, setReviewerCity] = useState("");
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<FormErrors>({});
   const [loadingCity, setLoadingCity] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mediaPreviewUrls, setMediaPreviewUrls] = useState<string[]>([]);
 
   useEffect(() => {
     setReviewerEmail(user?.email ?? "");
@@ -84,10 +88,21 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
     };
   }, []);
 
-  const imageHint = useMemo(() => {
-    if (!imageFile) return "Optional: image only, max 5MB.";
-    return `${imageFile.name} (${Math.round(imageFile.size / 1024)} KB)`;
-  }, [imageFile]);
+  const mediaHint = useMemo(() => {
+    if (!mediaFiles.length) return "Optional: up to 10 files. Images max 5MB, videos max 50MB.";
+    return `${mediaFiles.length} file(s) selected`;
+  }, [mediaFiles]);
+
+  useEffect(() => {
+    const previewUrls = mediaFiles.map((file) => URL.createObjectURL(file));
+    setMediaPreviewUrls(previewUrls);
+
+    return () => {
+      previewUrls.forEach((url) => {
+        if (url) URL.revokeObjectURL(url);
+      });
+    };
+  }, [mediaFiles]);
 
   const validate = () => {
     const nextErrors: FormErrors = {};
@@ -116,11 +131,16 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
       nextErrors.review_text = "Review text must be at least 10 characters.";
     }
 
-    if (imageFile) {
-      if (!imageFile.type.startsWith("image/")) {
-        nextErrors.image = "Only image files are allowed.";
-      } else if (imageFile.size > 5 * 1024 * 1024) {
-        nextErrors.image = "Image must be 5MB or smaller.";
+    if (mediaFiles.length > MAX_REVIEW_MEDIA_FILES) {
+      nextErrors.media = "Maximum 10 files allowed.";
+    }
+
+    for (const file of mediaFiles) {
+      try {
+        validateReviewMediaFile(file);
+      } catch (error) {
+        nextErrors.media = error instanceof Error ? error.message : "Please use valid image/video files.";
+        break;
       }
     }
 
@@ -134,10 +154,10 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
 
     setIsSubmitting(true);
     try {
-      let imageUrl: string | undefined;
-      if (imageFile) {
-        imageUrl = await uploadReviewImage(imageFile);
-      }
+      const uploadedMedia = await Promise.all(mediaFiles.map((file) => uploadReviewMedia(file)));
+      const mediaUrls = uploadedMedia.map((item) => item.url);
+      const mediaTypes = uploadedMedia.map((item) => item.type);
+      const legacyImageUrl = uploadedMedia.find((item) => item.type === "image")?.url;
 
       await submitReview({
         product_slug: productSlug,
@@ -146,7 +166,9 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
         reviewer_city: reviewerCity.trim(),
         rating,
         review_text: reviewText.trim(),
-        image_url: imageUrl,
+        image_url: legacyImageUrl,
+        media_urls: mediaUrls,
+        media_types: mediaTypes,
       });
 
       toast({
@@ -164,6 +186,35 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleMediaChange = (fileList: FileList | null) => {
+    if (!fileList?.length) return;
+    const selected = Array.from(fileList);
+    const remaining = MAX_REVIEW_MEDIA_FILES - mediaFiles.length;
+
+    if (remaining <= 0) {
+      setErrors((prev) => ({ ...prev, media: "Maximum 10 files allowed." }));
+      return;
+    }
+
+    if (selected.length > remaining) {
+      setErrors((prev) => ({ ...prev, media: "Maximum 10 files allowed." }));
+    } else {
+      setErrors((prev) => ({ ...prev, media: undefined }));
+    }
+
+    const accepted = selected.slice(0, remaining);
+    setMediaFiles((prev) => [...prev, ...accepted]);
+  };
+
+  const removeMediaAt = (index: number) => {
+    const previewUrl = mediaPreviewUrls[index];
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setMediaFiles((prev) => prev.filter((_, i) => i !== index));
+    setErrors((prev) => ({ ...prev, media: undefined }));
   };
 
   return (
@@ -225,15 +276,57 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="review_image">Upload Photo (optional)</Label>
+        <Label htmlFor="review_image">Upload Photos/Videos (optional)</Label>
         <Input
           id="review_image"
           type="file"
-          accept="image/*"
-          onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+          accept="image/*,video/*"
+          multiple
+          onChange={(e) => {
+            handleMediaChange(e.target.files);
+            e.target.value = "";
+          }}
         />
-        <p className="text-xs text-muted-foreground">{imageHint}</p>
-        {errors.image && <p className="text-sm text-destructive">{errors.image}</p>}
+        <p className="text-xs text-muted-foreground">{mediaHint}</p>
+        {errors.media && <p className="text-sm text-destructive">{errors.media}</p>}
+        {mediaFiles.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {mediaFiles.map((file, index) => {
+              const isVideo = file.type.startsWith("video/");
+              return (
+                <div key={`${file.name}-${index}`} className="relative rounded-md border p-2 flex flex-col items-center">
+                  {isVideo ? (
+                    <video
+                      src={mediaPreviewUrls[index]}
+                      className="w-20 h-20 rounded object-cover border pointer-events-none"
+                      muted
+                      playsInline
+                      autoPlay
+                      loop
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img
+                      src={mediaPreviewUrls[index]}
+                      alt={file.name}
+                      className="w-20 h-20 rounded object-cover border"
+                    />
+                  )}
+                  <p className="mt-1 text-xs truncate max-w-[80px]">{file.name}</p>
+                  <IconButton
+                    type="button"
+                    size="icon"
+                    variant="destructive"
+                    className="absolute -top-2 -right-2 h-5 w-5"
+                    onClick={() => removeMediaAt(index)}
+                  >
+                    <X className="h-3 w-3" />
+                  </IconButton>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
 
       <Button type="submit" disabled={isSubmitting} className="w-full">
