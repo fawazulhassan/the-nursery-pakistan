@@ -205,6 +205,33 @@ export async function deleteReview(id: string, imageUrl?: string | null): Promis
   if (error) throw error;
 }
 
+/** Same slug rules as admin product delete / review `product_slug` fallbacks. */
+function toProductSlugFromName(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function getProductReviewSlugCandidates(productId: string, productName: string): string[] {
+  return Array.from(new Set([productId, toProductSlugFromName(productName)].filter(Boolean)));
+}
+
+/** Deletes all reviews whose `product_slug` matches id or slugified name; cleans review storage per row. */
+export async function deleteReviewsForProductBySlugCandidates(
+  productId: string,
+  productName: string
+): Promise<void> {
+  const slugs = getProductReviewSlugCandidates(productId, productName);
+  const { data, error } = await supabase.from("reviews").select("id").in("product_slug", slugs);
+  if (error) throw error;
+  const ids = (data ?? []).map((row) => row.id);
+  for (const id of ids) {
+    await deleteReview(id, null);
+  }
+}
+
 export function getReviewMediaItems(review: ReviewRow): ReviewMediaItem[] {
   const urls = ((review.media_urls as string[] | null) ?? []).filter(Boolean);
   const types = ((review.media_types as string[] | null) ?? []).filter(Boolean);

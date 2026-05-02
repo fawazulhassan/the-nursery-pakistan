@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { CATEGORIES } from '@/lib/constants';
 import { MAX_PRODUCT_IMAGES, MAX_PRODUCT_IMAGE_BYTES, deleteProductImagesFromStorage, resolvePrimaryProductImage, resolveProductImageUrls, uploadProductImage, validateProductImageFile } from '@/lib/productImages';
+import { deleteReviewsForProductBySlugCandidates } from '@/lib/reviews';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { ProductImageCropDialog } from '@/components/admin/ProductImageCropDialog';
 
@@ -327,12 +328,10 @@ const AdminDashboard = () => {
       .replace(/^-+|-+$/g, "");
 
   const handleDeleteProduct = async (product: Product) => {
-    const confirmed = window.confirm(`Delete "${product.name}" permanently? This action cannot be undone.`);
-    if (!confirmed) return;
+    if (!window.confirm(`Delete "${product.name}" permanently? This action cannot be undone.`)) return;
 
-    setDeletingProductId(product.id);
-    try {
-      const [{ count: orderItemCount, error: orderItemsError }, { count: reviewCount, error: reviewsError }] = await Promise.all([
+    const [{ count: orderItemCount, error: orderItemsError }, { count: reviewCount, error: reviewsError }] =
+      await Promise.all([
         supabase
           .from('order_items')
           .select('id', { head: true, count: 'exact' })
@@ -343,25 +342,37 @@ const AdminDashboard = () => {
           .in('product_slug', [product.id, toProductSlug(product.name)]),
       ]);
 
-      if (orderItemsError) throw orderItemsError;
-      if (reviewsError) throw reviewsError;
+    if (orderItemsError) {
+      toast({ title: 'Error', description: orderItemsError.message, variant: 'destructive' });
+      return;
+    }
+    if (reviewsError) {
+      toast({ title: 'Error', description: reviewsError.message, variant: 'destructive' });
+      return;
+    }
 
-      if ((orderItemCount ?? 0) > 0 || (reviewCount ?? 0) > 0) {
-        toast({
-          title: 'Cannot delete product',
-          description: 'Cannot delete product with existing orders or reviews.',
-          variant: 'destructive',
-        });
-        return;
-      }
+    const orderLines = orderItemCount ?? 0;
+    const reviewTotal = reviewCount ?? 0;
+
+    if (orderLines + reviewTotal > 0) {
+      const secondMessage =
+        `"${product.name}" has ${orderLines} order line(s) and ${reviewTotal} review(s).\n\n` +
+        'Deleting will remove those order line rows from the database, delete all matching reviews, and remove the product and its catalog images. This cannot be undone.\n\n' +
+        'Continue with permanent delete?';
+      if (!window.confirm(secondMessage)) return;
+    }
+
+    setDeletingProductId(product.id);
+    let reviewsRemoved = false;
+    let imagesRemoved = false;
+    try {
+      await deleteReviewsForProductBySlugCandidates(product.id, product.name);
+      reviewsRemoved = true;
 
       await deleteProductImagesFromStorage(product);
+      imagesRemoved = true;
 
-      const { error: deleteError } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', product.id);
-
+      const { error: deleteError } = await supabase.from('products').delete().eq('id', product.id);
       if (deleteError) throw deleteError;
 
       if (editingProduct?.id === product.id) {
@@ -370,13 +381,27 @@ const AdminDashboard = () => {
 
       toast({
         title: 'Product deleted',
-        description: 'Product and its images were deleted successfully.',
+        description: 'Product, related reviews, images, and order line items were removed successfully.',
       });
       fetchProducts();
     } catch (error: any) {
+      const baseMessage = error?.message ?? 'Unknown error';
+      const lines = [
+        baseMessage,
+        '',
+        reviewsRemoved
+          ? 'Completed: matching reviews were removed.'
+          : 'Not completed: matching reviews were not removed.',
+        imagesRemoved
+          ? 'Completed: product catalog images were removed from storage.'
+          : 'Not completed: product catalog images were not removed from storage.',
+        reviewsRemoved && imagesRemoved
+          ? 'Not completed: the product database row may still exist. Order line items are only removed when that row is deleted.'
+          : 'Not completed: the product database row was not removed; order line items are unchanged.',
+      ];
       toast({
-        title: 'Error',
-        description: error.message,
+        title: 'Delete failed',
+        description: lines.join('\n'),
         variant: 'destructive',
       });
     } finally {
