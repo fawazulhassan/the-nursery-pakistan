@@ -15,6 +15,7 @@ import ReviewForm from "@/components/ReviewForm";
 import { useAuth } from "@/contexts/AuthContext";
 import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { ProductDescription } from "@/components/ProductDescription";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -225,10 +226,11 @@ const ProductPage = () => {
                     <span className="text-2xl sm:text-3xl font-bold text-primary">{displayPrice}</span>
                   )}
                 </div>
-                <p className="text-muted-foreground mb-8 leading-relaxed">
-                  {product.description ||
-                    "A beautiful plant that will bring life and freshness to your space."}
-                </p>
+                <ProductDescription
+                  text={product.description}
+                  className="text-muted-foreground leading-relaxed"
+                  wrapperClassName="mb-8"
+                />
 
                 <div className="flex items-center gap-4 mb-6">
                   <span className="font-medium">Quantity:</span>

@@ -13,6 +13,7 @@ import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { productDescriptionPreview } from "@/components/ProductDescription";
 
 const CategoryPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -224,7 +225,7 @@ const CategoryPage = () => {
                         </h3>
                       </Link>
                       <p className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3 line-clamp-2">
-                        {product.description}
+                        {productDescriptionPreview(product.description)}
                       </p>
                       <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                         {saleActive ? (

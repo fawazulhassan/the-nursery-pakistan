@@ -11,6 +11,7 @@ import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { resolveProductImageUrls } from "@/lib/productImages";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { ProductDescription } from "@/components/ProductDescription";
 
 interface ProductDetailDialogProps {
   open: boolean;
@@ -50,6 +51,8 @@ const ProductDetailDialog = ({
 
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
+
+  const hasDescription = Boolean(product.description?.trim());
 
   const handleAddToCart = () => {
     const cartItem = {
@@ -99,13 +102,12 @@ const ProductDetailDialog = ({
           </div>
           
           <div className="flex flex-col gap-4">
-            <div>
-              <h3 className="font-semibold mb-2 text-muted-foreground">Description</h3>
-              <p className="text-foreground">
-                {product.description ||
-                  "A beautiful plant that will bring life and freshness to your space. Easy to care for and perfect for any home or office environment."}
-              </p>
-            </div>
+            {hasDescription ? (
+              <div>
+                <h3 className="font-semibold mb-2 text-muted-foreground">Description</h3>
+                <ProductDescription text={product.description} className="text-foreground" />
+              </div>
+            ) : null}
 
             <div className="border-t border-border pt-4">
               <p className="text-2xl sm:text-3xl font-bold text-primary mb-4">
