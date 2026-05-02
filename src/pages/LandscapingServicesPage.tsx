@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useMemo, useState } from "react";
 import { getCompletedProjects, type CompletedProjectRow } from "@/lib/landscapingProjects";
 import { useToast } from "@/hooks/use-toast";
-import landscapingServicesHeroBanner from "@/assets/landscaping-services-hero-banner.png";
+import landscapingServicesHeroBanner from "@/assets/landscaping-services-hero-banner.webp";
 
 const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
 

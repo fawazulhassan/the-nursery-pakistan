@@ -10,42 +10,41 @@ import ReviewForm from "@/components/ReviewForm";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { getPublishedWorkshops, type WorkshopRow } from "@/lib/workshops";
-import flowerWorkshopHeroBanner from "@/assets/flower-workshop-hero-banner.png";
-import img1 from "@/assets/1.jpeg";
-import img2 from "@/assets/2.jpeg";
-import img3 from "@/assets/3.jpeg";
-import img4 from "@/assets/4.jpeg";
-import img5 from "@/assets/5.jpeg";
-import img6 from "@/assets/6.jpeg";
-import img7 from "@/assets/7.jpeg";
-import img8 from "@/assets/8.jpeg";
-import img9 from "@/assets/9.jpeg";
-import img10 from "@/assets/10.png";
-import img11 from "@/assets/11.jpeg";
-import img12 from "@/assets/12.jpeg";
-import img13 from "@/assets/13.jpeg";
-import img14 from "@/assets/14.jpeg";
-import img15 from "@/assets/15.jpeg";
-import img16 from "@/assets/16.jpeg";
-import img17 from "@/assets/17.jpeg";
-import img18 from "@/assets/18.jpeg";
-import img19 from "@/assets/19.jpeg";
-import img20 from "@/assets/20.jpeg";
-import img21 from "@/assets/21.jpeg";
-import img22 from "@/assets/22.jpeg";
-import img23 from "@/assets/23.jpeg";
-import img24 from "@/assets/24.jpeg";
-import img25 from "@/assets/25.jpeg";
-import img26 from "@/assets/26.jpeg";
-import img27 from "@/assets/27.jpeg";
-import img28 from "@/assets/28.jpeg";
-import img29 from "@/assets/29.jpeg";
-import img30 from "@/assets/30.jpeg";
-import img31 from "@/assets/31.jpeg";
-import img32 from "@/assets/32.jpeg";
-import img33 from "@/assets/33.jpeg";
-import img34 from "@/assets/34.jpeg";
-import img35 from "@/assets/35.jpeg";
+import flowerWorkshopHeroBanner from "@/assets/flower-workshop-hero-banner.webp";
+import img1 from "@/assets/1.webp";
+import img2 from "@/assets/2.webp";
+import img3 from "@/assets/3.webp";
+import img4 from "@/assets/4.webp";
+import img5 from "@/assets/5.webp";
+import img6 from "@/assets/6.webp";
+import img7 from "@/assets/7.webp";
+import img9 from "@/assets/9.webp";
+import img10 from "@/assets/10.webp";
+import img11 from "@/assets/11.webp";
+import img12 from "@/assets/12.webp";
+import img13 from "@/assets/13.webp";
+import img14 from "@/assets/14.webp";
+import img15 from "@/assets/15.webp";
+import img16 from "@/assets/16.webp";
+import img17 from "@/assets/17.webp";
+import img18 from "@/assets/18.webp";
+import img19 from "@/assets/19.webp";
+import img20 from "@/assets/20.webp";
+import img21 from "@/assets/21.webp";
+import img22 from "@/assets/22.webp";
+import img23 from "@/assets/23.webp";
+import img24 from "@/assets/24.webp";
+import img25 from "@/assets/25.webp";
+import img26 from "@/assets/26.webp";
+import img27 from "@/assets/27.webp";
+import img28 from "@/assets/28.webp";
+import img29 from "@/assets/29.webp";
+import img30 from "@/assets/30.webp";
+import img31 from "@/assets/31.webp";
+import img32 from "@/assets/32.webp";
+import img33 from "@/assets/33.webp";
+import img34 from "@/assets/34.webp";
+import img35 from "@/assets/35.webp";
 
 const workshopMemoryImages = [
   img1,
@@ -55,7 +54,6 @@ const workshopMemoryImages = [
   img5,
   img6,
   img7,
-  img8,
   img9,
   img10,
   img11,

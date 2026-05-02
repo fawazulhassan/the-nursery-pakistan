@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, Leaf, Package, AlertTriangle, Edit, Eye, EyeOff, Tag, ArrowUp, ArrowDown, X, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { CATEGORIES } from '@/lib/constants';
-import { MAX_PRODUCT_IMAGES, deleteProductImagesFromStorage, resolvePrimaryProductImage, resolveProductImageUrls, uploadProductImage, validateProductImageFile } from '@/lib/productImages';
+import { MAX_PRODUCT_IMAGES, MAX_PRODUCT_IMAGE_BYTES, deleteProductImagesFromStorage, resolvePrimaryProductImage, resolveProductImageUrls, uploadProductImage, validateProductImageFile } from '@/lib/productImages';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { ProductImageCropDialog } from '@/components/admin/ProductImageCropDialog';
 
 interface Product {
   id: string;
@@ -58,6 +59,12 @@ const AdminDashboard = () => {
   const [editStockQuantity, setEditStockQuantity] = useState('');
   const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
 
+  const [cropFlowOpen, setCropFlowOpen] = useState(false);
+  const [cropQueue, setCropQueue] = useState<File[]>([]);
+  const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+  const [recropDraftId, setRecropDraftId] = useState<string | null>(null);
+  const programmaticCropCloseRef = useRef(false);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -74,29 +81,129 @@ const AdminDashboard = () => {
 
   const hasImageErrors = draftImages.some((item) => !!item.error);
 
-  const addFilesToDraftImages = (files: File[]) => {
-    if (!files.length) return;
-
-    setDraftImages((prev) => {
-      const next = [...prev];
-      for (const file of files) {
-        if (next.length >= MAX_PRODUCT_IMAGES) break;
-        next.push({
-          id: `${crypto.randomUUID()}-${Date.now()}`,
-          source: 'file',
-          file,
-          url: URL.createObjectURL(file),
-          error: validateProductImageFile(file),
-        });
-      }
-      return next;
-    });
+  const handleCropFlowOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen && programmaticCropCloseRef.current) {
+      programmaticCropCloseRef.current = false;
+      setCropFlowOpen(false);
+      return;
+    }
+    setCropFlowOpen(nextOpen);
+    if (!nextOpen) {
+      setCropImageSrc((prevUrl) => {
+        if (prevUrl) URL.revokeObjectURL(prevUrl);
+        return null;
+      });
+      setCropQueue([]);
+      setRecropDraftId(null);
+    }
   };
 
   const handleImageFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    addFilesToDraftImages(files);
+    const slots = MAX_PRODUCT_IMAGES - draftImages.length;
+    if (slots <= 0 || files.length === 0) {
+      e.target.value = '';
+      return;
+    }
+    const batch = files.slice(0, slots);
     e.target.value = '';
+
+    setRecropDraftId(null);
+    setCropQueue(batch);
+    setCropImageSrc((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return URL.createObjectURL(batch[0]);
+    });
+    setCropFlowOpen(true);
+  };
+
+  const handleCropConfirmed = async (croppedFile: File) => {
+    if (croppedFile.size > MAX_PRODUCT_IMAGE_BYTES) {
+      toast({
+        title: 'Error',
+        description: 'Cropped image exceeds 5MB — try a smaller selection',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const validationErr = validateProductImageFile(croppedFile);
+    if (validationErr) {
+      toast({ title: 'Error', description: validationErr, variant: 'destructive' });
+      return;
+    }
+
+    if (recropDraftId != null) {
+      const previewUrl = URL.createObjectURL(croppedFile);
+      setDraftImages((prev) =>
+        prev.map((d) => {
+          if (d.id !== recropDraftId) return d;
+          if (d.url.startsWith('blob:')) URL.revokeObjectURL(d.url);
+          return { ...d, source: 'file' as const, file: croppedFile, url: previewUrl, error: null };
+        }),
+      );
+      setCropImageSrc((prevUrl) => {
+        if (prevUrl) URL.revokeObjectURL(prevUrl);
+        return null;
+      });
+      setRecropDraftId(null);
+      programmaticCropCloseRef.current = true;
+      setCropFlowOpen(false);
+      setCropQueue([]);
+      return;
+    }
+
+    const newDraftUrl = URL.createObjectURL(croppedFile);
+    setDraftImages((prev) => [
+      ...prev,
+      {
+        id: `${crypto.randomUUID()}-${Date.now()}`,
+        source: 'file',
+        file: croppedFile,
+        url: newDraftUrl,
+        error: validateProductImageFile(croppedFile),
+      },
+    ]);
+
+    const rest = cropQueue.slice(1);
+    setCropQueue(rest);
+    setCropImageSrc((prevUrl) => {
+      if (prevUrl) URL.revokeObjectURL(prevUrl);
+      if (rest.length === 0) return null;
+      return URL.createObjectURL(rest[0]);
+    });
+    if (rest.length === 0) {
+      programmaticCropCloseRef.current = true;
+      setCropFlowOpen(false);
+    }
+  };
+
+  const startRecropDraft = async (draft: DraftImage) => {
+    if (cropFlowOpen) return;
+    try {
+      let objectUrl: string;
+      if (draft.source === 'file' && draft.file) {
+        objectUrl = URL.createObjectURL(draft.file);
+      } else {
+        const res = await fetch(draft.url, { mode: 'cors' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const blob = await res.blob();
+        objectUrl = URL.createObjectURL(blob);
+      }
+      setCropQueue([]);
+      setRecropDraftId(draft.id);
+      setCropImageSrc((prevUrl) => {
+        if (prevUrl) URL.revokeObjectURL(prevUrl);
+        return objectUrl;
+      });
+      setCropFlowOpen(true);
+    } catch {
+      toast({
+        title: 'Cannot re-crop',
+        description: 'Could not load this image for editing. Replace it with an upload instead.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleAddManualImage = () => {
@@ -563,7 +670,7 @@ const AdminDashboard = () => {
                 multiple
                 onChange={handleImageFilesChange}
                 className="cursor-pointer"
-                disabled={draftImages.length >= MAX_PRODUCT_IMAGES}
+                disabled={draftImages.length >= MAX_PRODUCT_IMAGES || cropFlowOpen}
               />
 
               <div className="flex gap-2">
@@ -573,17 +680,20 @@ const AdminDashboard = () => {
                   placeholder="https://example.com/image.jpg"
                   value={manualImageUrlInput}
                   onChange={(e) => setManualImageUrlInput(e.target.value)}
-                  disabled={draftImages.length >= MAX_PRODUCT_IMAGES}
+                  disabled={draftImages.length >= MAX_PRODUCT_IMAGES || cropFlowOpen}
                 />
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleAddManualImage}
-                  disabled={draftImages.length >= MAX_PRODUCT_IMAGES}
+                  disabled={draftImages.length >= MAX_PRODUCT_IMAGES || cropFlowOpen}
                 >
                   Add Image
                 </Button>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Uploaded files are cropped here before saving. Images added by URL are not cropped (browser limitation).
+              </p>
 
               {draftImages.length >= MAX_PRODUCT_IMAGES && (
                 <p className="text-sm text-muted-foreground">Maximum 5 images allowed</p>
@@ -608,6 +718,17 @@ const AdminDashboard = () => {
                         {item.error && <p className="text-xs text-destructive">{item.error}</p>}
                       </div>
                       <div className="flex items-center gap-1">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="h-9 px-2"
+                          onClick={() => startRecropDraft(item)}
+                          disabled={cropFlowOpen}
+                          title="Square crop again"
+                        >
+                          Re-crop
+                        </Button>
                         <Button
                           type="button"
                           size="icon"
@@ -822,6 +943,17 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
+
+      <ProductImageCropDialog
+        open={cropFlowOpen && !!cropImageSrc}
+        onOpenChange={handleCropFlowOpenChange}
+        imageSrc={cropImageSrc}
+        displayLabel={
+          recropDraftId != null ? 'Adjust square crop for this image' : cropQueue[0]?.name ?? 'Image'
+        }
+        originalFileName={recropDraftId != null ? 'recropped' : cropQueue[0]?.name}
+        onConfirm={handleCropConfirmed}
+      />
     </AdminLayout>
   );
 };

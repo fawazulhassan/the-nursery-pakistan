@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import banner1 from "@/assets/hero-banner-1.png";
-import banner2 from "@/assets/hero-banner-2.png";
-import banner3 from "@/assets/hero-banner-3.png";
-import banner4 from "@/assets/hero-banner-4.png";
+import banner1 from "@/assets/hero-banner-1.webp";
+import banner2 from "@/assets/hero-banner-2.webp";
+import banner3 from "@/assets/hero-banner-3.webp";
+import banner4 from "@/assets/hero-banner-4.webp";
 
 type Slide = {
   image: string;

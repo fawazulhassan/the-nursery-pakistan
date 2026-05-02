@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import productSnakePlantImage from "@/assets/product-snake-plant.jpg";
-import peaceLilyImage from "@/assets/62e0a8bb81694aa8adc043f5b406b5e8.png";
-import aloeVeraImage from "@/assets/77c846171b944c2e9b270bca022ac64b.png";
-import productPothosImage from "@/assets/product-pothos.jpg";
+import productSnakePlantImage from "@/assets/snake-plant.webp";
+import peaceLilyImage from "@/assets/Peace-Lily.webp";
+import aloeVeraImage from "@/assets/Aloe-Vera.webp";
+import productPothosImage from "@/assets/money-plant.webp";
 import {
   ArrowLeft,
   Sun,
@@ -331,3 +331,4 @@ const GuidePage = () => {
 };
 
 export default GuidePage;
+
