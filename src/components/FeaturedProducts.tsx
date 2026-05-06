@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ const FeaturedProducts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -38,6 +39,23 @@ const FeaturedProducts = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBuyNow = (product: any) => {
+    const effectivePrice = getEffectivePrice(product);
+    const productImage = resolvePrimaryProductImage(product);
+    navigate("/checkout", {
+      state: {
+        buyNowItem: {
+        id: product.id,
+        name: product.name,
+        price: `Rs ${effectivePrice.toLocaleString()}`,
+        image: productImage,
+        description: product.description,
+          quantity: 1,
+        },
+      },
+    });
   };
 
   if (isLoading) {
@@ -158,6 +176,7 @@ const FeaturedProducts = () => {
               </CardContent>
 
               <CardFooter className="p-3 sm:p-4 pt-0">
+                <div className="w-full space-y-2">
                 <Button
                   className="w-full group/btn"
                   onClick={() => setSelectedProduct(product)}
@@ -166,6 +185,14 @@ const FeaturedProducts = () => {
                   <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
                   {product.stock_quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
                 </Button>
+                <Button
+                  className="w-full bg-foreground text-background hover:bg-foreground/90"
+                  onClick={() => handleBuyNow(product)}
+                  disabled={product.stock_quantity === 0}
+                >
+                  Buy it now
+                </Button>
+                </div>
               </CardFooter>
             </Card>
             );

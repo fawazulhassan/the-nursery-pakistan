@@ -81,6 +81,25 @@ const ProductPage = () => {
     navigate("/cart");
   };
 
+  const handleBuyNow = () => {
+    if (!product) return;
+    const imageUrl = selectedImage || resolvePrimaryProductImage(product);
+    const effectivePrice = getEffectivePrice(product);
+
+    navigate("/checkout", {
+      state: {
+        buyNowItem: {
+        id: product.id,
+        name: product.name,
+        price: `Rs ${effectivePrice.toLocaleString()}`,
+        image: imageUrl,
+        description: product.description,
+          quantity,
+        },
+      },
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -269,6 +288,14 @@ const ProductPage = () => {
                   >
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                  </Button>
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90"
+                    onClick={handleBuyNow}
+                    disabled={product.stock_quantity === 0}
+                  >
+                    Buy it now
                   </Button>
                   <Button
                     size="lg"

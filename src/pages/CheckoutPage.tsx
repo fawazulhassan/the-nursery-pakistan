@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,18 @@ interface StockError {
   requested: number;
 }
 
+interface BuyNowItem {
+  id: string;
+  name: string;
+  price: string | number;
+  image: string;
+  quantity: number;
+  description?: string;
+}
+
 const CheckoutPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user, loading: authLoading } = useAuth();
   const { defaultAddress } = useDefaultAddress();
@@ -38,6 +48,20 @@ const CheckoutPage = () => {
     notes: "",
   });
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
+  const buyNowItem = (location.state as { buyNowItem?: BuyNowItem } | null)?.buyNowItem;
+  const isBuyNowCheckout = Boolean(buyNowItem);
+  const checkoutSourceItems = isBuyNowCheckout && buyNowItem ? [buyNowItem] : cartItems;
+
+  const getCheckoutTotal = () => {
+    const total = checkoutSourceItems.reduce((sum, item) => {
+      const price =
+        typeof item.price === "string"
+          ? parseInt(item.price.replace(/[^0-9]/g, ""))
+          : item.price;
+      return sum + price * item.quantity;
+    }, 0);
+    return `Rs ${total.toLocaleString()}`;
+  };
 
   // Pre-fill form with default address when available
   useEffect(() => {
@@ -69,7 +93,7 @@ const CheckoutPage = () => {
 
     try {
       // First, validate stock availability for all items
-      const stockCheckItems = cartItems.map(item => ({
+      const stockCheckItems = checkoutSourceItems.map(item => ({
         product_id: item.id,
         quantity: item.quantity
       }));
@@ -98,7 +122,7 @@ const CheckoutPage = () => {
       }
 
       // Calculate total amount
-      const totalAmount = cartItems.reduce((sum, item) => {
+      const totalAmount = checkoutSourceItems.reduce((sum, item) => {
         const price = typeof item.price === 'string' 
           ? parseInt(item.price.replace(/[^0-9]/g, ""))
           : item.price;
@@ -109,7 +133,7 @@ const CheckoutPage = () => {
       const paymentStatus = paymentMethod === 'online' ? 'paid' : 'unpaid';
 
       // Build atomic checkout payload (order + items + stock updates in one transaction)
-      const checkoutItems = cartItems.map(item => {
+      const checkoutItems = checkoutSourceItems.map(item => {
         const price = typeof item.price === 'string' 
           ? parseInt(item.price.replace(/[^0-9]/g, ""))
           : item.price;
@@ -141,8 +165,10 @@ const CheckoutPage = () => {
           : "We'll contact you shortly to confirm your order.",
       });
       
-      clearCart();
-      navigate("/");
+      if (!isBuyNowCheckout) {
+        clearCart();
+      }
+      navigate("/", { replace: isBuyNowCheckout });
     } catch (error: any) {
       toast({
         title: "Error",
@@ -163,7 +189,7 @@ const CheckoutPage = () => {
     });
   };
 
-  if (cartItems.length === 0) {
+  if (checkoutSourceItems.length === 0) {
     navigate("/cart");
     return null;
   }
@@ -311,7 +337,7 @@ const CheckoutPage = () => {
                                 </div>
                               </Label>
                             </div>
-                            <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                            {/* <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
                               <RadioGroupItem value="online" id="online" />
                               <Label htmlFor="online" className="flex items-center gap-3 cursor-pointer flex-1">
                                 <CreditCard className="h-5 w-5 text-primary" />
@@ -320,7 +346,7 @@ const CheckoutPage = () => {
                                   <p className="text-sm text-muted-foreground">Pay securely online (Credit/Debit Card)</p>
                                 </div>
                               </Label>
-                            </div>
+                            </div> */}
                           </RadioGroup>
                         </div>
                       </div>
@@ -347,7 +373,7 @@ const CheckoutPage = () => {
                       )}
 
                       <div className="space-y-3 mb-6">
-                        {cartItems.map((item) => (
+                        {checkoutSourceItems.map((item) => (
                           <div key={item.id} className="flex justify-between text-sm">
                             <span className="text-foreground">
                               {item.name} x {item.quantity}
@@ -361,7 +387,7 @@ const CheckoutPage = () => {
                         <div className="border-t border-border pt-3">
                           <div className="flex justify-between font-bold text-lg">
                             <span>Total</span>
-                            <span className="text-primary">{getCartTotal()}</span>
+                            <span className="text-primary">{isBuyNowCheckout ? getCheckoutTotal() : getCartTotal()}</span>
                           </div>
                         </div>
                       </div>
