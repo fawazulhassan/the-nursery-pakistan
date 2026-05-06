@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Package, Search, Eye } from 'lucide-react';
+import { Package, Search, Eye, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -50,6 +50,7 @@ const AdminOrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
   
   const { toast } = useToast();
 
@@ -199,6 +200,47 @@ const AdminOrdersPage = () => {
         variant: 'destructive',
       });
     }
+  };
+
+  const handleDeleteOrder = async (order: Order) => {
+    const confirmMessage = `Permanently delete order #${order.id.slice(0, 8)}?\nThis will also remove all order items and cannot be undone.`;
+    const confirmed = window.confirm(confirmMessage);
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingOrderId(order.id);
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', order.id);
+
+      if (error) {
+        throw error;
+      }
+
+      setOrders((prev) => prev.filter((row) => row.id !== order.id));
+      if (selectedOrder?.id === order.id) {
+        setSelectedOrder(null);
+        setIsDialogOpen(false);
+      }
+
+      toast({
+        title: 'Order deleted',
+        description: `Order #${order.id.slice(0, 8)} was permanently deleted.`,
+      });
+    } catch (error: any) {
+      setDeletingOrderId(null);
+      toast({
+        title: 'Delete failed',
+        description: error.message ?? 'Failed to delete order. Please try again.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setDeletingOrderId(null);
   };
 
   const getStatusBadgeVariant = (status: string) => {
@@ -360,6 +402,16 @@ const AdminOrdersPage = () => {
                             <SelectItem value="paid">Mark Paid</SelectItem>
                           </SelectContent>
                         </Select>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDeleteOrder(order)}
+                          disabled={deletingOrderId === order.id}
+                          className="w-[160px]"
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          {deletingOrderId === order.id ? 'Deleting...' : 'Delete'}
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
