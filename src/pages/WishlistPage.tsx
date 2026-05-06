@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Heart, ShoppingCart, Trash2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,10 +7,12 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
+import { resolveProductImageUrls } from "@/lib/productImages";
 
 const WishlistPage = () => {
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   const handleAddToCartFromWishlist = (item: (typeof wishlistItems)[number]) => {
     const salePrice = item.sale_percentage
@@ -29,6 +31,39 @@ const WishlistPage = () => {
       1
     );
     removeFromWishlist(item.id);
+  };
+
+  const resolveWishlistBuyNowImage = (item: (typeof wishlistItems)[number]) => {
+    const fullProduct = (item as any).product ?? (item as any).fullProduct;
+    if (fullProduct) {
+      return (
+        resolveProductImageUrls(fullProduct)[0] ??
+        (item as any).image ??
+        (item as any).image_url
+      );
+    }
+
+    return (item as any).image ?? (item as any).image_url;
+  };
+
+  const handleBuyNowFromWishlist = (item: (typeof wishlistItems)[number]) => {
+    const salePrice = item.sale_percentage
+      ? item.price - (item.price * item.sale_percentage / 100)
+      : null;
+    const effectivePrice = salePrice ?? item.price;
+
+    navigate("/checkout", {
+      state: {
+        buyNowItem: {
+          id: item.id,
+          name: item.name,
+          price: `Rs ${effectivePrice.toLocaleString()}`,
+          image: resolveWishlistBuyNowImage(item),
+          description: item.description,
+          quantity: 1,
+        },
+      },
+    });
   };
 
   return (
@@ -125,13 +160,21 @@ const WishlistPage = () => {
                       </CardContent>
 
                       <CardFooter className="p-3 sm:p-4 pt-0">
-                        <Button
-                          className="w-full group/btn"
-                          onClick={() => handleAddToCartFromWishlist(item)}
-                        >
-                          <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                          Add to Cart
-                        </Button>
+                        <div className="w-full space-y-2">
+                          <Button
+                            className="w-full group/btn"
+                            onClick={() => handleAddToCartFromWishlist(item)}
+                          >
+                            <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
+                            Add to Cart
+                          </Button>
+                          <Button
+                            className="w-full bg-foreground text-background hover:bg-foreground/90"
+                            onClick={() => handleBuyNowFromWishlist(item)}
+                          >
+                            Buy it now
+                          </Button>
+                        </div>
                       </CardFooter>
                     </Card>
                   );

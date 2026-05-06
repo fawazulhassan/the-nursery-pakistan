@@ -17,6 +17,13 @@ import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/produ
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { ProductDescription } from "@/components/ProductDescription";
 
+const isEditableKeyboardTarget = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) return false;
+  return Boolean(
+    target.closest("input, textarea, select, [contenteditable='true']")
+  );
+};
+
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -99,6 +106,46 @@ const ProductPage = () => {
       },
     });
   };
+
+  useEffect(() => {
+    if (!product) return;
+
+    const productImages = resolveProductImageUrls(product);
+    if (productImages.length <= 1) return;
+
+    const mainImage = selectedImage || resolvePrimaryProductImage(product);
+    const currentImageIndex = Math.max(
+      0,
+      productImages.findIndex((imageUrl) => imageUrl === mainImage)
+    );
+
+    const showPreviousImage = () => {
+      const nextIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+      setSelectedImage(productImages[nextIndex]);
+    };
+
+    const showNextImage = () => {
+      const nextIndex = (currentImageIndex + 1) % productImages.length;
+      setSelectedImage(productImages[nextIndex]);
+    };
+
+    const handleImageKeyboardNavigation = (event: KeyboardEvent) => {
+      if (isEditableKeyboardTarget(event.target)) return;
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showPreviousImage();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showNextImage();
+      }
+    };
+
+    window.addEventListener("keydown", handleImageKeyboardNavigation);
+    return () => {
+      window.removeEventListener("keydown", handleImageKeyboardNavigation);
+    };
+  }, [product, selectedImage]);
 
   if (isLoading) {
     return (

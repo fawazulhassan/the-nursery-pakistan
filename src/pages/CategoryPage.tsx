@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ const CategoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const navigate = useNavigate();
 
   const categoryName = (category && slugToCategory[category]) || "";
 
@@ -75,6 +76,23 @@ const CategoryPage = () => {
     if (priceFilter === "high") return price > 3000;
     return true;
   });
+
+  const handleBuyNow = (product: any) => {
+    const effectivePrice = getEffectivePrice(product);
+    const productImage = resolvePrimaryProductImage(product);
+    navigate("/checkout", {
+      state: {
+        buyNowItem: {
+          id: product.id,
+          name: product.name,
+          price: `Rs ${effectivePrice.toLocaleString()}`,
+          image: productImage,
+          description: product.description,
+          quantity: 1,
+        },
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -246,14 +264,23 @@ const CategoryPage = () => {
                     </CardContent>
 
                     <CardFooter className="p-3 sm:p-4 pt-0">
-                      <Button
-                        className="w-full group/btn"
-                        onClick={() => setSelectedProduct(product)}
-                        disabled={product.stock_quantity === 0}
-                      >
-                        <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                        {product.stock_quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
-                      </Button>
+                      <div className="w-full space-y-2">
+                        <Button
+                          className="w-full group/btn"
+                          onClick={() => setSelectedProduct(product)}
+                          disabled={product.stock_quantity === 0}
+                        >
+                          <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
+                          {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                        </Button>
+                        <Button
+                          className="w-full bg-foreground text-background hover:bg-foreground/90"
+                          onClick={() => handleBuyNow(product)}
+                          disabled={product.stock_quantity === 0}
+                        >
+                          Buy it now
+                        </Button>
+                      </div>
                     </CardFooter>
                   </Card>
                   );
