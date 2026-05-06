@@ -58,7 +58,7 @@ const Navbar = () => {
           </form>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Link to="/wishlist">
               <Button variant="ghost" size="icon" className="relative" title="Wishlist">
                 <Heart className="h-5 w-5" />
@@ -91,7 +91,7 @@ const Navbar = () => {
                     variant="secondary"
                     size="sm"
                     onClick={() => navigate('/admin')}
-                    className="hidden md:flex"
+                    className="hidden md:flex px-2"
                   >
                     Admin
                   </Button>
