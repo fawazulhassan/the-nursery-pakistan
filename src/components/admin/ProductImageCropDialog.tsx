@@ -12,16 +12,16 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { cropImageToJpegFile } from "@/lib/cropImageToJpegFile";
+import { cropImageFile } from "@/lib/cropImageFile";
 
 type ProductImageCropDialogProps = {
   open: boolean;
   /** Overlay, Escape, built-in X */
   onOpenChange: (open: boolean) => void;
   imageSrc: string | null;
+  imageFile: File | null;
   /** Shown in the header; e.g. original file name */
   displayLabel?: string;
-  originalFileName?: string;
   onConfirm: (file: File) => void | Promise<void>;
 };
 
@@ -32,8 +32,8 @@ export function ProductImageCropDialog({
   open,
   onOpenChange,
   imageSrc,
+  imageFile,
   displayLabel,
-  originalFileName,
   onConfirm,
 }: ProductImageCropDialogProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -58,10 +58,10 @@ export function ProductImageCropDialog({
   };
 
   const handleConfirm = async () => {
-    if (!imageSrc || !croppedAreaPixels || isApplying) return;
+    if (!imageSrc || !imageFile || !croppedAreaPixels || isApplying) return;
     setIsApplying(true);
     try {
-      const file = await cropImageToJpegFile(imageSrc, croppedAreaPixels, originalFileName);
+      const file = await cropImageFile(imageFile, croppedAreaPixels);
       await onConfirm(file);
     } finally {
       setIsApplying(false);
@@ -122,7 +122,7 @@ export function ProductImageCropDialog({
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isApplying}>
             Cancel
           </Button>
-          <Button type="button" onClick={handleConfirm} disabled={!imageSrc || !croppedAreaPixels || isApplying}>
+          <Button type="button" onClick={handleConfirm} disabled={!imageSrc || !imageFile || !croppedAreaPixels || isApplying}>
             {isApplying ? "Working…" : "Confirm"}
           </Button>
         </DialogFooter>

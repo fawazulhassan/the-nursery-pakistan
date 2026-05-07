@@ -3,6 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 const PRODUCT_IMAGES_BUCKET = "product-images";
 export const MAX_PRODUCT_IMAGE_BYTES = 5 * 1024 * 1024;
 export const MAX_PRODUCT_IMAGES = 5;
+const MIME_EXTENSION_MAP: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
 
 type ProductImageLike = {
   image_url?: string | null;
@@ -40,8 +45,10 @@ export async function uploadProductImage(file: File): Promise<string> {
   const validationError = validateProductImageFile(file);
   if (validationError) throw new Error(validationError);
 
-  const fileExt = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
-  const safeExt = (fileExt ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const mimeExt = typeof file.type === "string" ? MIME_EXTENSION_MAP[file.type.toLowerCase()] : undefined;
+  const fileExt = file.name.includes(".") ? file.name.split(".").pop() : "";
+  const safeNameExt = (fileExt ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const safeExt = mimeExt || safeNameExt || "jpg";
   const filePath = `products/${crypto.randomUUID()}-${Date.now()}.${safeExt}`;
 
   const { error: uploadError } = await supabase.storage

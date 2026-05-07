@@ -63,6 +63,7 @@ const AdminDashboard = () => {
   const [cropFlowOpen, setCropFlowOpen] = useState(false);
   const [cropQueue, setCropQueue] = useState<File[]>([]);
   const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+  const [cropImageFile, setCropImageFile] = useState<File | null>(null);
   const [recropDraftId, setRecropDraftId] = useState<string | null>(null);
   const programmaticCropCloseRef = useRef(false);
 
@@ -94,6 +95,7 @@ const AdminDashboard = () => {
         if (prevUrl) URL.revokeObjectURL(prevUrl);
         return null;
       });
+      setCropImageFile(null);
       setCropQueue([]);
       setRecropDraftId(null);
     }
@@ -111,6 +113,7 @@ const AdminDashboard = () => {
 
     setRecropDraftId(null);
     setCropQueue(batch);
+    setCropImageFile(batch[0] ?? null);
     setCropImageSrc((prev) => {
       if (prev) URL.revokeObjectURL(prev);
       return URL.createObjectURL(batch[0]);
@@ -168,6 +171,7 @@ const AdminDashboard = () => {
 
     const rest = cropQueue.slice(1);
     setCropQueue(rest);
+    setCropImageFile(rest[0] ?? null);
     setCropImageSrc((prevUrl) => {
       if (prevUrl) URL.revokeObjectURL(prevUrl);
       if (rest.length === 0) return null;
@@ -182,16 +186,23 @@ const AdminDashboard = () => {
   const startRecropDraft = async (draft: DraftImage) => {
     if (cropFlowOpen) return;
     try {
+      let sourceFile: File;
       let objectUrl: string;
       if (draft.source === 'file' && draft.file) {
+        sourceFile = draft.file;
         objectUrl = URL.createObjectURL(draft.file);
       } else {
         const res = await fetch(draft.url, { mode: 'cors' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const blob = await res.blob();
+        const urlPath = draft.url.split("?")[0] ?? "";
+        const rawName = urlPath.split("/").pop() ?? "recrop-image";
+        const cleanName = rawName.trim() || "recrop-image";
+        sourceFile = new File([blob], cleanName, { type: blob.type || "image/jpeg" });
         objectUrl = URL.createObjectURL(blob);
       }
       setCropQueue([]);
+      setCropImageFile(sourceFile);
       setRecropDraftId(draft.id);
       setCropImageSrc((prevUrl) => {
         if (prevUrl) URL.revokeObjectURL(prevUrl);
@@ -973,10 +984,10 @@ const AdminDashboard = () => {
         open={cropFlowOpen && !!cropImageSrc}
         onOpenChange={handleCropFlowOpenChange}
         imageSrc={cropImageSrc}
+        imageFile={cropImageFile}
         displayLabel={
           recropDraftId != null ? 'Adjust square crop for this image' : cropQueue[0]?.name ?? 'Image'
         }
-        originalFileName={recropDraftId != null ? 'recropped' : cropQueue[0]?.name}
         onConfirm={handleCropConfirmed}
       />
     </AdminLayout>
