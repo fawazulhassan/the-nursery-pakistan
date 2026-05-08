@@ -124,16 +124,10 @@ const Hero = () => {
     <section className="relative overflow-hidden">
       <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
         <CarouselContent className="ml-0">
-          {slides.map((slide, index) => (
+          {slides.map((slide) => (
             <CarouselItem key={slide.heading} className="pl-0">
               <div className="relative h-[500px] md:h-[620px] w-full">
-                <img
-                  src={slide.image}
-                  alt={slide.alt}
-                  className="h-full w-full object-cover"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  fetchPriority={index === 0 ? "high" : "auto"}
-                />
+                <img src={slide.image} alt={slide.alt} className="h-full w-full object-cover" />
                 {slide.useOverlay ? (
                   <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent" />
                 ) : null}

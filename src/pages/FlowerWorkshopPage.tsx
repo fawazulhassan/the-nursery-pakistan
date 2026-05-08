@@ -172,8 +172,6 @@ const FlowerWorkshopPage = () => {
               src={flowerWorkshopHeroBanner}
               alt="Flower workshop session"
               className="w-full h-[320px] lg:h-[360px] object-cover rounded-xl"
-              loading="eager"
-              fetchPriority="high"
             />
           </div>
         </section>

@@ -132,8 +132,6 @@ const LandscapingServicesPage = () => {
                   src={landscapingServicesHeroBanner}
                   alt="Luxury residential garden with manicured lawn, stone path, pond, and pergola seating"
                   className="w-full h-[320px] md:h-[380px] object-cover"
-                  loading="eager"
-                  fetchPriority="high"
                 />
               </div>
             </div>
