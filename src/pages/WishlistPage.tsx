@@ -111,6 +111,7 @@ const WishlistPage = () => {
                           src={item.image_url}
                           alt={item.name}
                           className="w-full h-40 sm:h-52 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                          loading="lazy"
                         />
                         <Button
                           size="icon"

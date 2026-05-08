@@ -91,7 +91,12 @@ const WorkshopsPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleWorkshops.map((workshop) => (
               <Card key={workshop.id} className="overflow-hidden">
-                <img src={workshop.cover_image_url} alt={workshop.title} className="h-44 w-full object-cover" />
+                <img
+                  src={workshop.cover_image_url}
+                  alt={workshop.title}
+                  className="h-44 w-full object-cover"
+                  loading="lazy"
+                />
                 <CardContent className="p-5">
                   <p className="text-xs text-muted-foreground mb-2">{formatWorkshopDate(workshop.workshop_date)}</p>
                   <h2 className="font-bold text-lg mb-2 line-clamp-2">{workshop.title}</h2>

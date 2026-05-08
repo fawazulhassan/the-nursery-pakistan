@@ -468,6 +468,7 @@ const AdminOrdersPage = () => {
                         src={item.products.image_url}
                         alt={item.products.name}
                         className="w-16 h-16 object-cover rounded"
+                        loading="lazy"
                       />
                       <div className="flex-1">
                         <p className="font-medium">{item.products.name}</p>

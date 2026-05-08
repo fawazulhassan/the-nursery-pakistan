@@ -132,6 +132,8 @@ const LandscapingServicesPage = () => {
                   src={landscapingServicesHeroBanner}
                   alt="Luxury residential garden with manicured lawn, stone path, pond, and pergola seating"
                   className="w-full h-[320px] md:h-[380px] object-cover"
+                  loading="eager"
+                  fetchPriority="high"
                 />
               </div>
             </div>
@@ -156,6 +158,7 @@ const LandscapingServicesPage = () => {
                       src={featuredProject.cover_image_url}
                       alt={featuredProject.title}
                       className="w-full h-64 md:h-72 object-cover rounded-lg"
+                      loading="lazy"
                     />
                     <div className="flex flex-col h-full space-y-3">
                       <h3 className="text-2xl font-semibold">{featuredProject.title}</h3>
@@ -191,6 +194,7 @@ const LandscapingServicesPage = () => {
                                       src={imageUrl}
                                       alt={`${featuredProject.title} gallery ${index + 1}`}
                                       className="w-full h-full object-cover"
+                                      loading="lazy"
                                     />
                                   </button>
                                 )}
@@ -221,6 +225,7 @@ const LandscapingServicesPage = () => {
                           src={project.cover_image_url}
                           alt={project.title}
                           className="w-full h-44 object-cover rounded-md"
+                          loading="lazy"
                         />
                         <h3 className="text-xl font-semibold">{project.title}</h3>
                         <p className="text-sm text-muted-foreground">{project.description}</p>
@@ -255,6 +260,7 @@ const LandscapingServicesPage = () => {
                                         src={imageUrl}
                                         alt={`${project.title} gallery ${index + 1}`}
                                         className="w-full h-full object-cover"
+                                        loading="lazy"
                                       />
                                     </button>
                                   )}
@@ -330,6 +336,7 @@ const LandscapingServicesPage = () => {
                     src={activeLightbox.images[activeLightbox.currentIndex]}
                     alt={`Project gallery ${activeLightbox.currentIndex + 1}`}
                     className="max-h-[75vh] w-full object-contain rounded-lg"
+                    loading="lazy"
                   />
                 )}
                 <Button

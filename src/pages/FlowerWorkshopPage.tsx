@@ -172,6 +172,8 @@ const FlowerWorkshopPage = () => {
               src={flowerWorkshopHeroBanner}
               alt="Flower workshop session"
               className="w-full h-[320px] lg:h-[360px] object-cover rounded-xl"
+              loading="eager"
+              fetchPriority="high"
             />
           </div>
         </section>
@@ -214,6 +216,7 @@ const FlowerWorkshopPage = () => {
                   src={image}
                   alt={`Workshop memory ${index + 1}`}
                   className="w-full h-28 rounded-xl object-cover border"
+                  loading="lazy"
                 />
               </button>
             ))}
@@ -255,7 +258,12 @@ const FlowerWorkshopPage = () => {
           <div className="grid md:grid-cols-3 gap-4 mt-5">
             {recentWorkshops.map((workshop) => (
               <Card key={workshop.id} className="overflow-hidden">
-                <img src={workshop.cover_image_url} alt={workshop.title} className="w-full h-44 object-cover" />
+                <img
+                  src={workshop.cover_image_url}
+                  alt={workshop.title}
+                  className="w-full h-44 object-cover"
+                  loading="lazy"
+                />
                 <div className="p-4">
                   <h3 className="font-semibold line-clamp-2 mb-2">{workshop.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-3">{workshop.description}</p>
@@ -317,6 +325,7 @@ const FlowerWorkshopPage = () => {
                   src={workshopMemoryImages[selectedImageIndex]}
                   alt={`Workshop memory ${selectedImageIndex + 1}`}
                   className="max-h-[75vh] w-full object-contain rounded-lg"
+                  loading="lazy"
                 />
                 <Button
                   type="button"

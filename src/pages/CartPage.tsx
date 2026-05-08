@@ -101,6 +101,7 @@ const CartPage = () => {
                             src={item.image}
                             alt={item.name}
                             className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted shrink-0"
+                            loading="lazy"
                           />
 
                           <div className="flex-1 min-w-0">

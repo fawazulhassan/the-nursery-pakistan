@@ -147,6 +147,7 @@ const Testimonials = () => {
                                 src={item.url}
                                 alt={`Review by ${testimonial.reviewer_name}`}
                                 className="h-20 w-20 object-cover"
+                                loading="lazy"
                               />
                             )}
                           </button>

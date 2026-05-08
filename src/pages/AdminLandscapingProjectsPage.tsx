@@ -239,7 +239,12 @@ const AdminLandscapingProjectsPage = () => {
                 disabled={isUploadingCover}
               />
               {coverImageUrl ? (
-                <img src={coverImageUrl} alt="Cover preview" className="w-40 h-28 rounded-md border object-cover" />
+                <img
+                  src={coverImageUrl}
+                  alt="Cover preview"
+                  className="w-40 h-28 rounded-md border object-cover"
+                  loading="lazy"
+                />
               ) : null}
             </div>
 
@@ -277,6 +282,7 @@ const AdminLandscapingProjectsPage = () => {
                           src={url}
                           alt={`Gallery ${index + 1}`}
                           className="w-full h-24 rounded-md border object-cover"
+                          loading="lazy"
                         />
                       )}
                       <Button
@@ -329,6 +335,7 @@ const AdminLandscapingProjectsPage = () => {
                       src={project.cover_image_url}
                       alt={project.title}
                       className="w-16 h-12 rounded object-cover border"
+                      loading="lazy"
                     />
                     <div className="min-w-0">
                       <p className="font-medium truncate">{project.title}</p>

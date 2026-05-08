@@ -99,7 +99,12 @@ const BlogsPage = () => {
             {blogs.map((blog) => (
               <Card key={blog.id} className="overflow-hidden">
                 {blog.featured_image_url ? (
-                  <img src={blog.featured_image_url} alt={blog.title} className="h-44 w-full object-cover" />
+                  <img
+                    src={blog.featured_image_url}
+                    alt={blog.title}
+                    className="h-44 w-full object-cover"
+                    loading="lazy"
+                  />
                 ) : (
                   <div className="h-44 bg-gradient-to-br from-nature-mint to-nature-sage" />
                 )}

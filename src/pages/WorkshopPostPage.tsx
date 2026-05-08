@@ -246,7 +246,12 @@ const WorkshopPostPage = () => {
             </section>
 
             <section>
-              <img src={workshop.cover_image_url} alt={workshop.title} className="w-full rounded-lg mb-8 max-h-[520px] object-cover" />
+              <img
+                src={workshop.cover_image_url}
+                alt={workshop.title}
+                className="w-full rounded-lg mb-8 max-h-[520px] object-cover"
+                loading="lazy"
+              />
               <p className="text-muted-foreground">{workshop.description}</p>
             </section>
 
@@ -265,6 +270,7 @@ const WorkshopPostPage = () => {
                         src={imageUrl}
                         alt={`${workshop.title} gallery ${index + 1}`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                       />
                     </button>
                   ))}
@@ -278,7 +284,12 @@ const WorkshopPostPage = () => {
       <Dialog open={!!lightboxImage} onOpenChange={(open) => !open && setLightboxImage(null)}>
         <DialogContent className="max-w-4xl p-2">
           {lightboxImage ? (
-            <img src={lightboxImage} alt="Workshop gallery fullscreen" className="w-full max-h-[80vh] object-contain rounded-md" />
+            <img
+              src={lightboxImage}
+              alt="Workshop gallery fullscreen"
+              className="w-full max-h-[80vh] object-contain rounded-md"
+              loading="lazy"
+            />
           ) : null}
         </DialogContent>
       </Dialog>

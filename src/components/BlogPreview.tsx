@@ -69,7 +69,12 @@ const BlogPreview = () => {
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     {post.featured_image_url ? (
-                      <img src={post.featured_image_url} alt={post.title} className="h-48 w-full object-cover" />
+                      <img
+                        src={post.featured_image_url}
+                        alt={post.title}
+                        className="h-48 w-full object-cover"
+                        loading="lazy"
+                      />
                     ) : (
                       <div className="h-48 bg-gradient-to-br from-nature-mint to-nature-sage" />
                     )}

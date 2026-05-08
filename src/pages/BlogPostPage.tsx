@@ -93,6 +93,7 @@ const BlogPostPage = () => {
                 src={blog.featured_image_url}
                 alt={blog.title}
                 className="w-full rounded-lg mb-8 max-h-[420px] object-cover"
+                loading="lazy"
               />
             )}
             <div

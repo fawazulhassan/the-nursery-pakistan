@@ -58,6 +58,7 @@ const ReviewImageLightbox = ({
               src={activeItem.url}
               alt={`Review media ${currentIndex + 1}`}
               className="w-full max-h-[85vh] object-contain rounded-md"
+              loading="lazy"
             />
           )}
 

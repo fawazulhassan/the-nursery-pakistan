@@ -149,6 +149,7 @@ const ProductDetailDialog = ({
                   src={selectedImage}
                   alt={product.name}
                   className="w-full h-full object-cover object-center"
+                  loading="lazy"
                 />
               </div>
               {productImages.length > 1 && (
@@ -161,7 +162,12 @@ const ProductDetailDialog = ({
                         className={`border rounded overflow-hidden shrink-0 w-16 md:w-auto ${selectedImage === imageUrl ? "border-primary" : "border-border"}`}
                         onClick={() => setSelectedImage(imageUrl)}
                       >
-                        <img src={imageUrl} alt={`${product.name} thumbnail ${index + 1}`} className="w-16 h-16 md:w-full md:h-16 object-cover object-center" />
+                        <img
+                          src={imageUrl}
+                          alt={`${product.name} thumbnail ${index + 1}`}
+                          className="w-16 h-16 md:w-full md:h-16 object-cover object-center"
+                          loading="lazy"
+                        />
                       </button>
                     ))}
                   </div>

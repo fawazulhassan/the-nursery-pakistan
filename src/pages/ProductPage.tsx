@@ -219,6 +219,7 @@ const ProductPage = () => {
                     src={mainImage}
                     alt={product.name}
                     className="w-full h-full object-cover object-center"
+                    loading="lazy"
                   />
                   {productImages.length > 1 && (
                     <>
@@ -257,6 +258,7 @@ const ProductPage = () => {
                             src={imageUrl}
                             alt={`${product.name} thumbnail ${index + 1}`}
                             className="w-16 h-16 object-cover object-center"
+                            loading="lazy"
                           />
                         </button>
                       ))}

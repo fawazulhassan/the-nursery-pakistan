@@ -97,6 +97,7 @@ const HomeSaleSection = () => {
                   src={productImage}
                   alt={product.name}
                   className="w-full h-40 sm:h-48 lg:h-56 object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-red-500 text-white text-sm px-3 py-1">

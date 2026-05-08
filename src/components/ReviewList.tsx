@@ -112,6 +112,7 @@ const ReviewList = ({ productSlug }: ReviewListProps) => {
                             src={item.url}
                             alt={`Review from ${review.reviewer_name}`}
                             className="h-24 w-24 object-cover"
+                            loading="lazy"
                           />
                         )}
                       </button>

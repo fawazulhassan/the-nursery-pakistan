@@ -187,6 +187,7 @@ const ProductsPage = () => {
                         src={productImage}
                         alt={product.name}
                         className="w-full h-40 sm:h-52 lg:h-64 object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
                       />
                       <Button
                         size="icon"

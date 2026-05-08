@@ -747,6 +747,7 @@ const AdminDashboard = () => {
                         src={item.url}
                         alt={`Product preview ${index + 1}`}
                         className="w-16 h-16 rounded object-cover object-center border border-border"
+                        loading="lazy"
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm truncate">{item.url}</p>
@@ -832,7 +833,12 @@ const AdminDashboard = () => {
                   className={`flex items-center justify-between p-3 rounded-lg border ${!isVisible ? 'bg-muted/50 border-muted' : 'border-border'}`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <img src={resolvePrimaryProductImage(product)} alt={product.name} className="w-10 h-10 object-cover object-center rounded flex-shrink-0" />
+                    <img
+                      src={resolvePrimaryProductImage(product)}
+                      alt={product.name}
+                      className="w-10 h-10 object-cover object-center rounded flex-shrink-0"
+                      loading="lazy"
+                    />
                     <div className="min-w-0">
                       <p className="font-medium truncate">{product.name}</p>
                       <p className="text-sm text-muted-foreground">
@@ -899,7 +905,12 @@ const AdminDashboard = () => {
                   {outOfStockProducts.map(product => (
                     <div key={product.id} className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg border border-destructive/20">
                       <div className="flex items-center gap-3">
-                        <img src={resolvePrimaryProductImage(product)} alt={product.name} className="w-10 h-10 object-cover object-center rounded" />
+                        <img
+                          src={resolvePrimaryProductImage(product)}
+                          alt={product.name}
+                          className="w-10 h-10 object-cover object-center rounded"
+                          loading="lazy"
+                        />
                         <div>
                           <p className="font-medium">{product.name}</p>
                           <p className="text-sm text-muted-foreground">Stock: 0</p>
@@ -942,7 +953,12 @@ const AdminDashboard = () => {
                   {lowStockProducts.map(product => (
                     <div key={product.id} className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                       <div className="flex items-center gap-3">
-                        <img src={resolvePrimaryProductImage(product)} alt={product.name} className="w-10 h-10 object-cover object-center rounded" />
+                        <img
+                          src={resolvePrimaryProductImage(product)}
+                          alt={product.name}
+                          className="w-10 h-10 object-cover object-center rounded"
+                          loading="lazy"
+                        />
                         <div>
                           <p className="font-medium">{product.name}</p>
                           <p className="text-sm text-yellow-600">Stock: {product.stock_quantity}</p>

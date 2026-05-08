@@ -277,6 +277,7 @@ const GuidePage = () => {
                             src={imageUrl}
                             alt={plant.name}
                             className="h-[250px] w-full object-cover"
+                            loading="lazy"
                             onError={() => markImageFailed(plant.name, imageUrl)}
                           />
                         )}

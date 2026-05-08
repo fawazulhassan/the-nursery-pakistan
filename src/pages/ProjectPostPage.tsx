@@ -119,7 +119,12 @@ const ProjectPostPage = () => {
         ) : (
           <article className="max-w-4xl mx-auto">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">{project.title}</h1>
-            <img src={project.cover_image_url} alt={project.title} className="w-full rounded-lg mb-8 max-h-[520px] object-cover" />
+            <img
+              src={project.cover_image_url}
+              alt={project.title}
+              className="w-full rounded-lg mb-8 max-h-[520px] object-cover"
+              loading="lazy"
+            />
             <p className="text-muted-foreground mb-6">{project.description}</p>
 
             {galleryImages.length > 0 && (
@@ -152,6 +157,7 @@ const ProjectPostPage = () => {
                           src={imageUrl}
                           alt={`${project.title} gallery ${index + 1}`}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </button>
                     )
@@ -181,6 +187,7 @@ const ProjectPostPage = () => {
                     src={activeLightbox.images[activeLightbox.currentIndex]}
                     alt={`Project gallery ${activeLightbox.currentIndex + 1}`}
                     className="max-h-[75vh] w-full object-contain rounded-lg"
+                    loading="lazy"
                   />
                 )}
                 <Button

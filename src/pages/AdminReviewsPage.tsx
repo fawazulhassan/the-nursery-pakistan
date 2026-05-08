@@ -266,6 +266,7 @@ const AdminReviewsPage = () => {
                                       src={item.url}
                                       alt={`Review from ${review.reviewer_name}`}
                                       className="h-16 w-16 object-cover"
+                                      loading="lazy"
                                     />
                                   )}
                                 </button>
