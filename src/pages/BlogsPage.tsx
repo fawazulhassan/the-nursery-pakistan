@@ -98,19 +98,23 @@ const BlogsPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogs.map((blog) => (
               <Card key={blog.id} className="overflow-hidden">
-                {blog.featured_image_url ? (
-                  <img
-                    src={blog.featured_image_url}
-                    alt={blog.title}
-                    className="h-44 w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="h-44 bg-gradient-to-br from-nature-mint to-nature-sage" />
-                )}
+                <Link to={`/blog/${blog.slug}`} className="block overflow-hidden">
+                  {blog.featured_image_url ? (
+                    <img
+                      src={blog.featured_image_url}
+                      alt={blog.title}
+                      className="h-44 w-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="h-44 bg-gradient-to-br from-nature-mint to-nature-sage" />
+                  )}
+                </Link>
                 <CardContent className="p-5">
                   <p className="text-xs text-primary mb-2">{blog.category}</p>
-                  <h2 className="font-bold text-lg mb-2 line-clamp-2">{blog.title}</h2>
+                  <Link to={`/blog/${blog.slug}`}>
+                    <h2 className="font-bold text-lg mb-2 line-clamp-2">{blog.title}</h2>
+                  </Link>
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{blog.excerpt}</p>
                   <Link to={`/blog/${blog.slug}`}>
                     <Button variant="outline" size="sm">

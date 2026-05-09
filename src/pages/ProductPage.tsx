@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Heart } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -107,37 +108,47 @@ const ProductPage = () => {
     });
   };
 
+  const productImages = product ? resolveProductImageUrls(product) : [];
+  const mainImageForNav = selectedImage || (product ? resolvePrimaryProductImage(product) : "");
+  const currentImageIndexForNav = Math.max(0, productImages.findIndex((imageUrl) => imageUrl === mainImageForNav));
+
+  const showPreviousImage = () => {
+    if (productImages.length <= 1) return;
+    const nextIndex = (currentImageIndexForNav - 1 + productImages.length) % productImages.length;
+    setSelectedImage(productImages[nextIndex]);
+  };
+
+  const showNextImage = () => {
+    if (productImages.length <= 1) return;
+    const nextIndex = (currentImageIndexForNav + 1) % productImages.length;
+    setSelectedImage(productImages[nextIndex]);
+  };
+
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = showNextImage;
+  swipePrevRef.current = showPreviousImage;
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
+
+  const keyboardNextRef = useRef(() => {});
+  const keyboardPrevRef = useRef(() => {});
+  keyboardNextRef.current = showNextImage;
+  keyboardPrevRef.current = showPreviousImage;
+
   useEffect(() => {
     if (!product) return;
-
-    const productImages = resolveProductImageUrls(product);
-    if (productImages.length <= 1) return;
-
-    const mainImage = selectedImage || resolvePrimaryProductImage(product);
-    const currentImageIndex = Math.max(
-      0,
-      productImages.findIndex((imageUrl) => imageUrl === mainImage)
-    );
-
-    const showPreviousImage = () => {
-      const nextIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
-      setSelectedImage(productImages[nextIndex]);
-    };
-
-    const showNextImage = () => {
-      const nextIndex = (currentImageIndex + 1) % productImages.length;
-      setSelectedImage(productImages[nextIndex]);
-    };
+    const imgs = resolveProductImageUrls(product);
+    if (imgs.length <= 1) return;
 
     const handleImageKeyboardNavigation = (event: KeyboardEvent) => {
       if (isEditableKeyboardTarget(event.target)) return;
 
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        showPreviousImage();
+        keyboardPrevRef.current();
       } else if (event.key === "ArrowRight") {
         event.preventDefault();
-        showNextImage();
+        keyboardNextRef.current();
       }
     };
 
@@ -145,7 +156,7 @@ const ProductPage = () => {
     return () => {
       window.removeEventListener("keydown", handleImageKeyboardNavigation);
     };
-  }, [product, selectedImage]);
+  }, [product, productImages.length, selectedImage]);
 
   if (isLoading) {
     return (
@@ -181,21 +192,8 @@ const ProductPage = () => {
   const effectivePrice = getEffectivePrice(product);
   const displayPrice = saleActive ? `Rs ${effectivePrice.toFixed(0)}` : `Rs ${basePrice.toLocaleString()}`;
   const inWishlist = isInWishlist(product.id);
-  const productImages = resolveProductImageUrls(product);
   const mainImage = selectedImage || resolvePrimaryProductImage(product);
-  const currentImageIndex = Math.max(0, productImages.findIndex((imageUrl) => imageUrl === mainImage));
-
-  const showPreviousImage = () => {
-    if (productImages.length <= 1) return;
-    const nextIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
-    setSelectedImage(productImages[nextIndex]);
-  };
-
-  const showNextImage = () => {
-    if (productImages.length <= 1) return;
-    const nextIndex = (currentImageIndex + 1) % productImages.length;
-    setSelectedImage(productImages[nextIndex]);
-  };
+  const currentImageIndex = currentImageIndexForNav;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -214,7 +212,11 @@ const ProductPage = () => {
 
             <div className="grid md:grid-cols-2 gap-6 sm:gap-12">
               <div>
-                <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+                <div
+                  className="relative aspect-square overflow-hidden rounded-2xl bg-muted"
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                >
                   <img
                     src={mainImage}
                     alt={product.name}

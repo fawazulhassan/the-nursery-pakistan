@@ -43,6 +43,7 @@ import AdminWorkshopSlotsPage from "./pages/AdminWorkshopSlotsPage";
 import AdminWorkshopBookingsPage from "./pages/AdminWorkshopBookingsPage";
 import NotFound from "./pages/NotFound";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -126,6 +127,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToTop />
               <AppRoutes />
               <WhatsAppFloatingButton />
             </BrowserRouter>

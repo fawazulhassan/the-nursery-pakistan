@@ -8,7 +8,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
+import LightboxCloseButton from "@/components/LightboxCloseButton";
 import { getPublishedWorkshops, type WorkshopRow } from "@/lib/workshops";
 import flowerWorkshopHeroBanner from "@/assets/flower-workshop-hero-banner.webp";
 import img1 from "@/assets/1.webp";
@@ -113,6 +115,12 @@ const FlowerWorkshopPage = () => {
       return (current + 1) % workshopMemoryImages.length;
     });
   };
+
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = showNextImage;
+  swipePrevRef.current = showPreviousImage;
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
 
   useEffect(() => {
     const loadWorkshops = async () => {
@@ -256,14 +264,18 @@ const FlowerWorkshopPage = () => {
           <div className="grid md:grid-cols-3 gap-4 mt-5">
             {recentWorkshops.map((workshop) => (
               <Card key={workshop.id} className="overflow-hidden">
-                <img
-                  src={workshop.cover_image_url}
-                  alt={workshop.title}
-                  className="w-full h-44 object-cover"
-                  loading="lazy"
-                />
+                <Link to={`/workshop/${workshop.slug}`} className="block overflow-hidden">
+                  <img
+                    src={workshop.cover_image_url}
+                    alt={workshop.title}
+                    className="w-full h-44 object-cover"
+                    loading="lazy"
+                  />
+                </Link>
                 <div className="p-4">
-                  <h3 className="font-semibold line-clamp-2 mb-2">{workshop.title}</h3>
+                  <Link to={`/workshop/${workshop.slug}`}>
+                    <h3 className="font-semibold line-clamp-2 mb-2">{workshop.title}</h3>
+                  </Link>
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-3">{workshop.description}</p>
                   <Button asChild variant="outline" size="sm">
                     <Link to={`/workshop/${workshop.slug}`}>View Workshop →</Link>
@@ -318,7 +330,12 @@ const FlowerWorkshopPage = () => {
         <DialogContent className="max-w-5xl p-4 sm:p-6 [&>button]:hidden">
           {selectedImageIndex !== null && (
             <div className="flex flex-col items-center gap-4">
-              <div className="relative w-full">
+              <div
+                className="relative w-full"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                <LightboxCloseButton onClose={closeLightbox} />
                 <img
                   src={workshopMemoryImages[selectedImageIndex]}
                   alt={`Workshop memory ${selectedImageIndex + 1}`}

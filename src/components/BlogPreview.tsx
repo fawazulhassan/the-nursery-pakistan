@@ -68,25 +68,29 @@ const BlogPreview = () => {
                     className="group hover:shadow-xl transition-all duration-300 animate-fade-in border-border overflow-hidden"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    {post.featured_image_url ? (
-                      <img
-                        src={post.featured_image_url}
-                        alt={post.title}
-                        className="h-48 w-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="h-48 bg-gradient-to-br from-nature-mint to-nature-sage" />
-                    )}
+                    <Link to={`/blog/${post.slug}`} className="block overflow-hidden">
+                      {post.featured_image_url ? (
+                        <img
+                          src={post.featured_image_url}
+                          alt={post.title}
+                          className="h-48 w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="h-48 bg-gradient-to-br from-nature-mint to-nature-sage" />
+                      )}
+                    </Link>
 
                     <CardContent className="p-6">
                       <div className="inline-block bg-primary/10 text-primary text-xs px-3 py-1 rounded-full mb-3">
                         {post.category}
                       </div>
 
-                      <h3 className="font-bold text-xl mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
+                      <Link to={`/blog/${post.slug}`}>
+                        <h3 className="font-bold text-xl mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                          {post.title}
+                        </h3>
+                      </Link>
 
                       <p className="text-muted-foreground mb-4 line-clamp-2">{post.excerpt}</p>
 

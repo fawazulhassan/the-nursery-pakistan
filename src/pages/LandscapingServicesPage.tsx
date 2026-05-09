@@ -8,7 +8,9 @@ import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import LazyVideo from "@/components/LazyVideo";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
+import LightboxCloseButton from "@/components/LightboxCloseButton";
 import { getCompletedProjects, type CompletedProjectRow } from "@/lib/landscapingProjects";
 import { useToast } from "@/hooks/use-toast";
 import landscapingServicesHeroBanner from "@/assets/landscaping-services-hero-banner.webp";
@@ -87,6 +89,27 @@ const LandscapingServicesPage = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeLightbox]);
 
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = () => {
+    setActiveLightbox((current) =>
+      current && current.images.length > 1
+        ? { ...current, currentIndex: (current.currentIndex + 1) % current.images.length }
+        : current,
+    );
+  };
+  swipePrevRef.current = () => {
+    setActiveLightbox((current) =>
+      current && current.images.length > 1
+        ? {
+            ...current,
+            currentIndex: (current.currentIndex - 1 + current.images.length) % current.images.length,
+          }
+        : current,
+    );
+  };
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
+
   const [featuredProject, remainingProjects] = useMemo(() => {
     if (!projects.length) return [null, [] as CompletedProjectRow[]];
     return [projects[0], projects.slice(1)];
@@ -153,14 +176,21 @@ const LandscapingServicesPage = () => {
               <div className="space-y-6">
                 {featuredProject && (
                   <article className="grid lg:grid-cols-2 gap-4 rounded-xl border bg-card p-4">
-                    <img
-                      src={featuredProject.cover_image_url}
-                      alt={featuredProject.title}
-                      className="w-full h-64 md:h-72 object-cover rounded-lg"
-                      loading="lazy"
-                    />
+                    <Link
+                      to={`/project/${featuredProject.slug}`}
+                      className="block overflow-hidden rounded-lg"
+                    >
+                      <img
+                        src={featuredProject.cover_image_url}
+                        alt={featuredProject.title}
+                        className="w-full h-64 md:h-72 object-cover"
+                        loading="lazy"
+                      />
+                    </Link>
                     <div className="flex flex-col h-full space-y-3">
-                      <h3 className="text-2xl font-semibold">{featuredProject.title}</h3>
+                      <Link to={`/project/${featuredProject.slug}`}>
+                        <h3 className="text-2xl font-semibold">{featuredProject.title}</h3>
+                      </Link>
                       <p className="text-muted-foreground">{featuredProject.description}</p>
                       {featuredProject.gallery_image_urls?.length ? (
                         <div>
@@ -219,13 +249,17 @@ const LandscapingServicesPage = () => {
 
                       return (
                       <article key={project.id} className="rounded-xl border bg-card p-4 flex flex-col h-full space-y-3">
-                        <img
-                          src={project.cover_image_url}
-                          alt={project.title}
-                          className="w-full h-44 object-cover rounded-md"
-                          loading="lazy"
-                        />
-                        <h3 className="text-xl font-semibold">{project.title}</h3>
+                        <Link to={`/project/${project.slug}`} className="block overflow-hidden rounded-md">
+                          <img
+                            src={project.cover_image_url}
+                            alt={project.title}
+                            className="w-full h-44 object-cover"
+                            loading="lazy"
+                          />
+                        </Link>
+                        <Link to={`/project/${project.slug}`}>
+                          <h3 className="text-xl font-semibold">{project.title}</h3>
+                        </Link>
                         <p className="text-sm text-muted-foreground">{project.description}</p>
                         {galleryItems.length ? (
                           <div>
@@ -318,9 +352,15 @@ const LandscapingServicesPage = () => {
         <DialogContent className="max-w-5xl p-4 sm:p-6 [&>button]:hidden">
           {activeLightbox ? (
             <div className="flex flex-col items-center gap-4">
-              <div className="relative w-full">
+              <div
+                className="relative w-full"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                <LightboxCloseButton onClose={() => setActiveLightbox(null)} />
                 {isVideoUrl(activeLightbox.images[activeLightbox.currentIndex]) ? (
                   <video
+                    key={activeLightbox.images[activeLightbox.currentIndex]}
                     src={activeLightbox.images[activeLightbox.currentIndex]}
                     poster={activeLightbox.posterUrl}
                     controls

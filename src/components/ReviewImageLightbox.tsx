@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import type { ReviewMediaItem } from "@/lib/reviews";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
+import LightboxCloseButton from "@/components/LightboxCloseButton";
 
 interface ReviewImageLightboxProps {
   open: boolean;
@@ -37,27 +39,45 @@ const ReviewImageLightbox = ({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, currentIndex, onNavigate, onOpenChange, total]);
 
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = () => {
+    if (total <= 1) return;
+    onNavigate((currentIndex + 1) % total);
+  };
+  swipePrevRef.current = () => {
+    if (total <= 1) return;
+    onNavigate((currentIndex - 1 + total) % total);
+  };
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
+
   if (!activeItem) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl bg-black/95 border-none p-2 [&>button]:hidden">
+      <DialogContent className="flex w-[calc(100vw-1rem)] max-w-4xl flex-col gap-0 border-none bg-black/95 p-2 sm:w-full [&>button]:hidden">
         <DialogTitle className="sr-only">Review media preview</DialogTitle>
-        <div className="relative">
+        <div
+          className="relative z-0 w-full min-w-0 flex-1"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <LightboxCloseButton onClose={() => onOpenChange(false)} />
           {activeItem.type === "video" ? (
             <video
+              key={activeItem.url}
               src={activeItem.url}
               controls
               playsInline
               preload="metadata"
               autoPlay
-              className="w-full max-h-[85vh] object-contain rounded-md"
+              className="mx-auto block h-auto max-h-[85vh] w-full max-w-full bg-black object-contain rounded-md"
             />
           ) : (
             <img
               src={activeItem.url}
               alt={`Review media ${currentIndex + 1}`}
-              className="w-full max-h-[85vh] object-contain rounded-md"
+              className="mx-auto block h-auto max-h-[85vh] w-full max-w-full object-contain rounded-md"
               loading="lazy"
             />
           )}

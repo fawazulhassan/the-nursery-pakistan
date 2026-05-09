@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -8,11 +8,12 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { resolveProductImageUrls } from "@/lib/productImages";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { ProductDescription } from "@/components/ProductDescription";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
 
 interface ProductDetailDialogProps {
   open: boolean;
@@ -47,21 +48,25 @@ const ProductDetailDialog = ({
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentional: only rememoize when image fields change.
-  const productImages = useMemo(
-    () => resolveProductImageUrls(product),
-    [product.image_url, product.image_urls]
+  const productLike = useMemo(
+    () => ({
+      image_url: product.image_url || product.image || null,
+      image_urls: product.image_urls,
+    }),
+    [product.image_url, product.image, product.image_urls],
   );
+
+  const productImages = useMemo(() => resolveProductImageUrls(productLike), [productLike]);
   const fallbackImage = product.image_url || product.image || "";
   const [selectedImage, setSelectedImage] = useState(productImages[0] ?? fallbackImage);
   const saleActive = isSaleActive(product);
   const effectivePrice = getEffectivePrice(product);
   const displayPrice = typeof product.price === "string" ? product.price : `Rs ${effectivePrice.toLocaleString()}`;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentional: reset image only when dialog switches to a different product.
   useEffect(() => {
-    setSelectedImage(productImages[0] ?? fallbackImage);
-  }, [product.id]);
+    const first = productImages[0] ?? fallbackImage;
+    setSelectedImage(first);
+  }, [open, product.id, productImages, fallbackImage]);
 
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
@@ -84,6 +89,17 @@ const ProductDetailDialog = ({
     setSelectedImage(productImages[nextIndex]);
   };
 
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = showNextImage;
+  swipePrevRef.current = showPreviousImage;
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
+
+  const keyboardNextRef = useRef(() => {});
+  const keyboardPrevRef = useRef(() => {});
+  keyboardNextRef.current = showNextImage;
+  keyboardPrevRef.current = showPreviousImage;
+
   useEffect(() => {
     if (!open || productImages.length <= 1) return;
 
@@ -92,10 +108,10 @@ const ProductDetailDialog = ({
 
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        showPreviousImage();
+        keyboardPrevRef.current();
       } else if (event.key === "ArrowRight") {
         event.preventDefault();
-        showNextImage();
+        keyboardNextRef.current();
       }
     };
 
@@ -103,7 +119,7 @@ const ProductDetailDialog = ({
     return () => {
       window.removeEventListener("keydown", handleImageKeyboardNavigation);
     };
-  }, [open, productImages.length, currentImageIndex]);
+  }, [open, productImages.length]);
 
   const handleAddToCart = () => {
     const cartItem = {
@@ -141,16 +157,42 @@ const ProductDetailDialog = ({
           <DialogHeader>
             <DialogTitle className="text-xl sm:text-2xl">{product.name}</DialogTitle>
           </DialogHeader>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <div className="aspect-square overflow-hidden rounded-lg bg-muted">
+              <div
+                className="relative aspect-square overflow-hidden rounded-lg bg-muted"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 <img
                   src={selectedImage}
                   alt={product.name}
                   className="w-full h-full object-cover object-center"
                   loading="lazy"
                 />
+                {productImages.length > 1 ? (
+                  <>
+                    <Button
+                      type="button"
+                      size="icon"
+                      onClick={showPreviousImage}
+                      aria-label="Previous product image"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      size="icon"
+                      onClick={showNextImage}
+                      aria-label="Next product image"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </>
+                ) : null}
               </div>
               {productImages.length > 1 && (
                 <div className="mt-3">
@@ -174,7 +216,7 @@ const ProductDetailDialog = ({
                 </div>
               )}
             </div>
-            
+
             <div className="flex flex-col gap-4">
               {hasDescription ? (
                 <div>
@@ -187,7 +229,7 @@ const ProductDetailDialog = ({
                 <p className="text-2xl sm:text-3xl font-bold text-primary mb-4">
                   {saleActive && typeof product.price !== "string" ? `Rs ${effectivePrice.toFixed(0)}` : displayPrice}
                 </p>
-                
+
                 <div className="flex items-center gap-4 mb-6">
                   <span className="font-medium">Quantity:</span>
                   <div className="flex items-center gap-2">
@@ -202,11 +244,7 @@ const ProductDetailDialog = ({
                     <span className="w-12 text-center font-semibold text-lg">
                       {quantity}
                     </span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={handleIncrement}
-                    >
+                    <Button variant="outline" size="icon" onClick={handleIncrement}>
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>

@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
+import LightboxCloseButton from "@/components/LightboxCloseButton";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -99,6 +101,27 @@ const ProjectPostPage = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeLightbox]);
 
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = () => {
+    setActiveLightbox((current) =>
+      current && current.images.length > 1
+        ? { ...current, currentIndex: (current.currentIndex + 1) % current.images.length }
+        : current,
+    );
+  };
+  swipePrevRef.current = () => {
+    setActiveLightbox((current) =>
+      current && current.images.length > 1
+        ? {
+            ...current,
+            currentIndex: (current.currentIndex - 1 + current.images.length) % current.images.length,
+          }
+        : current,
+    );
+  };
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -176,9 +199,15 @@ const ProjectPostPage = () => {
         <DialogContent className="max-w-5xl p-4 sm:p-6 [&>button]:hidden">
           {activeLightbox ? (
             <div className="flex flex-col items-center gap-4">
-              <div className="relative w-full">
+              <div
+                className="relative w-full"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                <LightboxCloseButton onClose={() => setActiveLightbox(null)} />
                 {isVideoUrl(activeLightbox.images[activeLightbox.currentIndex]) ? (
                   <video
+                    key={activeLightbox.images[activeLightbox.currentIndex]}
                     src={activeLightbox.images[activeLightbox.currentIndex]}
                     poster={project?.cover_image_url}
                     controls
