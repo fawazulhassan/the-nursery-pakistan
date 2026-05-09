@@ -85,14 +85,18 @@ const ProjectsPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleProjects.map((project) => (
               <Card key={project.id} className="overflow-hidden">
-                <img
-                  src={project.cover_image_url}
-                  alt={project.title}
-                  className="h-44 w-full object-cover"
-                  loading="lazy"
-                />
+                <Link to={`/project/${project.slug}`} className="block overflow-hidden">
+                  <img
+                    src={project.cover_image_url}
+                    alt={project.title}
+                    className="h-44 w-full object-cover"
+                    loading="lazy"
+                  />
+                </Link>
                 <CardContent className="p-5">
-                  <h2 className="font-bold text-lg mb-2 line-clamp-2">{project.title}</h2>
+                  <Link to={`/project/${project.slug}`}>
+                    <h2 className="font-bold text-lg mb-2 line-clamp-2">{project.title}</h2>
+                  </Link>
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{project.description}</p>
                   <Link to={`/project/${project.slug}`}>
                     <Button variant="outline" size="sm">
