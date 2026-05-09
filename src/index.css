@@ -102,6 +102,16 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans;
+    overflow-x: hidden;
+  }
+
+  #root {
+    overflow-x: hidden;
+  }
+
+  img,
+  video {
+    max-width: 100%;
   }
 }
 

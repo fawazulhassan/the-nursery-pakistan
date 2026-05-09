@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
 import banner1 from "@/assets/hero-banner-1.webp";
 import banner2 from "@/assets/hero-banner-2.webp";
 import banner3 from "@/assets/hero-banner-3.webp";
@@ -122,49 +123,61 @@ const Hero = () => {
 
   return (
     <section className="relative overflow-hidden">
-      <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
+      <Carousel setApi={setApi} opts={{ loop: true }} className="w-full max-w-full">
         <CarouselContent className="ml-0">
-          {slides.map((slide) => (
+          {slides.map((slide, index) => (
             <CarouselItem key={slide.heading} className="pl-0">
-              <div className="relative h-[500px] md:h-[620px] w-full">
-                <img src={slide.image} alt={slide.alt} className="h-full w-full object-cover" />
+              <div className="relative h-[500px] w-full max-w-full min-w-0 overflow-hidden md:h-[620px]">
+                <img
+                  src={slide.image}
+                  alt={slide.alt}
+                  className="h-full w-full max-w-full object-cover"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
                 {slide.useOverlay ? (
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent pointer-events-none" />
                 ) : null}
 
-                <div className="absolute inset-0">
-                  {slide.tag ? (
-                    <div className="absolute left-[8%] top-[30%]">
+                {/* One column: same desktop-style stack on all breakpoints; gap-3 removes tablet “percent gap” blowout */}
+                <div className="pointer-events-none absolute inset-0">
+                  <div
+                    className={cn(
+                      "pointer-events-none absolute left-[8%] z-10 flex w-[min(560px,calc(100%-16vw))] max-w-[85vw] flex-col gap-3",
+                      // Anchor block from bottom so copy sits above carousel controls; grows upward with tight internal gaps
+                      "bottom-[5.25rem] md:bottom-[5.75rem] lg:bottom-[6.25rem]",
+                    )}
+                  >
+                    {slide.tag ? (
                       <span
-                        className="text-sm font-normal tracking-wide drop-shadow-sm"
+                        className="text-sm font-normal tracking-wide drop-shadow-sm md:text-[0.9375rem]"
                         style={{ color: slide.tagColor }}
                       >
                         {slide.tag}
                       </span>
-                    </div>
-                  ) : null}
+                    ) : null}
 
-                  <h1
-                    className="absolute left-[8%] top-[40%] max-w-[85%] md:max-w-[560px] text-4xl md:text-[52px] md:leading-[1.1] font-bold drop-shadow-sm"
-                    style={{ color: slide.headingColor }}
-                  >
-                    {slide.heading}
-                  </h1>
-
-                  <p
-                    className="absolute left-[8%] top-[58%] max-w-[85%] md:max-w-[560px] text-base md:text-lg font-normal leading-relaxed drop-shadow-sm"
-                    style={{ color: slide.subtextColor }}
-                  >
-                    {slide.subtext}
-                  </p>
-
-                  <div className="absolute left-[8%] top-[72%]">
-                    <Button
-                      asChild
-                      className="h-11 rounded-[8px] bg-[#2D6A4F] px-6 text-[15px] font-medium text-white hover:bg-[#24563f]"
+                    <h1
+                      className="font-bold leading-tight drop-shadow-sm text-3xl md:text-4xl md:leading-[1.12] lg:text-[52px] lg:leading-[1.1]"
+                      style={{ color: slide.headingColor }}
                     >
-                      <Link to={slide.href}>{slide.buttonText}</Link>
-                    </Button>
+                      {slide.heading}
+                    </h1>
+
+                    <p
+                      className="text-base font-normal leading-relaxed drop-shadow-sm md:text-[1.0625rem] lg:text-lg"
+                      style={{ color: slide.subtextColor }}
+                    >
+                      {slide.subtext}
+                    </p>
+
+                    <div className="pointer-events-auto w-fit pt-0.5">
+                      <Button
+                        asChild
+                        className="h-11 rounded-[8px] bg-[#2D6A4F] px-6 text-[15px] font-medium text-white hover:bg-[#24563f]"
+                      >
+                        <Link to={slide.href}>{slide.buttonText}</Link>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -173,7 +186,7 @@ const Hero = () => {
         </CarouselContent>
       </Carousel>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-6 flex items-center justify-center gap-3">
+      <div className="pointer-events-none absolute inset-x-0 bottom-6 flex max-w-full items-center justify-center gap-3">
         <button
           type="button"
           aria-label="Previous slide"
@@ -183,7 +196,7 @@ const Hero = () => {
           <ArrowLeft className="h-4 w-4" />
         </button>
 
-        <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur">
+        <div className="pointer-events-auto flex max-w-full items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur">
           {slides.map((slide, index) => (
             <button
               key={slide.heading}

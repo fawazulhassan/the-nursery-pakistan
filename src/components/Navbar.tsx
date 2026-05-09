@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Search, ShoppingCart, User, Menu, LogOut, Heart } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
@@ -11,10 +11,35 @@ import { CATEGORIES } from "@/lib/constants";
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const navRef = useRef<HTMLElement>(null);
   const { getCartCount } = useCart();
   const { getWishlistCount } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const el = navRef.current;
+      if (!el || el.contains(event.target as Node)) {
+        return;
+      }
+      setMobileMenuOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [mobileMenuOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,13 +56,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-card border-b border-border">
+    <nav ref={navRef} className="sticky top-0 z-50 bg-card border-b border-border">
       {/* Top Bar */}
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center whitespace-nowrap">
-            <div className="text-xl md:text-2xl font-bold text-primary">
+          <Link to="/" className="flex min-w-0 shrink items-center gap-1">
+            <div className="truncate text-xl font-bold text-primary md:text-2xl">
               The Nursery
               <span className="ml-1 text-sm font-normal text-muted-foreground">Pakistan</span>
             </div>
@@ -57,9 +82,9 @@ const Navbar = () => {
             </div>
           </form>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1">
-            <Link to="/wishlist">
+          {/* Actions: tight gap between icons on mobile; default icon button size */}
+          <div className="flex shrink-0 items-center gap-0 md:gap-1">
+            <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)}>
               <Button variant="ghost" size="icon" className="relative" title="Wishlist">
                 <Heart className="h-5 w-5" />
                 {getWishlistCount() > 0 && (
@@ -69,7 +94,7 @@ const Navbar = () => {
                 )}
               </Button>
             </Link>
-            <Link to="/cart">
+            <Link to="/cart" onClick={() => setMobileMenuOpen(false)}>
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
                 {getCartCount() > 0 && (
@@ -81,7 +106,7 @@ const Navbar = () => {
             </Link>
             {user ? (
               <>
-                <Link to="/account" className="flex">
+                <Link to="/account" className="flex" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="ghost" size="icon" title="My Account">
                     <User className="h-5 w-5" />
                   </Button>
@@ -90,35 +115,24 @@ const Navbar = () => {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => navigate('/admin')}
+                    onClick={() => navigate("/admin")}
                     className="hidden md:flex px-2"
                   >
                     Admin
                   </Button>
                 )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleLogout}
-                  className="hidden md:flex"
-                  title="Logout"
-                >
+                <Button variant="ghost" size="icon" onClick={handleLogout} className="hidden md:flex" title="Logout">
                   <LogOut className="h-5 w-5" />
                 </Button>
               </>
             ) : (
-              <Link to="/auth">
+              <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="ghost" size="icon" title="Login or create account">
                   <User className="h-5 w-5" />
                 </Button>
               </Link>
             )}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <Menu className="h-5 w-5" />
             </Button>
           </div>
@@ -142,7 +156,7 @@ const Navbar = () => {
       {/* Categories + Mobile Account Links */}
       <div className="border-t border-border">
         <div className="container mx-auto px-4">
-          <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:flex md:items-center md:gap-1 py-2`}>
+          <div className={`${mobileMenuOpen ? "block" : "hidden"} md:flex md:items-center md:gap-1 py-2`}>
             {!user && (
               <div className="flex flex-col md:hidden border-b border-border pb-2 mb-2 gap-1">
                 <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
@@ -170,7 +184,10 @@ const Navbar = () => {
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-sm hover:text-primary"
-                    onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }}
+                    onClick={() => {
+                      navigate("/admin");
+                      setMobileMenuOpen(false);
+                    }}
                   >
                     Admin
                   </Button>
@@ -178,7 +195,10 @@ const Navbar = () => {
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm hover:text-primary text-destructive"
-                  onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                  onClick={() => {
+                    handleLogout();
+                    setMobileMenuOpen(false);
+                  }}
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
@@ -187,19 +207,13 @@ const Navbar = () => {
             )}
             {!user && (
               <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block md:hidden">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-sm hover:text-primary"
-                >
+                <Button variant="ghost" className="w-full justify-start text-sm hover:text-primary">
                   About Us
                 </Button>
               </Link>
             )}
-            <Link to="/about" className="hidden md:block">
-              <Button
-                variant="ghost"
-                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
-              >
+            <Link to="/about" className="hidden md:block" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary">
                 About Us
               </Button>
             </Link>
@@ -208,6 +222,7 @@ const Navbar = () => {
                 key={category.slug}
                 to={`/category/${category.slug}`}
                 className="block"
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <Button
                   variant="ghost"
@@ -217,21 +232,13 @@ const Navbar = () => {
                 </Button>
               </Link>
             ))}
-            <Link to="/landscaping-services" className="block">
-              <Button
-                variant="ghost"
-                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+            <Link to="/landscaping-services" className="block" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary">
                 Landscaping
               </Button>
             </Link>
-            <Link to="/flower-workshop" className="block">
-              <Button
-                variant="ghost"
-                className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+            <Link to="/flower-workshop" className="block" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full md:w-auto justify-start md:justify-center text-sm hover:text-primary">
                 Workshop
               </Button>
             </Link>
