@@ -21,6 +21,7 @@ import {
 import AdminLayout from "@/components/admin/AdminLayout";
 import StarRating from "@/components/StarRating";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
+import LazyVideo from "@/components/LazyVideo";
 
 type StatusFilter = "all" | ReviewStatus;
 
@@ -242,34 +243,40 @@ const AdminReviewsPage = () => {
                           return (
                             <div className="flex flex-wrap items-center gap-2">
                               {mediaItems.map((item, index) => (
-                                <button
-                                  key={`${item.url}-${index}`}
-                                  type="button"
-                                  className="rounded-md border overflow-hidden"
-                                  onClick={() => {
-                                    setLightboxItems(mediaItems);
-                                    setLightboxIndex(index);
-                                  }}
-                                >
-                                  {item.type === "video" ? (
-                                    <video
+                                item.type === "video" ? (
+                                  <div
+                                    key={`${item.url}-${index}`}
+                                    className="rounded-md border overflow-hidden h-16 w-16"
+                                  >
+                                    <LazyVideo
                                       src={item.url}
-                                      className="h-16 w-16 object-cover pointer-events-none"
-                                      muted
-                                      playsInline
-                                      autoPlay
-                                      loop
-                                      preload="metadata"
+                                      captureFirstFrame
+                                      title={`Review video by ${review.reviewer_name}`}
+                                      aspectClassName="h-16 w-16"
+                                      onClickOverride={() => {
+                                        setLightboxItems(mediaItems);
+                                        setLightboxIndex(index);
+                                      }}
                                     />
-                                  ) : (
+                                  </div>
+                                ) : (
+                                  <button
+                                    key={`${item.url}-${index}`}
+                                    type="button"
+                                    className="rounded-md border overflow-hidden"
+                                    onClick={() => {
+                                      setLightboxItems(mediaItems);
+                                      setLightboxIndex(index);
+                                    }}
+                                  >
                                     <img
                                       src={item.url}
                                       alt={`Review from ${review.reviewer_name}`}
                                       className="h-16 w-16 object-cover"
                                       loading="lazy"
                                     />
-                                  )}
-                                </button>
+                                  </button>
+                                )
                               ))}
                             </div>
                           );

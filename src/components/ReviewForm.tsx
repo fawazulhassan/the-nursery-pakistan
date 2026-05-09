@@ -13,6 +13,7 @@ import {
   uploadReviewMedia,
   validateReviewMediaFile,
 } from "@/lib/reviews";
+import { MAX_IMAGE_UPLOAD_BYTES } from "@/lib/imageOptimization";
 import StarRating from "@/components/StarRating";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button as IconButton } from "@/components/ui/button";
@@ -89,7 +90,7 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
   }, []);
 
   const mediaHint = useMemo(() => {
-    if (!mediaFiles.length) return "Optional: up to 10 files. Images max 5MB, videos max 50MB.";
+    if (!mediaFiles.length) return "Optional: up to 10 files. Images max 2MB (auto-converted to WebP), videos max 50MB.";
     return `${mediaFiles.length} file(s) selected`;
   }, [mediaFiles]);
 
@@ -154,6 +155,13 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
 
     setIsSubmitting(true);
     try {
+      if (mediaFiles.length > 0) {
+        toast({
+          title: "Preparing media...",
+          description: "Optimizing images and uploading. This may take a moment.",
+        });
+      }
+
       const uploadedMedia = await Promise.all(mediaFiles.map((file) => uploadReviewMedia(file)));
       const mediaUrls = uploadedMedia.map((item) => item.url);
       const mediaTypes = uploadedMedia.map((item) => item.type);
@@ -195,6 +203,14 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
 
     if (remaining <= 0) {
       setErrors((prev) => ({ ...prev, media: "Maximum 10 files allowed." }));
+      return;
+    }
+
+    const oversizedImage = selected.find(
+      (file) => file.type.startsWith("image/") && file.size > MAX_IMAGE_UPLOAD_BYTES,
+    );
+    if (oversizedImage) {
+      setErrors((prev) => ({ ...prev, media: "Image must be under 2MB" }));
       return;
     }
 
@@ -298,11 +314,10 @@ const ReviewForm = ({ productSlug, onSuccess }: ReviewFormProps) => {
                   {isVideo ? (
                     <video
                       src={mediaPreviewUrls[index]}
-                      className="w-20 h-20 rounded object-cover border pointer-events-none"
+                      className="w-20 h-20 rounded object-cover border"
                       muted
                       playsInline
-                      autoPlay
-                      loop
+                      controls
                       preload="metadata"
                     />
                   ) : (

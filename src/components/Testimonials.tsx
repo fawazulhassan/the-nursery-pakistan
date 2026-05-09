@@ -5,6 +5,7 @@ import { getHomepageReviews, getReviewMediaItems, type ReviewMediaItem, type Rev
 import StarRating from "@/components/StarRating";
 import ReviewSplitLayout from "@/components/ReviewSplitLayout";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
+import LazyVideo from "@/components/LazyVideo";
 
 const fallbackTestimonials = [
   {
@@ -126,31 +127,36 @@ const Testimonials = () => {
                     return (
                       <div className="mt-4 flex flex-wrap gap-2">
                         {mediaItems.map((item: ReviewMediaItem, mediaIndex: number) => (
-                          <button
-                            key={`${item.url}-${mediaIndex}`}
-                            type="button"
-                            className="rounded-md border overflow-hidden"
-                            onClick={() => setActiveLightbox({ items: mediaItems, currentIndex: mediaIndex })}
-                          >
-                            {item.type === "video" ? (
-                              <video
+                          item.type === "video" ? (
+                            <div
+                              key={`${item.url}-${mediaIndex}`}
+                              className="rounded-md border overflow-hidden h-20 w-20"
+                            >
+                              <LazyVideo
                                 src={item.url}
-                                className="h-20 w-20 object-cover pointer-events-none"
-                                muted
-                                playsInline
-                                autoPlay
-                                loop
-                                preload="metadata"
+                                captureFirstFrame
+                                title={`Review video by ${testimonial.reviewer_name}`}
+                                aspectClassName="h-20 w-20"
+                                onClickOverride={() =>
+                                  setActiveLightbox({ items: mediaItems, currentIndex: mediaIndex })
+                                }
                               />
-                            ) : (
+                            </div>
+                          ) : (
+                            <button
+                              key={`${item.url}-${mediaIndex}`}
+                              type="button"
+                              className="rounded-md border overflow-hidden"
+                              onClick={() => setActiveLightbox({ items: mediaItems, currentIndex: mediaIndex })}
+                            >
                               <img
                                 src={item.url}
                                 alt={`Review by ${testimonial.reviewer_name}`}
                                 className="h-20 w-20 object-cover"
                                 loading="lazy"
                               />
-                            )}
-                          </button>
+                            </button>
+                          )
                         ))}
                       </div>
                     );

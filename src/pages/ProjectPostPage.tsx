@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import LazyVideo from "@/components/LazyVideo";
 import { getProjectBySlug, type CompletedProjectRow } from "@/lib/landscapingProjects";
 
 const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
@@ -133,14 +134,17 @@ const ProjectPostPage = () => {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {galleryImages.map((imageUrl, index) => (
                     isVideoUrl(imageUrl) ? (
-                      <video
+                      <div
                         key={`${project.id}-gallery-${index}`}
-                        src={imageUrl}
-                        controls
-                        playsInline
-                        title={`${project.title} gallery video ${index + 1}`}
-                        className="w-full rounded-lg border object-cover bg-black"
-                      />
+                        className="w-full aspect-square rounded-lg border overflow-hidden"
+                      >
+                        <LazyVideo
+                          src={imageUrl}
+                          poster={project.cover_image_url}
+                          title={`${project.title} gallery video ${index + 1}`}
+                          aspectClassName="w-full h-full"
+                        />
+                      </div>
                     ) : (
                       <button
                         key={`${project.id}-gallery-${index}`}
@@ -176,6 +180,7 @@ const ProjectPostPage = () => {
                 {isVideoUrl(activeLightbox.images[activeLightbox.currentIndex]) ? (
                   <video
                     src={activeLightbox.images[activeLightbox.currentIndex]}
+                    poster={project?.cover_image_url}
                     controls
                     playsInline
                     preload="metadata"

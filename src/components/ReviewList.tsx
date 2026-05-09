@@ -6,6 +6,7 @@ import { getProductReviews, getReviewMediaItems, type ReviewMediaItem, type Revi
 import StarRating from "@/components/StarRating";
 import ReviewImageLightbox from "@/components/ReviewImageLightbox";
 import ReviewSplitLayout from "@/components/ReviewSplitLayout";
+import LazyVideo from "@/components/LazyVideo";
 
 interface ReviewListProps {
   productSlug: string;
@@ -88,34 +89,40 @@ const ReviewList = ({ productSlug }: ReviewListProps) => {
                 return (
                   <div className="mt-4 flex flex-wrap gap-2">
                     {mediaItems.map((item, index) => (
-                      <button
-                        key={`${item.url}-${index}`}
-                        type="button"
-                        onClick={() => {
-                          setLightboxItems(mediaItems);
-                          setLightboxIndex(index);
-                        }}
-                        className="rounded-md border overflow-hidden"
-                      >
-                        {item.type === "video" ? (
-                          <video
+                      item.type === "video" ? (
+                        <div
+                          key={`${item.url}-${index}`}
+                          className="rounded-md border overflow-hidden h-24 w-24"
+                        >
+                          <LazyVideo
                             src={item.url}
-                            className="h-24 w-24 object-cover pointer-events-none"
-                            muted
-                            playsInline
-                            autoPlay
-                            loop
-                            preload="metadata"
+                            captureFirstFrame
+                            title={`Review video by ${review.reviewer_name}`}
+                            aspectClassName="h-24 w-24"
+                            onClickOverride={() => {
+                              setLightboxItems(mediaItems);
+                              setLightboxIndex(index);
+                            }}
                           />
-                        ) : (
+                        </div>
+                      ) : (
+                        <button
+                          key={`${item.url}-${index}`}
+                          type="button"
+                          onClick={() => {
+                            setLightboxItems(mediaItems);
+                            setLightboxIndex(index);
+                          }}
+                          className="rounded-md border overflow-hidden"
+                        >
                           <img
                             src={item.url}
                             alt={`Review from ${review.reviewer_name}`}
                             className="h-24 w-24 object-cover"
                             loading="lazy"
                           />
-                        )}
-                      </button>
+                        </button>
+                      )
                     ))}
                   </div>
                 );

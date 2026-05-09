@@ -261,7 +261,7 @@ const AdminLandscapingProjectsPage = () => {
                 disabled={isUploadingGallery || isGalleryAtLimit}
               />
               <p className="text-xs text-muted-foreground">
-                Accepted: JPG, PNG, MP4, WebM · Images up to 5 MB · Videos up to 50 MB
+                Accepted: JPG, PNG, MP4, WebM · Images up to 2 MB (auto-converted to WebP) · Videos up to 50 MB
               </p>
               {isGalleryAtLimit ? <p className="text-sm text-muted-foreground">Maximum 6 media files allowed</p> : null}
               {galleryImageUrls.length > 0 ? (

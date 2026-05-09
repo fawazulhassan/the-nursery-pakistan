@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { convertToWebP, validateImageUploadSize } from "@/lib/imageOptimization";
 export type ReviewStatus = "pending" | "approved" | "rejected";
 export type ReviewMediaType = "image" | "video";
 
@@ -36,7 +37,7 @@ export interface SubmitReviewInput {
 }
 
 const REVIEW_IMAGES_BUCKET = "review-images";
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 export const MAX_REVIEW_MEDIA_FILES = 10;
 
@@ -89,7 +90,7 @@ export function validateReviewMediaFile(file: File): ReviewMediaType {
     throw new Error("Only image and video files are allowed.");
   }
   if (isImage && file.size > MAX_IMAGE_BYTES) {
-    throw new Error("Image must be 5MB or smaller.");
+    throw new Error("Image must be under 2MB");
   }
   if (isVideo && file.size > MAX_VIDEO_BYTES) {
     throw new Error("Video must be under 50MB.");
@@ -99,14 +100,25 @@ export function validateReviewMediaFile(file: File): ReviewMediaType {
 
 export async function uploadReviewMedia(file: File): Promise<ReviewMediaItem> {
   const mediaType = validateReviewMediaFile(file);
-  const fallbackExtension = mediaType === "video" ? "mp4" : "jpg";
-  const fileExt = file.name.includes(".") ? file.name.split(".").pop() : fallbackExtension;
-  const safeExt = (fileExt ?? fallbackExtension).toLowerCase().replace(/[^a-z0-9]/g, "") || fallbackExtension;
+
+  let uploadFile = file;
+  let safeExt: string;
+
+  if (mediaType === "image") {
+    validateImageUploadSize(file);
+    uploadFile = await convertToWebP(file);
+    safeExt = "webp";
+  } else {
+    const fallbackExtension = "mp4";
+    const fileExt = file.name.includes(".") ? file.name.split(".").pop() : fallbackExtension;
+    safeExt = (fileExt ?? fallbackExtension).toLowerCase().replace(/[^a-z0-9]/g, "") || fallbackExtension;
+  }
+
   const filePath = `reviews/${crypto.randomUUID()}-${Date.now()}.${safeExt}`;
 
   const { error: uploadError } = await supabase.storage
     .from(REVIEW_IMAGES_BUCKET)
-    .upload(filePath, file, { cacheControl: "3600", upsert: false });
+    .upload(filePath, uploadFile, { cacheControl: "3600", upsert: false });
 
   if (uploadError) throw uploadError;
 

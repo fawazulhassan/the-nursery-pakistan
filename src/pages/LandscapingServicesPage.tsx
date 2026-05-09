@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
+import LazyVideo from "@/components/LazyVideo";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useMemo, useState } from "react";
 import { getCompletedProjects, type CompletedProjectRow } from "@/lib/landscapingProjects";
@@ -24,7 +25,7 @@ const LandscapingServicesPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState<CompletedProjectRow[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
-  const [activeLightbox, setActiveLightbox] = useState<{ images: string[]; currentIndex: number } | null>(null);
+  const [activeLightbox, setActiveLightbox] = useState<{ images: string[]; currentIndex: number; posterUrl?: string } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -169,13 +170,11 @@ const LandscapingServicesPage = () => {
                               return (
                               <div key={`${featuredProject.id}-gallery-${index}`} className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden">
                                 {isVideoUrl(imageUrl) ? (
-                                  <video
+                                  <LazyVideo
                                     src={imageUrl}
-                                    controls
-                                    muted
-                                    playsInline
+                                    poster={featuredProject.cover_image_url}
                                     title={`${featuredProject.title} gallery video ${index + 1}`}
-                                    className="w-full h-full object-cover bg-black"
+                                    aspectClassName="w-full h-full"
                                   />
                                 ) : (
                                   <button
@@ -185,6 +184,7 @@ const LandscapingServicesPage = () => {
                                       setActiveLightbox({
                                         images: featuredProject.gallery_image_urls ?? [],
                                         currentIndex: index,
+                                        posterUrl: featuredProject.cover_image_url,
                                       })
                                     }
                                   >
@@ -235,13 +235,11 @@ const LandscapingServicesPage = () => {
                                 return (
                                 <div key={`${project.id}-gallery-${index}`} className="w-full aspect-square rounded-md border bg-muted/40 overflow-hidden">
                                   {isVideoUrl(imageUrl) ? (
-                                    <video
+                                    <LazyVideo
                                       src={imageUrl}
-                                      controls
-                                      muted
-                                      playsInline
+                                      poster={project.cover_image_url}
                                       title={`${project.title} gallery video ${index + 1}`}
-                                      className="w-full h-full object-cover bg-black"
+                                      aspectClassName="w-full h-full"
                                     />
                                   ) : (
                                     <button
@@ -251,6 +249,7 @@ const LandscapingServicesPage = () => {
                                         setActiveLightbox({
                                           images: galleryItems,
                                           currentIndex: index,
+                                          posterUrl: project.cover_image_url,
                                         })
                                       }
                                     >
@@ -323,6 +322,7 @@ const LandscapingServicesPage = () => {
                 {isVideoUrl(activeLightbox.images[activeLightbox.currentIndex]) ? (
                   <video
                     src={activeLightbox.images[activeLightbox.currentIndex]}
+                    poster={activeLightbox.posterUrl}
                     controls
                     playsInline
                     preload="metadata"

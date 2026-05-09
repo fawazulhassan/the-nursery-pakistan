@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
+import { convertToWebP, validateImageUploadSize } from "@/lib/imageOptimization";
 
 export type CompletedProjectRow = Tables<"completed_projects">;
 
@@ -12,7 +13,7 @@ export interface CompletedProjectInput {
 }
 
 const LANDSCAPING_IMAGES_BUCKET = "landscaping-images";
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 
 export function generateProjectSlug(title: string): string {
@@ -172,20 +173,30 @@ export async function uploadLandscapingMedia(file: File): Promise<string> {
     throw new Error("Only image and video files are allowed.");
   }
   if (isImage && file.size > MAX_IMAGE_BYTES) {
-    throw new Error("Image must be 5MB or smaller.");
+    throw new Error("Image must be under 2MB");
   }
   if (isVideo && file.size > MAX_VIDEO_BYTES) {
     throw new Error("Video must be under 50MB.");
   }
 
-  const fallbackExtension = isVideo ? "mp4" : "jpg";
-  const extension = file.name.includes(".") ? file.name.split(".").pop() : fallbackExtension;
-  const safeExtension = (extension ?? fallbackExtension).toLowerCase().replace(/[^a-z0-9]/g, "") || fallbackExtension;
+  let uploadFile = file;
+  let safeExtension: string;
+
+  if (isImage) {
+    validateImageUploadSize(file);
+    uploadFile = await convertToWebP(file);
+    safeExtension = "webp";
+  } else {
+    const fallbackExtension = "mp4";
+    const extension = file.name.includes(".") ? file.name.split(".").pop() : fallbackExtension;
+    safeExtension = (extension ?? fallbackExtension).toLowerCase().replace(/[^a-z0-9]/g, "") || fallbackExtension;
+  }
+
   const filePath = `projects/${crypto.randomUUID()}-${Date.now()}.${safeExtension}`;
 
   const { error: uploadError } = await supabase.storage
     .from(LANDSCAPING_IMAGES_BUCKET)
-    .upload(filePath, file, { cacheControl: "3600", upsert: false });
+    .upload(filePath, uploadFile, { cacheControl: "3600", upsert: false });
   if (uploadError) throw uploadError;
 
   const { data } = supabase.storage.from(LANDSCAPING_IMAGES_BUCKET).getPublicUrl(filePath);
