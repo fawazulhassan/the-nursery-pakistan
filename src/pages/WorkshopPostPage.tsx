@@ -1,8 +1,9 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LightboxCloseButton from "@/components/LightboxCloseButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
 import { createBooking, getSlotsByWorkshop, type WorkshopSlotWithCount } from "@/lib/workshopBookings";
 import { getWorkshopBySlug, type WorkshopRow } from "@/lib/workshops";
 
@@ -38,7 +40,7 @@ const WorkshopPostPage = () => {
   const [slots, setSlots] = useState<WorkshopSlotWithCount[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [selectedSlotId, setSelectedSlotId] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
@@ -97,6 +99,60 @@ const WorkshopPostPage = () => {
     () => ((workshop?.gallery_image_urls as string[] | null) ?? []).filter((image) => !!image),
     [workshop]
   );
+
+  const closeLightbox = () => setLightboxIndex(null);
+
+  const openLightbox = (index: number) => {
+    if (galleryImages.length > 0 && index >= 0 && index < galleryImages.length) {
+      setLightboxIndex(index);
+    }
+  };
+
+  const showPreviousImage = () => {
+    setLightboxIndex((current) => {
+      if (current === null || galleryImages.length === 0) return null;
+      return (current - 1 + galleryImages.length) % galleryImages.length;
+    });
+  };
+
+  const showNextImage = () => {
+    setLightboxIndex((current) => {
+      if (current === null || galleryImages.length === 0) return null;
+      return (current + 1) % galleryImages.length;
+    });
+  };
+
+  const swipeNextRef = useRef(() => {});
+  const swipePrevRef = useRef(() => {});
+  swipeNextRef.current = showNextImage;
+  swipePrevRef.current = showPreviousImage;
+  const { handleTouchStart, handleTouchEnd } = useTouchSlideNavigation(swipeNextRef, swipePrevRef);
+
+  const showPrevKeyRef = useRef(showPreviousImage);
+  const showNextKeyRef = useRef(showNextImage);
+  const closeKeyRef = useRef(closeLightbox);
+  showPrevKeyRef.current = showPreviousImage;
+  showNextKeyRef.current = showNextImage;
+  closeKeyRef.current = closeLightbox;
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        showPrevKeyRef.current();
+      } else if (event.key === "ArrowRight") {
+        showNextKeyRef.current();
+      } else if (event.key === "Escape") {
+        closeKeyRef.current();
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [lightboxIndex, galleryImages.length]);
+
+  useEffect(() => {
+    setLightboxIndex(null);
+  }, [slug, workshop?.id]);
 
   const selectedSlot = slots.find((slot) => slot.id === selectedSlotId);
 
@@ -264,7 +320,7 @@ const WorkshopPostPage = () => {
                       key={`${workshop.id}-gallery-${index}`}
                       type="button"
                       className="w-full aspect-square rounded-md border overflow-hidden"
-                      onClick={() => setLightboxImage(imageUrl)}
+                      onClick={() => openLightbox(index)}
                     >
                       <img
                         src={imageUrl}
@@ -281,16 +337,50 @@ const WorkshopPostPage = () => {
         )}
       </main>
 
-      <Dialog open={!!lightboxImage} onOpenChange={(open) => !open && setLightboxImage(null)}>
-        <DialogContent className="max-w-4xl p-2">
-          {lightboxImage ? (
-            <img
-              src={lightboxImage}
-              alt="Workshop gallery fullscreen"
-              className="w-full max-h-[80vh] object-contain rounded-md"
-              loading="lazy"
-            />
-          ) : null}
+      <Dialog open={lightboxIndex !== null} onOpenChange={(open) => !open && closeLightbox()}>
+        <DialogContent className="max-w-5xl p-4 sm:p-6 [&>button]:hidden">
+          {lightboxIndex !== null && (
+            <div className="flex flex-col items-center gap-4">
+              <div
+                className="relative w-full"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                <LightboxCloseButton onClose={closeLightbox} />
+                <img
+                  src={galleryImages[lightboxIndex!]}
+                  alt={`Workshop gallery image ${(lightboxIndex ?? 0) + 1}`}
+                  className="max-h-[75vh] w-full object-contain rounded-lg"
+                  loading="lazy"
+                />
+                {galleryImages.length > 1 ? (
+                  <>
+                    <Button
+                      type="button"
+                      size="icon"
+                      onClick={showPreviousImage}
+                      aria-label="Previous image"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      size="icon"
+                      onClick={showNextImage}
+                      aria-label="Next image"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </>
+                ) : null}
+              </div>
+              <p className="text-sm text-muted-foreground text-center">
+                {lightboxIndex + 1} / {galleryImages.length}
+              </p>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
       <Footer />
