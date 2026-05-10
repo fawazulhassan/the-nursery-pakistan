@@ -1,1 +1,10 @@
 project_id = "hwlygzpvcrgksdnqcdvw"
+
+[functions.auth-send-email]
+verify_jwt = false
+
+# Guest checkout must call invoke without a full user account. Anonymous JWT + explicit Bearer
+# still fail for some setups; disabling JWT verification lets the function run (it uses service role
+# for DB only — no secrets returned). Re-enable and rely on anon JWT only if you add stricter auth.
+[functions.send-transactional-email]
+verify_jwt = false

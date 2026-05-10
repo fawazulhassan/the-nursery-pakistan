@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitConsultationRequest } from "@/lib/consultationRequests";
+import { sendEmail } from "@/lib/sendEmail";
 
 const ConsultationRequestPage = () => {
   const { toast } = useToast();
@@ -22,12 +23,16 @@ const ConsultationRequestPage = () => {
     event.preventDefault();
     setIsSubmitting(true);
     try {
-      await submitConsultationRequest({
+      const { id: requestId } = await submitConsultationRequest({
         full_name: fullName,
         email,
         phone_number: phoneNumber,
         message,
       });
+
+      console.log("Request created, id:", requestId);
+      console.log("Sending email for consultation:", requestId);
+      await sendEmail({ type: "consultation", id: requestId });
 
       toast({
         title: "Request received",

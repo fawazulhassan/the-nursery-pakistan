@@ -11,16 +11,17 @@ export interface ConsultationRequestInput {
   message?: string;
 }
 
-export async function submitConsultationRequest(input: ConsultationRequestInput): Promise<void> {
-  const { error } = await supabase.from("consultation_requests").insert({
-    full_name: input.full_name.trim(),
-    email: input.email.trim(),
-    phone_number: input.phone_number.trim(),
-    message: input.message?.trim() || null,
-    status: "new",
+export async function submitConsultationRequest(input: ConsultationRequestInput): Promise<{ id: string }> {
+  const { data: id, error } = await supabase.rpc("create_consultation_request", {
+    p_full_name: input.full_name.trim(),
+    p_email: input.email.trim(),
+    p_phone_number: input.phone_number.trim(),
+    p_message: input.message?.trim() ?? "",
   });
 
   if (error) throw error;
+  if (!id) throw new Error("Consultation request could not be created.");
+  return { id: id as string };
 }
 
 export async function getAdminConsultationRequests(): Promise<ConsultationRequestRow[]> {

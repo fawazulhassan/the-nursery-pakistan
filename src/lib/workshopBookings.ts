@@ -6,7 +6,8 @@ export type WorkshopBookingRow = Tables<"workshop_bookings">;
 export type WorkshopBookingStatus = "new" | "confirmed" | "completed" | "cancelled";
 
 export interface WorkshopSlotWithCount extends WorkshopSlotRow {
-  confirmed_booking_count: number;
+  /** Non-cancelled bookings (includes status new / confirmed / completed). */
+  booked_count: number;
   is_fully_booked: boolean;
 }
 
@@ -45,26 +46,24 @@ export async function getSlotsByWorkshop(workshopId: string): Promise<WorkshopSl
   if (!slots?.length) return [];
 
   const slotIds = slots.map((slot) => slot.id);
-  const { data: bookingRows, error: bookingError } = await supabase
-    .from("workshop_bookings")
-    .select("slot_id")
-    .in("slot_id", slotIds)
-    .eq("status", "confirmed");
+  const { data: countRows, error: countsError } = await supabase.rpc("get_confirmed_booking_counts_by_slots", {
+    p_slot_ids: slotIds,
+  });
 
-  if (bookingError) throw bookingError;
+  if (countsError) throw countsError;
 
   const countBySlot = new Map<string, number>();
-  for (const booking of bookingRows ?? []) {
-    const current = countBySlot.get(booking.slot_id) ?? 0;
-    countBySlot.set(booking.slot_id, current + 1);
+  for (const row of countRows ?? []) {
+    const r = row as { slot_id: string; cnt: number | string };
+    countBySlot.set(r.slot_id, Number(r.cnt));
   }
 
   return slots.map((slot) => {
-    const confirmedCount = countBySlot.get(slot.id) ?? 0;
+    const booked = countBySlot.get(slot.id) ?? 0;
     return {
       ...slot,
-      confirmed_booking_count: confirmedCount,
-      is_fully_booked: confirmedCount >= slot.capacity,
+      booked_count: booked,
+      is_fully_booked: booked >= slot.capacity,
     };
   });
 }
@@ -88,7 +87,9 @@ export async function createBooking(data: CreateWorkshopBookingInput): Promise<W
       throw new Error("This slot is fully booked.");
     }
     if (error.code === "23505") {
-      throw new Error("Already booked.");
+      throw new Error(
+        "This email already has an active booking for this slot. If you canceled or meant to register someone else, use a different email or contact support."
+      );
     }
     throw new Error("Could not create booking. Please try again.");
   }

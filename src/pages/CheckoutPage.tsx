@@ -12,6 +12,7 @@ import { ArrowLeft, Banknote, CreditCard, MapPin } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { sendEmail } from "@/lib/sendEmail";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDefaultAddress } from "@/hooks/useDefaultAddress";
 
@@ -91,6 +92,17 @@ const CheckoutPage = () => {
     setIsSubmitting(true);
     setStockErrors([]);
 
+    const trimmedCheckoutEmail = formData.email.trim();
+    if (!trimmedCheckoutEmail || !trimmedCheckoutEmail.includes("@")) {
+      toast({
+        title: "Valid email required",
+        description: "Please enter your email so we can send order confirmations.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // First, validate stock availability for all items
       const stockCheckItems = checkoutSourceItems.map(item => ({
@@ -145,18 +157,23 @@ const CheckoutPage = () => {
         };
       });
 
-      const { error: checkoutError } = await supabase.rpc('create_checkout_order', {
+      const { data: orderId, error: checkoutError } = await supabase.rpc("create_checkout_order", {
         p_total_amount: totalAmount,
         p_shipping_address: `${formData.address}, ${formData.city}`,
         p_phone_number: formData.phone,
         p_payment_method: paymentMethod,
         p_payment_status: paymentStatus,
-        p_customer_name: formData.name,
-        p_customer_email: formData.email,
+        p_customer_name: formData.name.trim(),
+        p_customer_email: trimmedCheckoutEmail,
         p_items: checkoutItems,
       });
 
       if (checkoutError) throw checkoutError;
+      console.log("Order created, orderId:", orderId);
+      if (!checkoutError && orderId !== null && orderId !== undefined) {
+        console.log("Sending email for order:", orderId);
+        await sendEmail({ type: "order", id: orderId as string });
+      }
 
       toast({
         title: "Order Placed Successfully!",

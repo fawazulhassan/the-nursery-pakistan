@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
 import { createBooking, getSlotsByWorkshop, type WorkshopSlotWithCount } from "@/lib/workshopBookings";
+import { sendEmail } from "@/lib/sendEmail";
 import { getWorkshopBySlug, type WorkshopRow } from "@/lib/workshops";
 
 const formatDate = (value: string) =>
@@ -171,13 +172,19 @@ const WorkshopPostPage = () => {
 
     setIsSaving(true);
     try {
-      await createBooking({
+      const row = await createBooking({
         slot_id: selectedSlotId,
         full_name: fullName,
         email,
         phone_number: phoneNumber,
         notes,
       });
+
+      console.log("Booking created, row:", row);
+      if (row?.id) {
+        console.log("Sending email for booking:", row.id);
+        await sendEmail({ type: "booking", id: row.id });
+      }
 
       toast({ title: "Booking submitted", description: "We received your booking request successfully." });
       setFullName("");
@@ -247,7 +254,7 @@ const WorkshopPostPage = () => {
                               {formatDateTime(slot.slot_start_at)} - {formatDateTime(slot.slot_end_at)}
                             </p>
                             <p className="text-xs text-muted-foreground mt-1">
-                              Confirmed: {slot.confirmed_booking_count}/{slot.capacity}
+                              Booked: {slot.booked_count}/{slot.capacity}
                             </p>
                           </div>
                           {slot.is_fully_booked ? (

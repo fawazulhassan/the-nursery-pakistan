@@ -274,6 +274,21 @@ export type Database = {
         };
         Returns: Database["public"]["Tables"]["workshop_bookings"]["Row"];
       };
+      create_consultation_request: {
+        Args: {
+          p_full_name: string;
+          p_email: string;
+          p_phone_number: string;
+          p_message: string;
+        };
+        Returns: string;
+      };
+      get_confirmed_booking_counts_by_slots: {
+        Args: {
+          p_slot_ids: string[];
+        };
+        Returns: { slot_id: string; cnt: number }[];
+      };
       [key: string]: { Args: Record<string, Json | undefined>; Returns: Json };
     };
     Enums: Record<string, never>;
