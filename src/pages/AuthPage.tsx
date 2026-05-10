@@ -76,9 +76,9 @@ const AuthPage = () => {
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-      redirectTo: `${window.location.origin}/auth`,
+      redirectTo: import.meta.env.VITE_AUTH_REDIRECT_URL || `${window.location.origin}/auth`,
     });
     
     if (error) {
