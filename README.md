@@ -121,6 +121,8 @@ npm run preview
 ---
 
 ## 📁 Project Structure
+
+```plaintext
 the-nursery-pakistan/
 ├── public/              # Static assets
 ├── src/
@@ -134,7 +136,7 @@ the-nursery-pakistan/
 ├── .env                 # Environment variables (not committed)
 ├── vite.config.ts       # Vite configuration
 └── tailwind.config.ts   # Tailwind configuration
----
+```
 
 ## 🔧 Environment Variables
 
