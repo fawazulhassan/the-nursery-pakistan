@@ -1,73 +1,174 @@
-# Welcome to your Lovable project
+# 🌿 The Nursery Pakistan
 
-## Project info
+A full-stack production web platform for plant e-commerce, workshop booking, and landscaping portfolio management. Live at **[nurserypakistan.pk](https://nurserypakistan.pk)**
 
-**URL**: https://lovable.dev/projects/a622af8e-2ea0-4142-9717-e2e8cde33002
+![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat-square&logo=cloudflare&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🚀 Live Demo
 
-**Use Lovable**
+🔗 [nurserypakistan.pk](https://nurserypakistan.pk)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a622af8e-2ea0-4142-9717-e2e8cde33002) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 📋 Features
 
-**Use your preferred IDE**
+### 🛒 Plant E-commerce
+- Browse and search plants with filtering options
+- Product image galleries with thumbnail sync and lightbox support
+- Cart and wishlist system
+- Time-bound sale pricing with start/end dates
+- Centralized pricing logic consistent across all pages
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 📅 Workshop Booking
+- Browse available workshops
+- Book workshops directly through the platform
+- Admin can publish and manage workshop listings
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 🏡 Landscaping Portfolio
+- Showcase completed landscaping projects
+- Image and video gallery support with carousel controls
+- Admin can add and manage portfolio entries
 
-Follow these steps:
+### 🔐 Admin Panel
+- Role-based admin flows
+- Manage products, sales windows, workshops, and projects
+- Review approval workflows
+- Real-time data management via Supabase
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### ⚡ Performance & Infrastructure
+- Lazy loading for images and components
+- Cloudflare CDN for fast global delivery
+- Resend email integration for booking confirmations
+- Custom `.pk` domain with SSL
+- Deployed on Vercel with 48+ production deployments
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠️ Tech Stack
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+| Category | Technology |
+|---|---|
+| Frontend | React.js, TypeScript, Tailwind CSS |
+| UI Components | shadcn/ui |
+| Routing | React Router |
+| Backend | Supabase (PostgreSQL + Auth + Storage) |
+| Email | Resend |
+| CDN & Security | Cloudflare |
+| Build Tool | Vite |
+| Deployment | Vercel |
+| Version Control | Git & GitHub |
+
+---
+
+## 📦 Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/) or [bun](https://bun.sh/)
+- A [Supabase](https://supabase.com/) account
+- A [Resend](https://resend.com/) account (for email)
+
+### Installation
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/fawazulhassan/the-nursery-pakistan.git
+cd the-nursery-pakistan
+```
+
+**2. Install dependencies**
+```bash
+npm install
+```
+
+**3. Set up environment variables**
+
+Create a `.env` file in the root of the project:
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_RESEND_API_KEY=your_resend_api_key
+```
+
+You can find your Supabase URL and anon key in your Supabase project dashboard under **Settings → API**.
+
+**4. Run the development server**
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be running at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build for Production
+```bash
+npm run build
+```
 
-**Use GitHub Codespaces**
+### Preview Production Build
+```bash
+npm run preview
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 📁 Project Structure
+the-nursery-pakistan/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── pages/           # Page components
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility functions
+│   ├── integrations/    # Supabase client & types
+│   └── main.tsx         # App entry point
+├── supabase/            # Supabase config & migrations
+├── .env                 # Environment variables (not committed)
+├── vite.config.ts       # Vite configuration
+└── tailwind.config.ts   # Tailwind configuration
+---
 
-This project is built with:
+## 🔧 Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+| Variable | Description |
+|---|---|
+| `VITE_SUPABASE_URL` | Your Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous key |
+| `VITE_RESEND_API_KEY` | Your Resend API key for emails |
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/a622af8e-2ea0-4142-9717-e2e8cde33002) and click on Share -> Publish.
+## 🚀 Deployment
 
-## Can I connect a custom domain to my Lovable project?
+This project is deployed on **Vercel** with a custom domain via **Cloudflare**.
 
-Yes, you can!
+To deploy your own instance:
+1. Push your code to GitHub
+2. Import the repo into [Vercel](https://vercel.com)
+3. Add your environment variables in Vercel project settings
+4. Connect your custom domain
+5. Set up Cloudflare as your DNS provider for CDN and security
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 👨‍💻 Developer
+
+**Muhammad Fawaz ul Hassan**
+- 🌐 [portfolio-website-bwxe.vercel.app](https://portfolio-website-bwxe.vercel.app/)
+- 💼 [linkedin.com/in/muhammad-fawaz-ul-hassan](https://linkedin.com/in/muhammad-fawaz-ul-hassan/)
+- 📧 fawazulhassan@gmail.com
+
+---
+
+## 📄 License
+
+This project is proprietary and built for a real client.
+All rights reserved © 2025 The Nursery Pakistan
