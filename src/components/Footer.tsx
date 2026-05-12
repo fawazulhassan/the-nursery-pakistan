@@ -92,9 +92,14 @@ const Footer = () => {
                 </a>
               </Button>
               <Button size="icon" variant="outline" asChild>
-                <Link to="/" aria-label="Go to homepage">
+                <a
+                  href="https://www.instagram.com/nurserypakistan_pk/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Visit our Instagram page"
+                >
                   <Instagram className="h-4 w-4" />
-                </Link>
+                </a>
               </Button>
               <Button size="icon" variant="outline" asChild>
                 <a href="mailto:fawazulhassan@gmail.com" aria-label="Email The Nursery">
