@@ -1,8 +1,14 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { usePageSeo } from "@/components/SeoManager";
 
 const NotFound = () => {
   const location = useLocation();
+  usePageSeo({
+    title: "Page Not Found | The Nursery Pakistan",
+    description: "The requested page could not be found.",
+    noIndex: true,
+  });
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);

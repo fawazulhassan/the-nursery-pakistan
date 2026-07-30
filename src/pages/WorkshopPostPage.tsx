@@ -16,6 +16,7 @@ import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
 import { createBooking, getSlotsByWorkshop, type WorkshopSlotWithCount } from "@/lib/workshopBookings";
 import { sendEmail } from "@/lib/sendEmail";
 import { getWorkshopBySlug, type WorkshopRow } from "@/lib/workshops";
+import { usePageSeo } from "@/components/SeoManager";
 
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat("en-US", {
@@ -70,31 +71,25 @@ const WorkshopPostPage = () => {
     load();
   }, [slug]);
 
-  useEffect(() => {
-    if (!workshop) return;
-
-    const previousTitle = document.title;
-    document.title = workshop.title;
-
-    let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    const created = !meta;
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.name = "description";
-      document.head.appendChild(meta);
-    }
-    const previousDescription = meta.content;
-    meta.content = workshop.description.slice(0, 160);
-
-    return () => {
-      document.title = previousTitle;
-      if (created) {
-        meta?.remove();
-      } else if (meta) {
-        meta.content = previousDescription;
-      }
-    };
-  }, [workshop]);
+  usePageSeo(
+    isLoading
+      ? {
+          title: "Loading Workshop | The Nursery Pakistan",
+          noIndex: true,
+        }
+      : workshop
+        ? {
+            title: `${workshop.title} | The Nursery Pakistan`,
+            description: workshop.description.slice(0, 160),
+            canonicalPath: `/workshop/${workshop.slug}`,
+            noIndex: false,
+          }
+        : {
+            title: "Workshop Not Found | The Nursery Pakistan",
+            description: "The requested workshop could not be found.",
+            noIndex: true,
+          },
+  );
 
   const galleryImages = useMemo(
     () => ((workshop?.gallery_image_urls as string[] | null) ?? []).filter((image) => !!image),

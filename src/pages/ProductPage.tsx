@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { ProductDescription } from "@/components/ProductDescription";
+import { usePageSeo } from "@/components/SeoManager";
 
 const isEditableKeyboardTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -37,6 +38,28 @@ const ProductPage = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { user } = useAuth();
+
+  usePageSeo(
+    isLoading
+      ? {
+          title: "Loading Product | The Nursery Pakistan",
+          noIndex: true,
+        }
+      : product
+        ? {
+            title: `${product.name} | The Nursery Pakistan`,
+            description:
+              product.description?.slice(0, 160) ||
+              `Shop ${product.name} from The Nursery Pakistan.`,
+            canonicalPath: `/product/${product.id}`,
+            noIndex: false,
+          }
+        : {
+            title: "Product Not Found | The Nursery Pakistan",
+            description: "The requested product could not be found.",
+            noIndex: true,
+          },
+  );
 
   useEffect(() => {
     if (id) fetchProduct();

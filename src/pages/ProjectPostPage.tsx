@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LazyVideo from "@/components/LazyVideo";
 import { getProjectBySlug, type CompletedProjectRow } from "@/lib/landscapingProjects";
+import { usePageSeo } from "@/components/SeoManager";
 
 const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
 
@@ -41,31 +42,25 @@ const ProjectPostPage = () => {
     load();
   }, [slug]);
 
-  useEffect(() => {
-    if (!project) return;
-
-    const previousTitle = document.title;
-    document.title = project.title;
-
-    let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    const created = !meta;
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.name = "description";
-      document.head.appendChild(meta);
-    }
-    const previousDescription = meta.content;
-    meta.content = project.description.slice(0, 160);
-
-    return () => {
-      document.title = previousTitle;
-      if (created) {
-        meta?.remove();
-      } else if (meta) {
-        meta.content = previousDescription;
-      }
-    };
-  }, [project]);
+  usePageSeo(
+    isLoading
+      ? {
+          title: "Loading Project | The Nursery Pakistan",
+          noIndex: true,
+        }
+      : project
+        ? {
+            title: `${project.title} | The Nursery Pakistan`,
+            description: project.description.slice(0, 160),
+            canonicalPath: `/project/${project.slug}`,
+            noIndex: false,
+          }
+        : {
+            title: "Project Not Found | The Nursery Pakistan",
+            description: "The requested project could not be found.",
+            noIndex: true,
+          },
+  );
 
   const galleryImages = useMemo(
     () => ((project?.gallery_image_urls as string[] | null) ?? []).filter((image) => !!image),

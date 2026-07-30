@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getPublishedBlogBySlug, type BlogRow } from "@/lib/blogs";
+import { usePageSeo } from "@/components/SeoManager";
 
 const BlogPostPage = () => {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -30,30 +31,25 @@ const BlogPostPage = () => {
     load();
   }, [slug]);
 
-  useEffect(() => {
-    if (!blog) return;
-    const previousTitle = document.title;
-    document.title = blog.title;
-
-    let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    const created = !meta;
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.name = "description";
-      document.head.appendChild(meta);
-    }
-    const previousDescription = meta.content;
-    meta.content = blog.excerpt;
-
-    return () => {
-      document.title = previousTitle;
-      if (created) {
-        meta?.remove();
-      } else if (meta) {
-        meta.content = previousDescription;
-      }
-    };
-  }, [blog]);
+  usePageSeo(
+    isLoading
+      ? {
+          title: "Loading Article | The Nursery Pakistan",
+          noIndex: true,
+        }
+      : blog
+        ? {
+            title: `${blog.title} | The Nursery Pakistan`,
+            description: blog.excerpt,
+            canonicalPath: `/blog/${blog.slug}`,
+            noIndex: false,
+          }
+        : {
+            title: "Article Not Found | The Nursery Pakistan",
+            description: "The requested article could not be found.",
+            noIndex: true,
+          },
+  );
 
   const safeHtml = useMemo(() => {
     if (!blog) return "";

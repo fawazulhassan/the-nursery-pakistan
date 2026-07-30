@@ -44,6 +44,7 @@ import AdminWorkshopBookingsPage from "./pages/AdminWorkshopBookingsPage";
 import NotFound from "./pages/NotFound";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import { SeoProvider } from "@/components/SeoManager";
 
 const queryClient = new QueryClient();
 
@@ -127,9 +128,11 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <ScrollToTop />
-              <AppRoutes />
-              <WhatsAppFloatingButton />
+              <SeoProvider>
+                <ScrollToTop />
+                <AppRoutes />
+                <WhatsAppFloatingButton />
+              </SeoProvider>
             </BrowserRouter>
             <Analytics />
             <SpeedInsights />
