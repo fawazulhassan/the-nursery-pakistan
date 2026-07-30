@@ -18,6 +18,9 @@ import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/produ
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { ProductDescription } from "@/components/ProductDescription";
 import { usePageSeo } from "@/components/SeoManager";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { CATEGORIES } from "@/lib/constants";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const isEditableKeyboardTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -53,6 +56,34 @@ const ProductPage = () => {
               `Shop ${product.name} from The Nursery Pakistan.`,
             canonicalPath: `/product/${product.id}`,
             noIndex: false,
+            image: resolvePrimaryProductImage(product),
+            type: "product",
+            structuredData: [
+              createBreadcrumbSchema([
+                { name: "Home", path: "/" },
+                { name: "Products", path: "/products" },
+                { name: product.name, path: `/product/${product.id}` },
+              ]),
+              {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                name: product.name,
+                description: product.description,
+                image: resolveProductImageUrls(product),
+                sku: String(product.id),
+                category: product.category,
+                offers: {
+                  "@type": "Offer",
+                  priceCurrency: "PKR",
+                  price: getEffectivePrice(product).toFixed(2),
+                  availability:
+                    Number(product.stock_quantity) > 0
+                      ? "https://schema.org/InStock"
+                      : "https://schema.org/OutOfStock",
+                  url: `https://nurserypakistan.pk/product/${product.id}`,
+                },
+              },
+            ],
           }
         : {
             title: "Product Not Found | The Nursery Pakistan",
@@ -225,6 +256,18 @@ const ProductPage = () => {
       <main className="flex-1">
         <section className="py-8 sm:py-12">
           <div className="container mx-auto px-4">
+            <Breadcrumbs
+              items={[
+                { label: "Products", to: "/products" },
+                ...(CATEGORIES.find(({ name }) => name === product.category)
+                  ? [{
+                      label: product.category,
+                      to: `/category/${CATEGORIES.find(({ name }) => name === product.category)?.slug}`,
+                    }]
+                  : []),
+                { label: product.name },
+              ]}
+            />
             <Link
               to="/products"
               className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 sm:mb-8"

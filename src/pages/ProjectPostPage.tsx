@@ -10,6 +10,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LazyVideo from "@/components/LazyVideo";
 import { getProjectBySlug, type CompletedProjectRow } from "@/lib/landscapingProjects";
 import { usePageSeo } from "@/components/SeoManager";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
 
@@ -54,6 +56,24 @@ const ProjectPostPage = () => {
             description: project.description.slice(0, 160),
             canonicalPath: `/project/${project.slug}`,
             noIndex: false,
+            image: project.cover_image_url,
+            structuredData: [
+              createBreadcrumbSchema([
+                { name: "Home", path: "/" },
+                { name: "Landscaping Services", path: "/landscaping-services" },
+                { name: "Completed Projects", path: "/projects" },
+                { name: project.title, path: `/project/${project.slug}` },
+              ]),
+              {
+                "@context": "https://schema.org",
+                "@type": "CreativeWork",
+                name: project.title,
+                description: project.description,
+                image: project.cover_image_url,
+                url: `https://nurserypakistan.pk/project/${project.slug}`,
+                creator: { "@id": "https://nurserypakistan.pk/#organization" },
+              },
+            ],
           }
         : {
             title: "Project Not Found | The Nursery Pakistan",
@@ -121,6 +141,13 @@ const ProjectPostPage = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Landscaping Services", to: "/landscaping-services" },
+            { label: "Completed Projects", to: "/projects" },
+            { label: project?.title || "Project" },
+          ]}
+        />
         <Link to="/projects">
           <Button variant="outline" className="mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />

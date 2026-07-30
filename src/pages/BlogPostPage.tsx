@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getPublishedBlogBySlug, type BlogRow } from "@/lib/blogs";
 import { usePageSeo } from "@/components/SeoManager";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const BlogPostPage = () => {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -43,6 +45,30 @@ const BlogPostPage = () => {
             description: blog.excerpt,
             canonicalPath: `/blog/${blog.slug}`,
             noIndex: false,
+            image: blog.featured_image_url || undefined,
+            type: "article",
+            structuredData: [
+              createBreadcrumbSchema([
+                { name: "Home", path: "/" },
+                { name: "Plant Care Blog", path: "/blogs" },
+                { name: blog.title, path: `/blog/${blog.slug}` },
+              ]),
+              {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                headline: blog.title,
+                description: blog.excerpt,
+                image: blog.featured_image_url || undefined,
+                author: {
+                  "@type": "Person",
+                  name: blog.author_name || "The Nursery Pakistan",
+                },
+                datePublished: blog.published_at || blog.created_at,
+                dateModified: blog.updated_at,
+                mainEntityOfPage: `https://nurserypakistan.pk/blog/${blog.slug}`,
+                publisher: { "@id": "https://nurserypakistan.pk/#organization" },
+              },
+            ],
           }
         : {
             title: "Article Not Found | The Nursery Pakistan",
@@ -60,6 +86,12 @@ const BlogPostPage = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Plant Care Blog", to: "/blogs" },
+            { label: blog?.title || "Article" },
+          ]}
+        />
         <Link to="/blogs">
           <Button variant="outline" className="mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />

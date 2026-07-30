@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ShoppingCart, Tag, ArrowLeft, SlidersHorizontal } from "lucide-react";
+import { Heart, ShoppingCart, Tag, SlidersHorizontal } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import { useToast } from "@/hooks/use-toast";
@@ -14,6 +14,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const CATEGORIES = [
   { name: "All", value: "all" },
@@ -88,15 +89,13 @@ const ProductsPage = () => {
       <main className="flex-1">
         <section className="bg-muted/30 border-b border-border">
           <div className="container mx-auto px-4 py-6 sm:py-8">
-            <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-4">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Link>
+            <Breadcrumbs items={[{ label: "Products" }]} />
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
               All Products
             </h1>
             <p className="text-muted-foreground text-lg max-w-3xl">
-              Browse our full collection of plants, pots, soil, and accessories.
+              Shop indoor and outdoor plants, pots, soil, fertilizers, and garden
+              accessories selected for homes and gardens across Pakistan.
             </p>
             <span className="text-sm text-muted-foreground mt-4 block">
               {filteredProducts.length} products found

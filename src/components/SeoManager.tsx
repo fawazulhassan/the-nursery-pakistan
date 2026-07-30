@@ -19,6 +19,9 @@ type SeoConfig = {
   description?: string;
   canonicalPath?: string;
   noIndex?: boolean;
+  image?: string;
+  type?: "website" | "article" | "product";
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 };
 
 type SeoOverrideContextValue = {
@@ -27,17 +30,127 @@ type SeoOverrideContextValue = {
 
 const SeoOverrideContext = createContext<SeoOverrideContextValue | null>(null);
 
-const indexableStaticPaths = new Set([
-  "/",
-  "/about",
-  "/blogs",
-  "/flower-workshop",
-  "/guide",
-  "/landscaping-services",
-  "/products",
-  "/projects",
-  "/workshops",
-]);
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "@id": `${CANONICAL_ORIGIN}/#organization`,
+  name: "The Nursery Pakistan",
+  url: `${CANONICAL_ORIGIN}/`,
+  logo: `${CANONICAL_ORIGIN}/logo-cropped.webp`,
+  image: `${CANONICAL_ORIGIN}/portfolio-1.webp`,
+  email: "fawazulhassan@gmail.com",
+  telephone: "+92-311-7819614",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Kasur",
+    addressCountry: "PK",
+  },
+  sameAs: [
+    "https://facebook.com/profile.php?id=61579022675427",
+    "https://www.instagram.com/nurserypakistan_pk/",
+  ],
+};
+
+const staticSeo: Record<string, SeoConfig> = {
+  "/": {
+    title: "Buy Plants Online in Pakistan | The Nursery Pakistan",
+    description:
+      "Shop indoor and outdoor plants, pots, fertilizers and garden accessories online from The Nursery Pakistan, with practical plant-care guidance.",
+    structuredData: [
+      organizationSchema,
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": `${CANONICAL_ORIGIN}/#website`,
+        url: `${CANONICAL_ORIGIN}/`,
+        name: "The Nursery Pakistan",
+        publisher: { "@id": `${CANONICAL_ORIGIN}/#organization` },
+      },
+    ],
+  },
+  "/about": {
+    title: "About The Nursery Pakistan | Plants & Garden Care",
+    description:
+      "Learn about The Nursery Pakistan, our passion for quality plants, reliable gardening supplies and practical support for plant lovers.",
+  },
+  "/blogs": {
+    title: "Plant Care Blog Pakistan | The Nursery Pakistan",
+    description:
+      "Read practical plant-care advice, seasonal gardening tips and workshop updates created for plant lovers in Pakistan.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      name: "The Nursery Pakistan Plant Care Blog",
+      url: `${CANONICAL_ORIGIN}/blogs`,
+    },
+  },
+  "/flower-workshop": {
+    title: "Hands-On Flower Arrangement Workshop | The Nursery Pakistan",
+    description:
+      "Learn flower arrangement, bouquet styling and bloom-care techniques through The Nursery Pakistan's hands-on workshop experience.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Hands-On Flower Arrangement Workshop",
+      description:
+        "A practical flower-arrangement experience covering bouquet styling, floral design basics and bloom care.",
+      provider: { "@id": `${CANONICAL_ORIGIN}/#organization` },
+      url: `${CANONICAL_ORIGIN}/flower-workshop`,
+    },
+  },
+  "/guide": {
+    title: "Plant Care Guide for Pakistan | The Nursery Pakistan",
+    description:
+      "Use our practical Pakistan plant-care guide for watering, feeding, common plant problems and care tips for popular indoor plants.",
+  },
+  "/landscaping-services": {
+    title: "Landscaping Services in Kasur | The Nursery Pakistan",
+    description:
+      "Explore residential and commercial landscaping services in Kasur, including garden planning, planting and completed project inspiration.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Landscaping Services",
+      serviceType: "Garden landscaping and planting",
+      areaServed: { "@type": "City", name: "Kasur" },
+      provider: { "@id": `${CANONICAL_ORIGIN}/#organization` },
+      url: `${CANONICAL_ORIGIN}/landscaping-services`,
+    },
+  },
+  "/products": {
+    title: "Buy Plants, Pots & Garden Supplies Online in Pakistan",
+    description:
+      "Browse plants, pots, fertilizers, soil and garden accessories available online from The Nursery Pakistan.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Plants and Garden Supplies",
+      url: `${CANONICAL_ORIGIN}/products`,
+    },
+  },
+  "/projects": {
+    title: "Completed Landscaping Projects | The Nursery Pakistan",
+    description:
+      "Explore completed garden and landscaping projects by The Nursery Pakistan for ideas, design inspiration and proof of our work.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Completed Landscaping Projects",
+      url: `${CANONICAL_ORIGIN}/projects`,
+    },
+  },
+  "/workshops": {
+    title: "Current & Upcoming Flower Workshops | The Nursery Pakistan",
+    description:
+      "View current and upcoming hands-on flower workshops, available dates and booking information from The Nursery Pakistan.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Current and Upcoming Flower Workshops",
+      url: `${CANONICAL_ORIGIN}/workshops`,
+    },
+  },
+};
 
 const noIndexStaticPaths = new Set([
   "/account",
@@ -61,7 +174,7 @@ const normalizePath = (pathname: string) => {
 const routeDefaults = (pathname: string): SeoConfig => {
   const path = normalizePath(pathname);
   const indexable =
-    indexableStaticPaths.has(path) ||
+    Object.prototype.hasOwnProperty.call(staticSeo, path) ||
     categoryPaths.has(path) ||
     indexableDynamicPattern.test(path);
   const explicitlyNoIndex =
@@ -71,7 +184,33 @@ const routeDefaults = (pathname: string): SeoConfig => {
     return { noIndex: true };
   }
 
+  const category = CATEGORIES.find(({ slug }) => `/category/${slug}` === path);
+  const categoryDescription: Record<string, string> = {
+    "indoor-plants":
+      "Shop indoor plants for Pakistani homes, including easy-care and air-purifying varieties with practical care guidance.",
+    "outdoor-plants":
+      "Explore outdoor plants suited to Pakistan's climate for gardens, balconies and attractive green spaces.",
+    "pots-accessories":
+      "Shop plant pots, planters and useful garden accessories for indoor and outdoor planting.",
+    "fertilizers-soil":
+      "Find fertilizers, soil mixes and plant nutrition products for healthier plant growth in Pakistani conditions.",
+    sale: "Browse current offers on visible plants and garden supplies from The Nursery Pakistan.",
+  };
+
   return {
+    ...(staticSeo[path] ?? {}),
+    ...(category
+      ? {
+          title: `${category.name} Online in Pakistan | The Nursery Pakistan`,
+          description: categoryDescription[category.slug],
+          structuredData: {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: category.name,
+            url: `${CANONICAL_ORIGIN}${path}`,
+          },
+        }
+      : {}),
     canonicalPath: path,
     noIndex: false,
   };
@@ -101,9 +240,24 @@ const ensurePropertyMeta = (property: string) => {
 
 const applySeo = (config: SeoConfig) => {
   const noIndex = config.noIndex ?? false;
-  document.title = config.title || DEFAULT_TITLE;
-  ensureMeta("description").content = config.description || DEFAULT_DESCRIPTION;
+  const title = config.title || DEFAULT_TITLE;
+  const description = config.description || DEFAULT_DESCRIPTION;
+  const image = config.image || `${CANONICAL_ORIGIN}/portfolio-1.webp`;
+  document.title = title;
+  ensureMeta("description").content = description;
   ensureMeta("robots").content = noIndex ? "noindex, follow" : "index, follow";
+  ensurePropertyMeta("og:title").content = title;
+  ensurePropertyMeta("og:description").content = description;
+  ensurePropertyMeta("og:type").content = config.type || "website";
+  ensurePropertyMeta("og:image").content = image;
+  ensureMeta("twitter:card").content = "summary_large_image";
+  ensureMeta("twitter:title").content = title;
+  ensureMeta("twitter:description").content = description;
+  ensureMeta("twitter:image").content = image;
+
+  document
+    .querySelectorAll('script[type="application/ld+json"][data-seo-json-ld]')
+    .forEach((script) => script.remove());
 
   const existingCanonical = document.head.querySelector(
     'link[rel="canonical"]',
@@ -121,6 +275,19 @@ const applySeo = (config: SeoConfig) => {
   canonical.href = canonicalUrl;
   if (!existingCanonical) document.head.appendChild(canonical);
   ensurePropertyMeta("og:url").content = canonicalUrl;
+
+  const structuredItems = Array.isArray(config.structuredData)
+    ? config.structuredData
+    : config.structuredData
+      ? [config.structuredData]
+      : [];
+  structuredItems.forEach((item) => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.dataset.seoJsonLd = "true";
+    script.text = JSON.stringify(item);
+    document.head.appendChild(script);
+  });
 };
 
 export const SeoProvider = ({ children }: { children: ReactNode }) => {
@@ -160,6 +327,9 @@ export const usePageSeo = (config: SeoConfig | null) => {
   const description = config?.description;
   const canonicalPath = config?.canonicalPath;
   const noIndex = config?.noIndex;
+  const image = config?.image;
+  const type = config?.type;
+  const structuredDataJson = JSON.stringify(config?.structuredData ?? null);
 
   useEffect(() => {
     if (!context) {
@@ -167,7 +337,25 @@ export const usePageSeo = (config: SeoConfig | null) => {
     }
 
     if (!hasConfig) return;
-    context.setOverride({ title, description, canonicalPath, noIndex });
+    context.setOverride({
+      title,
+      description,
+      canonicalPath,
+      noIndex,
+      image,
+      type,
+      structuredData: structuredDataJson ? JSON.parse(structuredDataJson) : undefined,
+    });
     return () => context.setOverride(null);
-  }, [context, title, description, canonicalPath, noIndex, hasConfig]);
+  }, [
+    context,
+    title,
+    description,
+    canonicalPath,
+    noIndex,
+    image,
+    type,
+    structuredDataJson,
+    hasConfig,
+  ]);
 };

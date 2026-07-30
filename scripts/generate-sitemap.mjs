@@ -52,8 +52,9 @@ const staticPaths = [
   "/workshops",
 ];
 
-// TODO(seo): Review whether /flower-workshop and /workshops serve distinct
-// search intent. Keep both in the sitemap until that content decision is made.
+// These routes intentionally serve different search intent:
+// /flower-workshop explains the evergreen experience, while /workshops lists
+// current bookable workshop dates.
 
 const assertRows = (label, data) => {
   if (!Array.isArray(data)) {

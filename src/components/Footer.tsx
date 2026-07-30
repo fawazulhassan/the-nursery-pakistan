@@ -11,6 +11,9 @@ const QUICK_LINKS = [
   { label: "About Us", to: "/about" },
   { label: "Shop All", to: "/products" },
   { label: "Plant Care Guide", to: "/guide" },
+  { label: "Plant Care Blog", to: "/blogs" },
+  { label: "Completed Projects", to: "/projects" },
+  { label: "Current Workshops", to: "/workshops" },
   { label: "Delivery Info", to: "/account?tab=addresses" },
   { label: "Track Order", to: "/account?tab=orders" },
 ] as const;
@@ -21,7 +24,7 @@ const CATEGORY_LINKS = [
     to: `/category/${category.slug}`,
   })),
   { label: "Landscaping", to: "/landscaping-services" },
-  { label: "Workshop", to: "/flower-workshop" },
+  { label: "Workshop Experience", to: "/flower-workshop" },
 ] as const;
 
 const Footer = () => {

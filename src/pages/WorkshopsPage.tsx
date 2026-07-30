@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getPublishedWorkshops, type WorkshopRow } from "@/lib/workshops";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const PAGE_SIZE = 12;
 
@@ -56,12 +57,18 @@ const WorkshopsPage = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Flower Workshop Experience", to: "/flower-workshop" },
+            { label: "Current Workshops" },
+          ]}
+        />
         <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold">Our Floral Workshops</h1>
             <p className="text-muted-foreground mt-1">
-              Learn the art of arrangement from our expert florists. A live, hands-on experience crafted for beginners
-              and enthusiasts alike.
+              Browse current and upcoming bookable dates for our live flower-arrangement
+              workshops. For an overview of what you will learn, visit the workshop experience page.
             </p>
           </div>
           <Link to="/flower-workshop">

@@ -17,6 +17,8 @@ import { createBooking, getSlotsByWorkshop, type WorkshopSlotWithCount } from "@
 import { sendEmail } from "@/lib/sendEmail";
 import { getWorkshopBySlug, type WorkshopRow } from "@/lib/workshops";
 import { usePageSeo } from "@/components/SeoManager";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat("en-US", {
@@ -83,6 +85,27 @@ const WorkshopPostPage = () => {
             description: workshop.description.slice(0, 160),
             canonicalPath: `/workshop/${workshop.slug}`,
             noIndex: false,
+            image: workshop.cover_image_url,
+            type: "article",
+            structuredData: [
+              createBreadcrumbSchema([
+                { name: "Home", path: "/" },
+                { name: "Workshops", path: "/workshops" },
+                { name: workshop.title, path: `/workshop/${workshop.slug}` },
+              ]),
+              {
+                "@context": "https://schema.org",
+                "@type": "Event",
+                name: workshop.title,
+                description: workshop.description,
+                image: [workshop.cover_image_url],
+                startDate: workshop.workshop_date,
+                eventStatus: "https://schema.org/EventScheduled",
+                eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+                organizer: { "@id": "https://nurserypakistan.pk/#organization" },
+                url: `https://nurserypakistan.pk/workshop/${workshop.slug}`,
+              },
+            ],
           }
         : {
             title: "Workshop Not Found | The Nursery Pakistan",
@@ -204,6 +227,12 @@ const WorkshopPostPage = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Workshops", to: "/workshops" },
+            { label: workshop?.title || "Workshop" },
+          ]}
+        />
         <Button variant="outline" className="mb-6" onClick={() => navigate("/workshops")}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Workshops
