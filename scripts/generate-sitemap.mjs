@@ -52,6 +52,79 @@ const staticPaths = [
   "/workshops",
 ];
 
+const staticSeo = {
+  "/": [
+    "Buy Plants Online in Pakistan | The Nursery Pakistan",
+    "Shop indoor and outdoor plants, pots, fertilizers and garden accessories online from The Nursery Pakistan, with practical plant-care guidance.",
+    "Buy plants and garden supplies online in Pakistan",
+  ],
+  "/about": [
+    "About The Nursery Pakistan | Plants & Garden Care",
+    "Learn about The Nursery Pakistan, our passion for quality plants, reliable gardening supplies and practical support for plant lovers.",
+    "About The Nursery Pakistan",
+  ],
+  "/blogs": [
+    "Plant Care Blog Pakistan | The Nursery Pakistan",
+    "Read practical plant-care advice, seasonal gardening tips and workshop updates created for plant lovers in Pakistan.",
+    "Plant care advice for Pakistan",
+  ],
+  "/flower-workshop": [
+    "Hands-On Flower Arrangement Workshop | The Nursery Pakistan",
+    "Learn flower arrangement, bouquet styling and bloom-care techniques through The Nursery Pakistan's hands-on workshop experience.",
+    "Hands-on flower arrangement workshop",
+  ],
+  "/guide": [
+    "Plant Care Guide for Pakistan | The Nursery Pakistan",
+    "Use our practical Pakistan plant-care guide for watering, feeding, common plant problems and care tips for popular indoor plants.",
+    "Plant care guide for Pakistan",
+  ],
+  "/landscaping-services": [
+    "Landscaping Services in Kasur | The Nursery Pakistan",
+    "Explore residential and commercial landscaping services in Kasur, including garden planning, planting and completed project inspiration.",
+    "Landscaping services in Kasur",
+  ],
+  "/products": [
+    "Buy Plants, Pots & Garden Supplies Online in Pakistan",
+    "Browse plants, pots, fertilizers, soil and garden accessories available online from The Nursery Pakistan.",
+    "Plants and garden supplies",
+  ],
+  "/projects": [
+    "Completed Landscaping Projects | The Nursery Pakistan",
+    "Explore completed garden and landscaping projects by The Nursery Pakistan for ideas, design inspiration and proof of our work.",
+    "Completed landscaping projects",
+  ],
+  "/workshops": [
+    "Current & Upcoming Flower Workshops | The Nursery Pakistan",
+    "View current and upcoming hands-on flower workshops, available dates and booking information from The Nursery Pakistan.",
+    "Current and upcoming flower workshops",
+  ],
+  "/category/indoor-plants": [
+    "Indoor Plants Online in Pakistan | The Nursery Pakistan",
+    "Shop indoor plants for Pakistani homes, including easy-care and air-purifying varieties with practical care guidance.",
+    "Indoor plants",
+  ],
+  "/category/outdoor-plants": [
+    "Outdoor Plants Online in Pakistan | The Nursery Pakistan",
+    "Explore outdoor plants suited to Pakistan's climate for gardens, balconies and attractive green spaces.",
+    "Outdoor plants",
+  ],
+  "/category/pots-accessories": [
+    "Pots & Accessories Online in Pakistan | The Nursery Pakistan",
+    "Shop plant pots, planters and useful garden accessories for indoor and outdoor planting.",
+    "Pots and garden accessories",
+  ],
+  "/category/fertilizers-soil": [
+    "Fertilizers & Soil Online in Pakistan | The Nursery Pakistan",
+    "Find fertilizers, soil mixes and plant nutrition products for healthier plant growth in Pakistani conditions.",
+    "Fertilizers and soil",
+  ],
+  "/category/sale": [
+    "Sale Online in Pakistan | The Nursery Pakistan",
+    "Browse current offers on visible plants and garden supplies from The Nursery Pakistan.",
+    "Plants and garden supplies on sale",
+  ],
+};
+
 // These routes intentionally serve different search intent:
 // /flower-workshop explains the evergreen experience, while /workshops lists
 // current bookable workshop dates.
@@ -76,26 +149,26 @@ const [products, blogs, workshops, projects] = await Promise.all([
     "visible products",
     supabase
       .from("products")
-      .select("id, updated_at, sale_percentage, sale_start_at, sale_end_at")
+      .select("id, name, description, category, price, stock_quantity, image_url, image_urls, updated_at, sale_percentage, sale_start_at, sale_end_at")
       .eq("is_visible", true),
   ),
   runQuery(
     "published blogs",
     supabase
       .from("blogs")
-      .select("slug, published_at, updated_at")
+      .select("slug, title, excerpt, featured_image_url, published_at, updated_at")
       .eq("is_published", true),
   ),
   runQuery(
     "active workshops",
     supabase
       .from("workshops")
-      .select("slug, updated_at")
+      .select("slug, title, description, workshop_date, cover_image_url, updated_at")
       .eq("is_active", true),
   ),
   runQuery(
     "completed projects",
-    supabase.from("completed_projects").select("slug, updated_at"),
+    supabase.from("completed_projects").select("slug, title, description, cover_image_url, updated_at"),
   ),
 ]);
 
@@ -129,6 +202,20 @@ const safeSegment = (value) => {
   return encodeURIComponent(trimmed);
 };
 
+const slugifyProductName = (name) => {
+  const slug = String(name || "product")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 70);
+  return slug || "product";
+};
+
+const productPath = (product) =>
+  `/product/${slugifyProductName(product.name)}--${product.id}`;
+
 const entries = staticPaths.map((pathname) => ({ pathname }));
 
 if (products.some((product) => isActiveSale(product))) {
@@ -139,7 +226,7 @@ for (const product of products) {
   const id = safeSegment(product.id);
   if (!id) continue;
   entries.push({
-    pathname: `/product/${id}`,
+    pathname: productPath(product),
     lastmod: toLastModified(product.updated_at),
   });
 }
@@ -214,6 +301,87 @@ if (!xml.includes("<urlset") || !xml.includes("<loc>")) {
 
 const outputPath = path.join(projectRoot, "public", "sitemap.xml");
 await writeFile(outputPath, xml, "utf8");
+
+const seoPages = staticPaths.map((pathname) => {
+  const [title, description, heading] = staticSeo[pathname];
+  return { pathname, title, description, heading };
+});
+
+if (products.some((product) => isActiveSale(product))) {
+  const [title, description, heading] = staticSeo["/category/sale"];
+  seoPages.push({ pathname: "/category/sale", title, description, heading });
+}
+
+for (const product of products) {
+  const pathname = productPath(product);
+  seoPages.push({
+    pathname,
+    title: `${product.name} | The Nursery Pakistan`,
+    description:
+      product.description?.slice(0, 160) ||
+      `Shop ${product.name} from The Nursery Pakistan.`,
+    heading: product.name,
+    image: product.image_urls?.[0] || product.image_url,
+    type: "product",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.name,
+      description: product.description,
+      image: product.image_urls?.length ? product.image_urls : [product.image_url].filter(Boolean),
+      sku: product.id,
+      category: product.category,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "PKR",
+        price: String(product.price),
+        availability:
+          Number(product.stock_quantity) > 0
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+        url: `${CANONICAL_ORIGIN}${pathname}`,
+      },
+    },
+  });
+}
+
+for (const blog of blogs) {
+  const pathname = `/blog/${safeSegment(blog.slug)}`;
+  seoPages.push({
+    pathname,
+    title: `${blog.title} | The Nursery Pakistan`,
+    description: blog.excerpt,
+    heading: blog.title,
+    image: blog.featured_image_url,
+    type: "article",
+  });
+}
+
+for (const workshop of workshops) {
+  const pathname = `/workshop/${safeSegment(workshop.slug)}`;
+  seoPages.push({
+    pathname,
+    title: `${workshop.title} | The Nursery Pakistan`,
+    description: workshop.description.slice(0, 160),
+    heading: workshop.title,
+    image: workshop.cover_image_url,
+    type: "article",
+  });
+}
+
+for (const project of projects) {
+  const pathname = `/project/${safeSegment(project.slug)}`;
+  seoPages.push({
+    pathname,
+    title: `${project.title} | The Nursery Pakistan`,
+    description: project.description.slice(0, 160),
+    heading: project.title,
+    image: project.cover_image_url,
+  });
+}
+
+const seoManifestPath = path.join(projectRoot, "scripts", ".seo-pages.json");
+await writeFile(seoManifestPath, JSON.stringify(seoPages, null, 2), "utf8");
 
 console.log(
   `Sitemap written to ${path.relative(projectRoot, outputPath)} with ${sitemapEntries.length} URLs ` +

@@ -15,6 +15,7 @@ import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/produ
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { productPath } from "@/lib/productUrls";
 
 const CATEGORIES = [
   { name: "All", value: "all" },
@@ -181,12 +182,16 @@ const ProductsPage = () => {
                     className="group hover:shadow-xl transition-all duration-300 animate-fade-in overflow-hidden border-border"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-muted">
+                    <Link to={productPath(product)} className="block relative overflow-hidden bg-muted">
                       <img
                         src={productImage}
                         alt={product.name}
                         className="w-full h-40 sm:h-52 lg:h-64 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                         loading="lazy"
+                        decoding="async"
+                        width="600"
+                        height="600"
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                       />
                       <Button
                         size="icon"
@@ -237,7 +242,7 @@ const ProductsPage = () => {
                       <div className="text-xs text-muted-foreground mb-1">
                         {product.category}
                       </div>
-                      <Link to={`/product/${product.id}`}>
+                      <Link to={productPath(product)}>
                         <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-foreground hover:text-primary line-clamp-2">
                           {product.name}
                         </h3>

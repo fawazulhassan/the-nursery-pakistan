@@ -91,6 +91,9 @@ const ProjectsPage = () => {
                     alt={project.title}
                     className="h-44 w-full object-cover"
                     loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="600"
                   />
                 </Link>
                 <CardContent className="p-5">

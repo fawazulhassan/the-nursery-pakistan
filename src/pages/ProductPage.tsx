@@ -21,6 +21,7 @@ import { usePageSeo } from "@/components/SeoManager";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { CATEGORIES } from "@/lib/constants";
 import { createBreadcrumbSchema } from "@/lib/seoSchemas";
+import { productIdFromRoute, productPath } from "@/lib/productUrls";
 
 const isEditableKeyboardTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -31,6 +32,7 @@ const isEditableKeyboardTarget = (target: EventTarget | null) => {
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
+  const productId = productIdFromRoute(id);
   const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
@@ -41,6 +43,7 @@ const ProductPage = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { user } = useAuth();
+  const preferredProductPath = product ? productPath(product) : undefined;
 
   usePageSeo(
     isLoading
@@ -54,7 +57,7 @@ const ProductPage = () => {
             description:
               product.description?.slice(0, 160) ||
               `Shop ${product.name} from The Nursery Pakistan.`,
-            canonicalPath: `/product/${product.id}`,
+            canonicalPath: preferredProductPath,
             noIndex: false,
             image: resolvePrimaryProductImage(product),
             type: "product",
@@ -62,7 +65,7 @@ const ProductPage = () => {
               createBreadcrumbSchema([
                 { name: "Home", path: "/" },
                 { name: "Products", path: "/products" },
-                { name: product.name, path: `/product/${product.id}` },
+                { name: product.name, path: preferredProductPath! },
               ]),
               {
                 "@context": "https://schema.org",
@@ -80,7 +83,7 @@ const ProductPage = () => {
                     Number(product.stock_quantity) > 0
                       ? "https://schema.org/InStock"
                       : "https://schema.org/OutOfStock",
-                  url: `https://nurserypakistan.pk/product/${product.id}`,
+                  url: `https://nurserypakistan.pk${preferredProductPath}`,
                 },
               },
             ],
@@ -93,8 +96,21 @@ const ProductPage = () => {
   );
 
   useEffect(() => {
-    if (id) fetchProduct();
-  }, [id]);
+    if (productId) {
+      fetchProduct(productId);
+    } else {
+      setProduct(null);
+      setIsLoading(false);
+    }
+  }, [productId]);
+
+  useEffect(() => {
+    if (!product || !id) return;
+    const preferredPath = productPath(product);
+    if (`/product/${id}` !== preferredPath) {
+      navigate(preferredPath, { replace: true });
+    }
+  }, [id, navigate, product]);
 
   useEffect(() => {
     if (!product) {
@@ -105,11 +121,10 @@ const ProductPage = () => {
     setSelectedImage(images[0] ?? resolvePrimaryProductImage(product));
   }, [product]);
 
-  const fetchProduct = async () => {
-    if (!id) return;
+  const fetchProduct = async (resolvedId: string) => {
     setIsLoading(true);
     try {
-      const { data, error } = await fetchProductsWithFallback({ id });
+      const { data, error } = await fetchProductsWithFallback({ id: resolvedId });
 
       if (error) throw error;
       setProduct((data || [])[0] || null);
@@ -287,7 +302,12 @@ const ProductPage = () => {
                     src={mainImage}
                     alt={product.name}
                     className="w-full h-full object-cover object-center"
-                    loading="lazy"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    width="900"
+                    height="900"
+                    sizes="(min-width: 768px) 50vw, 100vw"
                   />
                   {productImages.length > 1 && (
                     <>
@@ -327,6 +347,9 @@ const ProductPage = () => {
                             alt={`${product.name} thumbnail ${index + 1}`}
                             className="w-16 h-16 object-cover object-center"
                             loading="lazy"
+                            decoding="async"
+                            width="64"
+                            height="64"
                           />
                         </button>
                       ))}

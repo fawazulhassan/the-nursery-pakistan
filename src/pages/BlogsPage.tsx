@@ -105,6 +105,9 @@ const BlogsPage = () => {
                       alt={blog.title}
                       className="h-44 w-full object-cover"
                       loading="lazy"
+                      decoding="async"
+                      width="800"
+                      height="450"
                     />
                   ) : (
                     <div className="h-44 bg-gradient-to-br from-nature-mint to-nature-sage" />

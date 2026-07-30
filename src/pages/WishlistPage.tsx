@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Heart, ShoppingCart, Trash2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { productPath } from "@/lib/productUrls";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -106,7 +107,7 @@ const WishlistPage = () => {
 
                   return (
                     <Card key={item.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
-                      <Link to={`/product/${item.id}`} className="block relative overflow-hidden bg-muted">
+                      <Link to={productPath(item)} className="block relative overflow-hidden bg-muted">
                         <img
                           src={item.image_url}
                           alt={item.name}
@@ -134,7 +135,7 @@ const WishlistPage = () => {
                       </Link>
 
                       <CardContent className="p-3 sm:p-4">
-                        <Link to={`/product/${item.id}`}>
+                        <Link to={productPath(item)}>
                           <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-foreground hover:text-primary line-clamp-2">
                             {item.name}
                           </h3>

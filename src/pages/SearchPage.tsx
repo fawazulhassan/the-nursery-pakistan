@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
+import { productPath } from "@/lib/productUrls";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
@@ -112,7 +113,7 @@ const SearchPage = () => {
                     key={product.id}
                     className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-border"
                   >
-                    <Link to={`/product/${product.id}`} className="block">
+                    <Link to={productPath(product)} className="block">
                       <div className="relative overflow-hidden bg-muted">
                         <img
                           src={productImage}
@@ -136,7 +137,7 @@ const SearchPage = () => {
                     </Link>
                     <CardContent className="p-3 sm:p-4">
                       <div className="text-xs text-muted-foreground mb-1">{product.category}</div>
-                      <Link to={`/product/${product.id}`}>
+                      <Link to={productPath(product)}>
                         <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-foreground hover:text-primary line-clamp-2">
                           {product.name}
                         </h3>

@@ -16,7 +16,19 @@
   ],
   "rewrites": [
     {
-      "source": "/:page(about|products|guide|landscaping-services|flower-workshop|workshops|blogs|projects|search|cart|wishlist|auth|checkout|my-orders|account)",
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/product/:id([0-9a-fA-F-]{36})",
+      "destination": "/api/product-redirect?id=:id"
+    },
+    {
+      "source": "/:page(about|products|guide|landscaping-services|flower-workshop|workshops|blogs|projects)",
+      "destination": "/:page/index.html"
+    },
+    {
+      "source": "/:page(search|cart|wishlist|auth|checkout|my-orders|account)",
       "destination": "/index.html"
     },
     {
@@ -25,7 +37,7 @@
     },
     {
       "source": "/:section(category|product|workshop|blog|project)/:value",
-      "destination": "/index.html"
+      "destination": "/:section/:value/index.html"
     },
     {
       "source": "/admin/:path*",

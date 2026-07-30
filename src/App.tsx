@@ -9,42 +9,44 @@ import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
-import CategoryPage from "./pages/CategoryPage";
-import ProductsPage from "./pages/ProductsPage";
-import GuidePage from "./pages/GuidePage";
-import AboutPage from "./pages/AboutPage";
-import SearchPage from "./pages/SearchPage";
-import ProductPage from "./pages/ProductPage";
-import CartPage from "./pages/CartPage";
-import WishlistPage from "@/pages/WishlistPage";
-import CheckoutPage from "./pages/CheckoutPage";
-import AuthPage from "./pages/AuthPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminUsersPage from "./pages/AdminUsersPage";
-import AdminOrdersPage from "./pages/AdminOrdersPage";
-import AdminReviewsPage from "./pages/AdminReviewsPage";
-import AdminBlogsPage from "./pages/AdminBlogsPage";
-import AdminSubscribersPage from "./pages/AdminSubscribersPage";
-import MyOrdersPage from "./pages/MyOrdersPage";
-import AccountPage from "./pages/AccountPage";
-import LandscapingServicesPage from "./pages/LandscapingServicesPage";
-import ConsultationRequestPage from "./pages/ConsultationRequestPage";
-import FlowerWorkshopPage from "./pages/FlowerWorkshopPage";
-import WorkshopsPage from "./pages/WorkshopsPage";
-import WorkshopPostPage from "./pages/WorkshopPostPage";
-import BlogsPage from "./pages/BlogsPage";
-import BlogPostPage from "./pages/BlogPostPage";
-import ProjectsPage from "./pages/ProjectsPage";
-import ProjectPostPage from "./pages/ProjectPostPage";
-import AdminLandscapingProjectsPage from "./pages/AdminLandscapingProjectsPage";
-import AdminConsultationRequestsPage from "./pages/AdminConsultationRequestsPage";
-import AdminWorkshopsPage from "./pages/AdminWorkshopsPage";
-import AdminWorkshopSlotsPage from "./pages/AdminWorkshopSlotsPage";
-import AdminWorkshopBookingsPage from "./pages/AdminWorkshopBookingsPage";
-import NotFound from "./pages/NotFound";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SeoProvider } from "@/components/SeoManager";
+import { lazy, Suspense } from "react";
+
+const CategoryPage = lazy(() => import("./pages/CategoryPage"));
+const ProductsPage = lazy(() => import("./pages/ProductsPage"));
+const GuidePage = lazy(() => import("./pages/GuidePage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const SearchPage = lazy(() => import("./pages/SearchPage"));
+const ProductPage = lazy(() => import("./pages/ProductPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
+const WishlistPage = lazy(() => import("@/pages/WishlistPage"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminUsersPage = lazy(() => import("./pages/AdminUsersPage"));
+const AdminOrdersPage = lazy(() => import("./pages/AdminOrdersPage"));
+const AdminReviewsPage = lazy(() => import("./pages/AdminReviewsPage"));
+const AdminBlogsPage = lazy(() => import("./pages/AdminBlogsPage"));
+const AdminSubscribersPage = lazy(() => import("./pages/AdminSubscribersPage"));
+const MyOrdersPage = lazy(() => import("./pages/MyOrdersPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
+const LandscapingServicesPage = lazy(() => import("./pages/LandscapingServicesPage"));
+const ConsultationRequestPage = lazy(() => import("./pages/ConsultationRequestPage"));
+const FlowerWorkshopPage = lazy(() => import("./pages/FlowerWorkshopPage"));
+const WorkshopsPage = lazy(() => import("./pages/WorkshopsPage"));
+const WorkshopPostPage = lazy(() => import("./pages/WorkshopPostPage"));
+const BlogsPage = lazy(() => import("./pages/BlogsPage"));
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
+const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
+const ProjectPostPage = lazy(() => import("./pages/ProjectPostPage"));
+const AdminLandscapingProjectsPage = lazy(() => import("./pages/AdminLandscapingProjectsPage"));
+const AdminConsultationRequestsPage = lazy(() => import("./pages/AdminConsultationRequestsPage"));
+const AdminWorkshopsPage = lazy(() => import("./pages/AdminWorkshopsPage"));
+const AdminWorkshopSlotsPage = lazy(() => import("./pages/AdminWorkshopSlotsPage"));
+const AdminWorkshopBookingsPage = lazy(() => import("./pages/AdminWorkshopBookingsPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -74,7 +76,14 @@ const ProtectedRoute = ({ children, adminOnly = false }: { children: React.React
 
 const AppRoutes = () => {
   return (
-    <Routes>
+    <Suspense
+      fallback={
+        <main className="min-h-[60vh] flex items-center justify-center" aria-live="polite">
+          <span className="text-muted-foreground">Loading page...</span>
+        </main>
+      }
+    >
+      <Routes>
       {/* Public routes - accessible without login */}
       <Route path="/" element={<Index />} />
       <Route path="/category/:category" element={<CategoryPage />} />
@@ -115,7 +124,8 @@ const AppRoutes = () => {
       <Route path="/admin/subscribers" element={<ProtectedRoute adminOnly><AdminSubscribersPage /></ProtectedRoute>} />
       
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 };
 

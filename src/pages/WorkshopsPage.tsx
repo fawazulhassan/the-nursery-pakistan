@@ -104,6 +104,9 @@ const WorkshopsPage = () => {
                     alt={workshop.title}
                     className="h-44 w-full object-cover"
                     loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="450"
                   />
                 </Link>
                 <CardContent className="p-5">

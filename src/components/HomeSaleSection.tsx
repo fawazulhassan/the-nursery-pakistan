@@ -8,43 +8,43 @@ import ProductDetailDialog from "./ProductDetailDialog";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
+import { productPath } from "@/lib/productUrls";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import type { Tables } from "@/integrations/supabase/types";
+
+type ProductRow = Tables<"products">;
 
 const HomeSaleSection = () => {
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [products, setProducts] = useState<any[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<ProductRow | null>(null);
+  const [products, setProducts] = useState<ProductRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchSaleProducts();
-  }, []);
+    const loadSaleProducts = async () => {
+      try {
+        const { data, error } = await fetchProductsWithFallback({
+          saleOnly: true,
+          limit: 6,
+        });
+        if (error) throw error;
+        setProducts((data || []).filter((product) => isSaleActive(product)));
+      } catch {
+        toast({
+          title: "Error",
+          description: "Failed to load sale products",
+          variant: "destructive",
+        });
+        setProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    void loadSaleProducts();
+  }, [toast]);
 
-  const fetchSaleProducts = async () => {
-    try {
-      const { data, error } = await fetchProductsWithFallback({
-        saleOnly: true,
-        limit: 6,
-      });
-
-      if (error) throw error;
-
-      const filtered = (data || []).filter((p) => isSaleActive(p));
-      setProducts(filtered);
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: "Failed to load sale products",
-        variant: "destructive",
-      });
-      setProducts([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleBuyNow = (product: any) => {
+  const handleBuyNow = (product: ProductRow) => {
     const effectivePrice = getEffectivePrice(product);
     const productImage = resolvePrimaryProductImage(product);
     navigate("/checkout", {
@@ -92,12 +92,16 @@ const HomeSaleSection = () => {
               key={product.id}
               className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-border"
             >
-              <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-muted">
+              <Link to={productPath(product)} className="block relative overflow-hidden bg-muted">
                 <img
                   src={productImage}
                   alt={product.name}
                   className="w-full h-40 sm:h-48 lg:h-56 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                   loading="lazy"
+                  decoding="async"
+                  width="600"
+                  height="600"
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-red-500 text-white text-sm px-3 py-1">
@@ -108,7 +112,7 @@ const HomeSaleSection = () => {
               </Link>
               <CardContent className="p-3 sm:p-4">
                 <div className="text-xs text-muted-foreground mb-1">{product.category}</div>
-                <Link to={`/product/${product.id}`}>
+                <Link to={productPath(product)}>
                   <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-foreground hover:text-primary line-clamp-2">
                     {product.name}
                   </h3>

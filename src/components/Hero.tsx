@@ -133,6 +133,11 @@ const Hero = () => {
                   alt={slide.alt}
                   className="h-full w-full max-w-full object-cover"
                   loading={index === 0 ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  decoding="async"
+                  width="1600"
+                  height="620"
+                  sizes="100vw"
                 />
                 {slide.useOverlay ? (
                   <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent pointer-events-none" />
