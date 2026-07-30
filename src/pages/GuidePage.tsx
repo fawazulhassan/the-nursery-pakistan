@@ -43,6 +43,57 @@ type PopularPlant = {
   imageCandidates: string[];
 };
 
+const plantCareTopics = [
+  {
+    title: "Best Indoor Plants for Pakistan",
+    description: "Choose beginner-friendly indoor plants suited to Pakistani homes and weather.",
+    to: "/blog/best-indoor-plants-pakistan-2026",
+  },
+  {
+    title: "Plant Care in Pakistani Summer",
+    description: "Protect indoor and outdoor plants from intense heat, dry soil, and leaf stress.",
+    to: "/blog/care-for-plants-pakistani-summer-2026",
+  },
+  {
+    title: "Why Your Plants Are Dying",
+    description: "Check watering, drainage, light, pests, and other common causes in a clear order.",
+    to: "/blog/pakistan-plant-crisis-why-plants-dying-2026",
+  },
+  {
+    title: "Best Fertilizers for Home Gardens",
+    description: "Understand bone meal and other fertilizer choices for healthier roots and blooms.",
+    to: "/blog/best-fertilizers-home-garden-pakistan-bone-meal",
+  },
+  {
+    title: "Grow a Kitchen Herb Garden",
+    description: "Start a useful herb garden at home with practical growing advice for Pakistan.",
+    to: "/blog/grow-kitchen-herb-garden-home-pakistan",
+  },
+] as const;
+
+const plantCareFaqs = [
+  {
+    question: "How often should indoor plants be watered in Pakistan?",
+    answer:
+      "Check the soil instead of following a fixed calendar. Water when the top layer feels dry, and reduce watering during cooler months or when the soil stays wet longer.",
+  },
+  {
+    question: "How can I protect plants during Pakistan's summer?",
+    answer:
+      "Keep sensitive plants away from harsh afternoon sun, water deeply when the soil needs it, improve airflow, and use mulch for outdoor pots to slow moisture loss.",
+  },
+  {
+    question: "Why do plant leaves turn yellow?",
+    answer:
+      "Common causes include overwatering, poor drainage, low light, root stress, and nutrient problems. Check soil moisture and drainage before adding fertilizer.",
+  },
+  {
+    question: "Which indoor plants are easiest for beginners?",
+    answer:
+      "Snake plant, money plant, aloe vera, and several pothos varieties are popular beginner choices when they receive suitable light and are not overwatered.",
+  },
+] as const;
+
 const resolveGuideImageUrls = (imageCandidates?: string[] | null): string[] => {
   if (!Array.isArray(imageCandidates)) return [];
   return imageCandidates.filter((url): url is string => typeof url === "string" && url.trim().length > 0);
@@ -173,11 +224,12 @@ const GuidePage = () => {
               Back to Home
             </Link>
             <h1 className="text-3xl font-bold text-foreground md:text-4xl">
-              How to Use Bone Meal Fertilizer
+              Plant Care Guide for Pakistan
             </h1>
             <p className="mt-3 max-w-4xl text-sm leading-6 text-muted-foreground md:text-base">
-              Bone meal supports root development, improves flowering, and helps plants stay healthier.
-              Follow this practical guide to apply it correctly for better growth results.
+              Learn how to choose, water, feed, and protect indoor and outdoor plants in
+              Pakistan&apos;s changing seasons. Use the topic guides below, then follow our
+              practical bone meal instructions and problem-solving checklist.
             </p>
           </div>
         </section>
@@ -185,6 +237,33 @@ const GuidePage = () => {
         <section className="py-8 md:py-10">
           <div className="container mx-auto px-4">
             <div className="space-y-6">
+              <section className="rounded-xl border border-border bg-card p-4 md:p-6">
+                <h2 className="text-2xl font-semibold text-foreground">
+                  Explore Plant Care Topics
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground md:text-base">
+                  Start with the problem or goal that matches your plants. These guides are
+                  written for common Pakistani home and garden conditions.
+                </p>
+                <div className="mt-5 grid gap-4 md:grid-cols-2">
+                  {plantCareTopics.map((topic) => (
+                    <article key={topic.to} className="rounded-lg border border-border bg-background p-4">
+                      <h3 className="font-semibold text-foreground">
+                        <Link to={topic.to} className="hover:text-primary">
+                          {topic.title}
+                        </Link>
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {topic.description}
+                      </p>
+                      <Link to={topic.to} className="mt-3 inline-flex text-sm font-medium text-primary">
+                        Read guide →
+                      </Link>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
               <section className="rounded-xl border border-border bg-card p-4 md:p-5">
                 <h2 className="text-xl font-semibold text-foreground">How to Use Bone Meal Fertilizer</h2>
                 <div className="mt-4 grid grid-cols-2 gap-3">
@@ -304,6 +383,20 @@ const GuidePage = () => {
                 </p>
               </section>
 
+              <section className="rounded-xl border border-border bg-card p-4 md:p-6">
+                <h2 className="text-2xl font-semibold text-foreground">
+                  Plant Care Questions
+                </h2>
+                <div className="mt-4 space-y-4">
+                  {plantCareFaqs.map((faq) => (
+                    <article key={faq.question} className="rounded-lg border border-border bg-background p-4">
+                      <h3 className="font-semibold text-foreground">{faq.question}</h3>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{faq.answer}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
               <section className="rounded-xl border border-border bg-card p-4 text-center md:p-6">
                 <h3 className="text-2xl font-semibold text-foreground">Need Help Choosing the Right Plant?</h3>
                 <div className="mt-4 flex flex-col justify-center gap-3 sm:flex-row">
@@ -332,4 +425,3 @@ const GuidePage = () => {
 };
 
 export default GuidePage;
-

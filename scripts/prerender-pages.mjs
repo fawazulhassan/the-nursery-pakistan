@@ -63,7 +63,12 @@ for (const page of pages) {
 
   const canonical = new URL(page.pathname, ORIGIN).href;
   const image = page.image || `${ORIGIN}/portfolio-1.webp`;
-  const schemas = [breadcrumbSchema(page), ...(page.structuredData ? [page.structuredData] : [])];
+  const pageSchemas = Array.isArray(page.structuredData)
+    ? page.structuredData
+    : page.structuredData
+      ? [page.structuredData]
+      : [];
+  const schemas = [breadcrumbSchema(page), ...pageSchemas];
   const head = [
     `<title>${escapeHtml(page.title)}</title>`,
     `<meta name="description" content="${escapeHtml(page.description)}">`,

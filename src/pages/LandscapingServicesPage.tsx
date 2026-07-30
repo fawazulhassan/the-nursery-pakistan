@@ -22,6 +22,24 @@ const isVideoUrl = (url: string): boolean => {
   return VIDEO_EXTENSIONS.some((extension) => normalized.endsWith(extension));
 };
 
+const landscapingFaqs = [
+  {
+    question: "Which landscaping services are available in Pakistan?",
+    answer:
+      "We provide garden planning, plant selection, planting, and landscaping consultation for suitable residential and commercial projects in Pakistan.",
+  },
+  {
+    question: "How do I request a landscaping consultation?",
+    answer:
+      "Use our consultation form and share your location, space details, and project goals. We can then review your request and discuss the next step.",
+  },
+  {
+    question: "Can I view completed landscaping work?",
+    answer:
+      "Yes. The completed projects section on this page shows published landscaping work from The Nursery Pakistan.",
+  },
+] as const;
+
 const LandscapingServicesPage = () => {
   const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
@@ -137,10 +155,12 @@ const LandscapingServicesPage = () => {
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="space-y-5">
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight text-foreground">
-                  Welcome, Our Landscaping Services
+                  Landscaping Services in Pakistan
                 </h1>
                 <p className="text-muted-foreground text-lg max-w-xl">
-                With a passion for plants and a commitment to excellence, we offer comprehensive landscaping and plant maintenance services to our green community
+                  We help suitable homes and businesses in Pakistan plan greener outdoor
+                  spaces through practical garden design, plant selection, planting, and
+                  landscaping consultation.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild>
@@ -313,6 +333,30 @@ const LandscapingServicesPage = () => {
                 )}
               </div>
             )}
+
+            <section className="mt-12 rounded-xl border border-border bg-card p-5 md:p-7">
+              <h2 className="text-3xl font-bold text-foreground">
+                Landscaping Questions
+              </h2>
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                {landscapingFaqs.map((faq) => (
+                  <article key={faq.question} className="rounded-lg border border-border bg-background p-4">
+                    <h3 className="font-semibold text-foreground">{faq.question}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{faq.answer}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button asChild>
+                  <Link to="/landscaping-services/request-consultation">
+                    Request a Consultation
+                  </Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link to="/projects">View All Projects</Link>
+                </Button>
+              </div>
+            </section>
 
             <section className="mt-12 border-t pt-10">
               <h2 className="text-3xl font-bold text-foreground mb-3">Customer Reviews</h2>

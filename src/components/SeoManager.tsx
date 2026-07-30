@@ -51,6 +51,76 @@ const organizationSchema = {
   ],
 };
 
+const guideFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How often should indoor plants be watered in Pakistan?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Check the soil instead of following a fixed calendar. Water when the top layer feels dry, and reduce watering during cooler months or when the soil stays wet longer.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How can I protect plants during Pakistan's summer?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Keep sensitive plants away from harsh afternoon sun, water deeply when the soil needs it, improve airflow, and use mulch for outdoor pots to slow moisture loss.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Why do plant leaves turn yellow?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Common causes include overwatering, poor drainage, low light, root stress, and nutrient problems. Check soil moisture and drainage before adding fertilizer.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Which indoor plants are easiest for beginners?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Snake plant, money plant, aloe vera, and several pothos varieties are popular beginner choices when they receive suitable light and are not overwatered.",
+      },
+    },
+  ],
+};
+
+const landscapingFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Which landscaping services are available in Kasur?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The Nursery Pakistan provides garden planning, plant selection, planting, and landscaping consultation for suitable residential and commercial projects in Kasur.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I request a landscaping consultation?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Use the landscaping consultation form and share your location, space details, and project goals. The team can then review the request and discuss the next step.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I view completed landscaping work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. The completed projects section shows published landscaping work from The Nursery Pakistan.",
+      },
+    },
+  ],
+};
+
 const staticSeo: Record<string, SeoConfig> = {
   "/": {
     title: "Buy Plants Online in Pakistan | The Nursery Pakistan",
@@ -102,20 +172,24 @@ const staticSeo: Record<string, SeoConfig> = {
     title: "Plant Care Guide for Pakistan | The Nursery Pakistan",
     description:
       "Use our practical Pakistan plant-care guide for watering, feeding, common plant problems and care tips for popular indoor plants.",
+    structuredData: guideFaqSchema,
   },
   "/landscaping-services": {
     title: "Landscaping Services in Kasur | The Nursery Pakistan",
     description:
       "Explore residential and commercial landscaping services in Kasur, including garden planning, planting and completed project inspiration.",
-    structuredData: {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      name: "Landscaping Services",
-      serviceType: "Garden landscaping and planting",
-      areaServed: { "@type": "City", name: "Kasur" },
-      provider: { "@id": `${CANONICAL_ORIGIN}/#organization` },
-      url: `${CANONICAL_ORIGIN}/landscaping-services`,
-    },
+    structuredData: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Landscaping Services",
+        serviceType: "Garden landscaping and planting",
+        areaServed: { "@type": "City", name: "Kasur" },
+        provider: { "@id": `${CANONICAL_ORIGIN}/#organization` },
+        url: `${CANONICAL_ORIGIN}/landscaping-services`,
+      },
+      landscapingFaqSchema,
+    ],
   },
   "/products": {
     title: "Buy Plants, Pots & Garden Supplies Online in Pakistan",
@@ -256,7 +330,9 @@ const applySeo = (config: SeoConfig) => {
   ensureMeta("twitter:image").content = image;
 
   document
-    .querySelectorAll('script[type="application/ld+json"][data-seo-json-ld]')
+    .querySelectorAll(
+      'script[type="application/ld+json"][data-seo-json-ld], script[type="application/ld+json"][data-prerender-json-ld]',
+    )
     .forEach((script) => script.remove());
 
   const existingCanonical = document.head.querySelector(

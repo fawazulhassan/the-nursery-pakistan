@@ -125,6 +125,47 @@ const staticSeo = {
   ],
 };
 
+const staticStructuredData = {
+  "/guide": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      ["How often should indoor plants be watered in Pakistan?", "Check the soil instead of following a fixed calendar. Water when the top layer feels dry, and reduce watering during cooler months or when the soil stays wet longer."],
+      ["How can I protect plants during Pakistan's summer?", "Keep sensitive plants away from harsh afternoon sun, water deeply when the soil needs it, improve airflow, and use mulch for outdoor pots to slow moisture loss."],
+      ["Why do plant leaves turn yellow?", "Common causes include overwatering, poor drainage, low light, root stress, and nutrient problems. Check soil moisture and drainage before adding fertilizer."],
+      ["Which indoor plants are easiest for beginners?", "Snake plant, money plant, aloe vera, and several pothos varieties are popular beginner choices when they receive suitable light and are not overwatered."],
+    ].map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      acceptedAnswer: { "@type": "Answer", text },
+    })),
+  },
+  "/landscaping-services": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Landscaping Services",
+      serviceType: "Garden landscaping and planting",
+      areaServed: { "@type": "City", name: "Kasur" },
+      provider: { "@id": `${CANONICAL_ORIGIN}/#organization` },
+      url: `${CANONICAL_ORIGIN}/landscaping-services`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        ["Which landscaping services are available in Kasur?", "The Nursery Pakistan provides garden planning, plant selection, planting, and landscaping consultation for suitable residential and commercial projects in Kasur."],
+        ["How do I request a landscaping consultation?", "Use the landscaping consultation form and share your location, space details, and project goals. The team can then review the request and discuss the next step."],
+        ["Can I view completed landscaping work?", "Yes. The completed projects section shows published landscaping work from The Nursery Pakistan."],
+      ].map(([name, text]) => ({
+        "@type": "Question",
+        name,
+        acceptedAnswer: { "@type": "Answer", text },
+      })),
+    },
+  ],
+};
+
 // These routes intentionally serve different search intent:
 // /flower-workshop explains the evergreen experience, while /workshops lists
 // current bookable workshop dates.
@@ -304,7 +345,13 @@ await writeFile(outputPath, xml, "utf8");
 
 const seoPages = staticPaths.map((pathname) => {
   const [title, description, heading] = staticSeo[pathname];
-  return { pathname, title, description, heading };
+  return {
+    pathname,
+    title,
+    description,
+    heading,
+    structuredData: staticStructuredData[pathname],
+  };
 });
 
 if (products.some((product) => isActiveSale(product))) {

@@ -128,6 +128,21 @@ const BlogPostPage = () => {
               className="prose prose-sm sm:prose lg:prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: safeHtml }}
             />
+            <aside className="mt-10 rounded-xl border border-border bg-muted/20 p-5">
+              <h2 className="text-xl font-semibold">Continue learning about plant care</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                Use our Pakistan plant-care pillar to explore watering, summer protection,
+                common plant problems, fertilizer guidance, and beginner-friendly plants.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button asChild>
+                  <Link to="/guide">Open Plant Care Guide</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link to="/products">Browse Plants &amp; Supplies</Link>
+                </Button>
+              </div>
+            </aside>
           </article>
         )}
       </main>
