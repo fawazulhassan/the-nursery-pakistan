@@ -82,6 +82,18 @@ const AdminDashboard = () => {
   };
 
   const hasImageErrors = draftImages.some((item) => !!item.error);
+  const previewBasePrice = Number(price);
+  const previewSalePercentage = Number(salePercentage);
+  const hasValidSalePreview =
+    salePercentage.trim() !== '' &&
+    Number.isFinite(previewBasePrice) &&
+    previewBasePrice >= 0 &&
+    Number.isFinite(previewSalePercentage) &&
+    previewSalePercentage > 0 &&
+    previewSalePercentage <= 100;
+  const previewFinalPrice = hasValidSalePreview
+    ? previewBasePrice - (previewBasePrice * previewSalePercentage) / 100
+    : null;
 
   const handleCropFlowOpenChange = (nextOpen: boolean) => {
     if (!nextOpen && programmaticCropCloseRef.current) {
@@ -460,6 +472,63 @@ const AdminDashboard = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const hasPercentageSale = salePercentage.trim() !== '';
+    const salePct = hasPercentageSale ? Number(salePercentage) : null;
+    if (
+      hasPercentageSale &&
+      (!Number.isFinite(salePct) || salePct <= 0 || salePct > 100)
+    ) {
+      toast({
+        title: 'Invalid sale percentage',
+        description: 'Enter a percentage greater than 0 and no more than 100.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const saleStartDate = hasPercentageSale && saleStartAt ? new Date(saleStartAt) : null;
+    const saleEndDate = hasPercentageSale && saleEndAt ? new Date(saleEndAt) : null;
+    if (saleStartDate && Number.isNaN(saleStartDate.getTime())) {
+      toast({
+        title: 'Invalid sale start date',
+        description: 'Choose a valid start date and time.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (saleEndDate && Number.isNaN(saleEndDate.getTime())) {
+      toast({
+        title: 'Invalid sale end date',
+        description: 'Choose a valid end date and time.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (saleStartDate && saleEndDate && saleEndDate <= saleStartDate) {
+      toast({
+        title: 'Invalid sale dates',
+        description: 'Sale end must be later than sale start.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const parsedSaleQuantityLimit =
+      hasPercentageSale && saleQuantityLimit.trim() !== ''
+        ? Number(saleQuantityLimit)
+        : null;
+    if (
+      parsedSaleQuantityLimit !== null &&
+      (!Number.isInteger(parsedSaleQuantityLimit) || parsedSaleQuantityLimit < 1)
+    ) {
+      toast({
+        title: 'Invalid sale quantity limit',
+        description: 'The sale quantity limit must be a whole number of at least 1.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (draftImages.length === 0) {
       toast({
         title: 'Error',
@@ -488,8 +557,6 @@ const AdminDashboard = () => {
       const primaryImage = uploadedImageUrls[0] ?? '';
 
       const stockQty = parseInt(stockQuantity) || 0;
-      const salePct = salePercentage ? parseFloat(salePercentage) : null;
-
       if (isEditMode && editingProduct) {
         const updateData: Record<string, unknown> = {
           name,
@@ -500,9 +567,9 @@ const AdminDashboard = () => {
           in_stock: stockQty > 0,
           stock_quantity: stockQty,
           sale_percentage: salePct,
-          sale_start_at: saleStartAt ? new Date(saleStartAt).toISOString() : null,
-          sale_end_at: saleEndAt ? new Date(saleEndAt).toISOString() : null,
-          sale_quantity_limit: saleQuantityLimit ? parseInt(saleQuantityLimit, 10) : null,
+          sale_start_at: saleStartDate?.toISOString() ?? null,
+          sale_end_at: saleEndDate?.toISOString() ?? null,
+          sale_quantity_limit: parsedSaleQuantityLimit,
           image_url: primaryImage,
           image_urls: uploadedImageUrls,
         };
@@ -522,9 +589,9 @@ const AdminDashboard = () => {
           in_stock: stockQty > 0,
           stock_quantity: stockQty,
           sale_percentage: salePct,
-          sale_start_at: saleStartAt ? new Date(saleStartAt).toISOString() : null,
-          sale_end_at: saleEndAt ? new Date(saleEndAt).toISOString() : null,
-          sale_quantity_limit: saleQuantityLimit ? parseInt(saleQuantityLimit, 10) : null,
+          sale_start_at: saleStartDate?.toISOString() ?? null,
+          sale_end_at: saleEndDate?.toISOString() ?? null,
+          sale_quantity_limit: parsedSaleQuantityLimit,
         });
         if (error) throw error;
         toast({ title: 'Success!', description: 'Product has been added successfully.' });
@@ -610,6 +677,11 @@ const AdminDashboard = () => {
                     ))}
                   </SelectContent>
                 </Select>
+                {category.toLowerCase() === 'sale' && (
+                  <p className="text-sm text-muted-foreground">
+                    Category = Sale creates a fixed-price Sale listing. The entered product price is the final deal price, so a percentage is not required.
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -646,6 +718,14 @@ const AdminDashboard = () => {
                   value={salePercentage}
                   onChange={(e) => setSalePercentage(e.target.value)}
                 />
+                <p className="text-sm text-muted-foreground">
+                  Use this only for a calculated discount from the product price. Leave it empty for a fixed-price product in the Sale category.
+                </p>
+                {previewFinalPrice !== null && (
+                  <p className="text-sm font-medium text-primary">
+                    Final sale price: Rs {previewFinalPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                  </p>
+                )}
               </div>
 
               {salePercentage && (

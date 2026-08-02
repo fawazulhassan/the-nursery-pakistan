@@ -46,6 +46,9 @@
     <loc>https://nurserypakistan.pk/category/pots-accessories</loc>
   </url>
   <url>
+    <loc>https://nurserypakistan.pk/category/sale</loc>
+  </url>
+  <url>
     <loc>https://nurserypakistan.pk/flower-workshop</loc>
   </url>
   <url>
@@ -61,6 +64,10 @@
   <url>
     <loc>https://nurserypakistan.pk/product/agave-variegated--21655ce4-e2c7-4e2b-b110-0749bd9d4810</loc>
     <lastmod>2026-05-10T18:57:54.353Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nurserypakistan.pk/product/azadi-plant-deal-4-indoor-plants-for-rs-1-000--e4ebe044-bbbb-4828-adbd-0a9d8509b25d</loc>
+    <lastmod>2026-07-31T09:31:12.809Z</lastmod>
   </url>
   <url>
     <loc>https://nurserypakistan.pk/product/dwarf-pineapple-plant-ananas-comosus--9ba23b72-7d57-46f2-a980-78d9aee5374a</loc>
@@ -151,8 +158,4 @@
   <url>
     <loc>https://nurserypakistan.pk/workshops</loc>
   </url>
-    <url>
-    <loc>https://nurserypakistan.pk/product/azadi-plant-deal-4-indoor-plants-for-rs-1-000--e4ebe044-bbbb-4828-adbd-0a9d8509b25d</loc>
-  </url>
-
 </urlset>

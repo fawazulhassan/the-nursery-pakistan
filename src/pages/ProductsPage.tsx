@@ -12,7 +12,7 @@ import { CATEGORIES as CATEGORY_LIST } from "@/lib/constants";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getEffectivePrice, isSaleActive, isSaleListingProduct } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { productPath } from "@/lib/productUrls";
@@ -56,7 +56,7 @@ const ProductsPage = () => {
 
   const filteredProducts = products.filter((product) => {
     if (categoryFilter === "Sale") {
-      if (!isSaleActive(product)) return false;
+      if (!isSaleListingProduct(product)) return false;
     } else if (categoryFilter !== "all" && product.category !== categoryFilter) return false;
     if (priceFilter === "all") return true;
     const price = parseFloat(product.price);

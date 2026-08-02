@@ -9,7 +9,7 @@ import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
 import { productPath } from "@/lib/productUrls";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getEffectivePrice, isSaleActive, isSaleListingProduct } from "@/lib/productSale";
 import type { Tables } from "@/integrations/supabase/types";
 
 type ProductRow = Tables<"products">;
@@ -24,12 +24,9 @@ const HomeSaleSection = () => {
   useEffect(() => {
     const loadSaleProducts = async () => {
       try {
-        const { data, error } = await fetchProductsWithFallback({
-          saleOnly: true,
-          limit: 6,
-        });
+        const { data, error } = await fetchProductsWithFallback();
         if (error) throw error;
-        setProducts((data || []).filter((product) => isSaleActive(product)));
+        setProducts((data || []).filter((product) => isSaleListingProduct(product)).slice(0, 6));
       } catch {
         toast({
           title: "Error",
@@ -86,6 +83,7 @@ const HomeSaleSection = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {products.map((product, index) => {
             const productImage = resolvePrimaryProductImage(product);
+            const saleActive = isSaleActive(product);
             const effectivePrice = getEffectivePrice(product);
             return (
             <Card
@@ -103,12 +101,14 @@ const HomeSaleSection = () => {
                   height="600"
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                 />
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-red-500 text-white text-sm px-3 py-1">
-                    <Tag className="h-3 w-3 mr-1" />
-                    {product.sale_percentage}% OFF
-                  </Badge>
-                </div>
+                {saleActive && (
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-red-500 text-white text-sm px-3 py-1">
+                      <Tag className="h-3 w-3 mr-1" />
+                      {product.sale_percentage}% OFF
+                    </Badge>
+                  </div>
+                )}
               </Link>
               <CardContent className="p-3 sm:p-4">
                 <div className="text-xs text-muted-foreground mb-1">{product.category}</div>
@@ -118,12 +118,20 @@ const HomeSaleSection = () => {
                   </h3>
                 </Link>
                 <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
-                  <span className="text-sm sm:text-lg line-through text-muted-foreground">
-                    Rs {product.price}
-                  </span>
-                  <span className="text-base sm:text-2xl font-bold text-red-500">
-                    Rs {effectivePrice.toFixed(0)}
-                  </span>
+                  {saleActive ? (
+                    <>
+                      <span className="text-sm sm:text-lg line-through text-muted-foreground">
+                        Rs {product.price}
+                      </span>
+                      <span className="text-base sm:text-2xl font-bold text-red-500">
+                        Rs {effectivePrice.toFixed(0)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-base sm:text-2xl font-bold text-primary">
+                      Rs {product.price}
+                    </span>
+                  )}
                 </div>
               </CardContent>
               <CardFooter className="p-3 sm:p-4 pt-0">

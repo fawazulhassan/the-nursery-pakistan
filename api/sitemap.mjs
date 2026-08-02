@@ -42,12 +42,27 @@ const lastmod = (value) => {
   return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
 };
 
-const isActiveSale = (product, now = new Date()) => {
-  if (Number(product.sale_percentage || 0) <= 0) return false;
-  if (product.sale_start_at && new Date(product.sale_start_at) > now) return false;
-  if (product.sale_end_at && new Date(product.sale_end_at) < now) return false;
+const isSaleActive = (product, now = new Date()) => {
+  const percentage = Number(product.sale_percentage ?? 0);
+  if (!Number.isFinite(percentage) || percentage <= 0) return false;
+
+  if (product.sale_start_at) {
+    const start = new Date(product.sale_start_at);
+    if (!Number.isNaN(start.getTime()) && start > now) return false;
+  }
+
+  if (product.sale_end_at) {
+    const end = new Date(product.sale_end_at);
+    if (!Number.isNaN(end.getTime()) && end < now) return false;
+  }
+
   return true;
 };
+
+// Keep this plain-JavaScript predicate in sync with
+// isSaleListingProduct() in src/lib/productSale.ts.
+const isSaleListingProduct = (product, now = new Date()) =>
+  product.category?.toLowerCase() === "sale" || isSaleActive(product, now);
 
 export default async function handler(_request, response) {
   const supabaseUrl = process.env.VITE_SUPABASE_URL;
@@ -65,7 +80,7 @@ export default async function handler(_request, response) {
   const results = await Promise.all([
     supabase
       .from("products")
-      .select("id, name, updated_at, sale_percentage, sale_start_at, sale_end_at")
+      .select("id, name, category, updated_at, sale_percentage, sale_start_at, sale_end_at")
       .eq("is_visible", true),
     supabase
       .from("blogs")
@@ -83,7 +98,7 @@ export default async function handler(_request, response) {
   const [products = [], blogs = [], workshops = [], projects = []] =
     results.map((result) => result.data || []);
   const entries = STATIC_PATHS.map((pathname) => ({ pathname }));
-  if (products.some((product) => isActiveSale(product))) {
+  if (products.some((product) => isSaleListingProduct(product))) {
     entries.push({ pathname: "/category/sale" });
   }
   products.forEach((product) =>

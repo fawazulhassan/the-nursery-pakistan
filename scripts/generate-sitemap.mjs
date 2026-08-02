@@ -213,7 +213,7 @@ const [products, blogs, workshops, projects] = await Promise.all([
   ),
 ]);
 
-const isActiveSale = (product, now = new Date()) => {
+const isSaleActive = (product, now = new Date()) => {
   const percentage = Number(product.sale_percentage ?? 0);
   if (!Number.isFinite(percentage) || percentage <= 0) return false;
 
@@ -229,6 +229,11 @@ const isActiveSale = (product, now = new Date()) => {
 
   return true;
 };
+
+// Keep this plain-JavaScript predicate in sync with
+// isSaleListingProduct() in src/lib/productSale.ts.
+const isSaleListingProduct = (product, now = new Date()) =>
+  product.category?.toLowerCase() === "sale" || isSaleActive(product, now);
 
 const toLastModified = (value) => {
   if (!value) return undefined;
@@ -258,8 +263,11 @@ const productPath = (product) =>
   `/product/${slugifyProductName(product.name)}--${product.id}`;
 
 const entries = staticPaths.map((pathname) => ({ pathname }));
+const hasSaleListingProducts = products.some((product) =>
+  isSaleListingProduct(product),
+);
 
-if (products.some((product) => isActiveSale(product))) {
+if (hasSaleListingProducts) {
   entries.push({ pathname: "/category/sale" });
 }
 
@@ -354,10 +362,14 @@ const seoPages = staticPaths.map((pathname) => {
   };
 });
 
-if (products.some((product) => isActiveSale(product))) {
-  const [title, description, heading] = staticSeo["/category/sale"];
-  seoPages.push({ pathname: "/category/sale", title, description, heading });
-}
+const [saleTitle, saleDescription, saleHeading] = staticSeo["/category/sale"];
+seoPages.push({
+  pathname: "/category/sale",
+  title: saleTitle,
+  description: saleDescription,
+  heading: saleHeading,
+  robots: hasSaleListingProducts ? "index, follow" : "noindex, follow",
+});
 
 for (const product of products) {
   const pathname = productPath(product);

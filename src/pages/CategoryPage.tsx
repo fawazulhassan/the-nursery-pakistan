@@ -12,7 +12,7 @@ import { slugToCategory } from "@/lib/constants";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getEffectivePrice, isSaleActive, isSaleListingProduct } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { productPath } from "@/lib/productUrls";
@@ -37,15 +37,13 @@ const CategoryPage = () => {
     setIsLoading(true);
     try {
       const { data, error } = await fetchProductsWithFallback(
-        category === "sale"
-          ? { saleOnly: true }
-          : { category: categoryName }
+        category === "sale" ? {} : { category: categoryName }
       );
 
       if (error) throw error;
       let result = data || [];
       if (category === 'sale') {
-        result = result.filter((p) => isSaleActive(p));
+        result = result.filter((p) => isSaleListingProduct(p));
       }
       setProducts(result);
     } catch (error: any) {

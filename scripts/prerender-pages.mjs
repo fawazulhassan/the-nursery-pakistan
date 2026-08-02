@@ -69,10 +69,11 @@ for (const page of pages) {
       ? [page.structuredData]
       : [];
   const schemas = [breadcrumbSchema(page), ...pageSchemas];
+  const robots = page.robots || "index, follow";
   const head = [
     `<title>${escapeHtml(page.title)}</title>`,
     `<meta name="description" content="${escapeHtml(page.description)}">`,
-    '<meta name="robots" content="index, follow">',
+    `<meta name="robots" content="${escapeHtml(robots)}">`,
     `<link rel="canonical" href="${escapeHtml(canonical)}">`,
     `<meta property="og:title" content="${escapeHtml(page.title)}">`,
     `<meta property="og:description" content="${escapeHtml(page.description)}">`,

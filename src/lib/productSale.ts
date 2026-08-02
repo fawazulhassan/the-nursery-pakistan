@@ -1,6 +1,9 @@
 import type { Product } from "@/types";
 
-type SaleProduct = Pick<Product, "price" | "sale_percentage" | "sale_start_at" | "sale_end_at">;
+type SaleProduct = Pick<
+  Product,
+  "price" | "category" | "sale_percentage" | "sale_start_at" | "sale_end_at"
+>;
 
 export const isSaleActive = (product: SaleProduct, now: Date = new Date()): boolean => {
   const salePercentage = Number(product.sale_percentage ?? 0);
@@ -21,6 +24,12 @@ export const isSaleActive = (product: SaleProduct, now: Date = new Date()): bool
 
   return true;
 };
+
+export const isSaleListingProduct = (
+  product: SaleProduct,
+  now: Date = new Date()
+): boolean =>
+  product.category?.toLowerCase() === "sale" || isSaleActive(product, now);
 
 const toNumberPrice = (price: number | string): number => {
   if (typeof price === "number") return price;
