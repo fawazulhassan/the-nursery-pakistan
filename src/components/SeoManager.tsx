@@ -234,6 +234,7 @@ const noIndexStaticPaths = new Set([
   "/landscaping-services/request-consultation",
   "/my-orders",
   "/search",
+  "/track-order",
   "/wishlist",
 ]);
 

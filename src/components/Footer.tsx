@@ -15,7 +15,7 @@ const QUICK_LINKS = [
   { label: "Completed Projects", to: "/projects" },
   { label: "Current Workshops", to: "/workshops" },
   { label: "Delivery Info", to: "/account?tab=addresses" },
-  { label: "Track Order", to: "/account?tab=orders" },
+  { label: "Track Order", to: "/track-order" },
 ] as const;
 
 const CATEGORY_LINKS = [

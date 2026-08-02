@@ -289,6 +289,21 @@ export type Database = {
         };
         Returns: { slot_id: string; cnt: number }[];
       };
+      track_guest_order: {
+        Args: {
+          p_order_reference: string;
+          p_customer_email: string;
+        };
+        Returns: {
+          order_reference: string;
+          status: string;
+          order_date: string;
+          total_amount: number;
+          payment_method: string;
+          payment_status: string;
+          items: Json;
+        }[];
+      };
       [key: string]: { Args: Record<string, Json | undefined>; Returns: Json };
     };
     Enums: Record<string, never>;

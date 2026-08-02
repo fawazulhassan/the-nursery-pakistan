@@ -28,7 +28,7 @@
       "destination": "/:page/index.html"
     },
     {
-      "source": "/:page(search|cart|wishlist|auth|checkout|my-orders|account)",
+      "source": "/:page(search|cart|wishlist|auth|checkout|my-orders|account|track-order)",
       "destination": "/index.html"
     },
     {

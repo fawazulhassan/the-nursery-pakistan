@@ -32,6 +32,7 @@ const AdminBlogsPage = lazy(() => import("./pages/AdminBlogsPage"));
 const AdminSubscribersPage = lazy(() => import("./pages/AdminSubscribersPage"));
 const MyOrdersPage = lazy(() => import("./pages/MyOrdersPage"));
 const AccountPage = lazy(() => import("./pages/AccountPage"));
+const TrackOrderPage = lazy(() => import("./pages/TrackOrderPage"));
 const LandscapingServicesPage = lazy(() => import("./pages/LandscapingServicesPage"));
 const ConsultationRequestPage = lazy(() => import("./pages/ConsultationRequestPage"));
 const FlowerWorkshopPage = lazy(() => import("./pages/FlowerWorkshopPage"));
@@ -104,6 +105,7 @@ const AppRoutes = () => {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/wishlist" element={<WishlistPage />} />
       <Route path="/auth" element={<AuthPage />} />
+      <Route path="/track-order" element={<TrackOrderPage />} />
       
       {/* Protected routes - require authentication */}
       <Route path="/checkout" element={<CheckoutPage />} />

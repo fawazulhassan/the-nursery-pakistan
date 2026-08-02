@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Heading, Hr, Text } from "@react-email/components";
-import { BrandLayout, PRIMARY_GREEN } from "./branding.tsx";
+import { BrandLayout, PRIMARY_GREEN, primaryButton } from "./branding.tsx";
 
 export interface OrderLine {
   name: string;
@@ -33,6 +33,9 @@ export default function OrderConfirmedCustomer({
       <Text style={{ color: "#444444", fontSize: "15px", lineHeight: "24px" }}>
         We have received your order and will process it shortly. Your order reference is{" "}
         <strong style={{ color: PRIMARY_GREEN }}>{orderId}</strong>.
+      </Text>
+      <Text style={{ margin: "20px 0 24px" }}>
+        {primaryButton("Track your order", "https://nurserypakistan.pk/track-order")}
       </Text>
 
       <Text style={{ color: "#1a1a1a", fontSize: "15px", fontWeight: 600, marginBottom: "8px", marginTop: "24px" }}>
