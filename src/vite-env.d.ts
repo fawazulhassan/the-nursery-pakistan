@@ -1,5 +1,9 @@
 /// <reference types="vite/client" />
 
 interface Window {
-  fbq?: (...args: unknown[]) => void;
+  fbq?: (
+    action: string,
+    eventName?: string,
+    params?: Record<string, unknown>,
+  ) => void;
 }

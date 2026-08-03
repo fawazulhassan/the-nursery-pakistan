@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
+import { trackAddToWishlist } from "@/lib/metaPixel";
 
 const WISHLIST_STORAGE_KEY = "leafy-luxe-wishlist";
 
@@ -76,6 +77,11 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
         return prev.filter((item) => item.id !== mappedItem.id);
       }
 
+      trackAddToWishlist({
+        id: mappedItem.id,
+        name: mappedItem.name,
+        price: mappedItem.price,
+      });
       toast({
         title: "Added to wishlist",
         description: `${mappedItem.name} has been added to your wishlist.`,

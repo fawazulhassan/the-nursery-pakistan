@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Tag, ArrowLeft } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
@@ -13,6 +13,7 @@ import { productPath } from "@/lib/productUrls";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
+import { trackSearch } from "@/lib/metaPixel";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
@@ -31,6 +32,16 @@ const SearchPage = () => {
       setIsLoading(false);
     }
   }, [q]);
+
+  // Fire Search only after results finish loading for a non-empty query
+  const wasLoadingRef = useRef(false);
+  useEffect(() => {
+    const finishedLoading = wasLoadingRef.current && !isLoading;
+    wasLoadingRef.current = isLoading;
+    if (!finishedLoading) return;
+    if (q.trim().length === 0) return;
+    trackSearch(q.trim());
+  }, [q, isLoading]);
 
   const fetchSearchResults = async () => {
     setIsLoading(true);

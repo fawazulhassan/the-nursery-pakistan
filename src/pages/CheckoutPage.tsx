@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { sendEmail } from "@/lib/sendEmail";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDefaultAddress } from "@/hooks/useDefaultAddress";
+import { trackInitiateCheckout, trackPurchase } from "@/lib/metaPixel";
 
 interface StockError {
   product_id: string;
@@ -77,6 +78,20 @@ const CheckoutPage = () => {
       });
     }
   }, [defaultAddress, user]);
+
+  // Fire InitiateCheckout once on mount (empty cart already redirects away)
+  useEffect(() => {
+    if (checkoutSourceItems.length > 0) {
+      trackInitiateCheckout(
+        checkoutSourceItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only per Meta plan
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,6 +186,15 @@ const CheckoutPage = () => {
       if (checkoutError) throw checkoutError;
       console.log("Order created, orderId:", orderId);
       if (!checkoutError && orderId !== null && orderId !== undefined) {
+        trackPurchase({
+          orderId: String(orderId),
+          value: totalAmount,
+          contents: checkoutItems.map((item) => ({
+            id: item.product_id,
+            quantity: item.quantity,
+            item_price: item.price,
+          })),
+        });
         console.log("Sending email for order:", orderId);
         await sendEmail({ type: "order", id: orderId as string });
       }

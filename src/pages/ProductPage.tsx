@@ -22,6 +22,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { CATEGORIES } from "@/lib/constants";
 import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 import { productIdFromRoute, productPath } from "@/lib/productUrls";
+import { trackViewContent } from "@/lib/metaPixel";
 
 const isEditableKeyboardTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -103,6 +104,15 @@ const ProductPage = () => {
       setIsLoading(false);
     }
   }, [productId]);
+
+  useEffect(() => {
+    if (!product) return;
+    trackViewContent({
+      id: product.id,
+      name: product.name,
+      price: getEffectivePrice(product),
+    });
+  }, [product]);
 
   useEffect(() => {
     if (!product || !id) return;

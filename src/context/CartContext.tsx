@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { trackAddToCart } from "@/lib/metaPixel";
 
 const CART_STORAGE_BASE_KEY = "leafy-luxe-cart";
 
@@ -67,6 +68,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         quantity
       };
       return [...prev, formattedItem];
+    });
+    trackAddToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity,
     });
     toast({
       title: "Added to cart",
