@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import MetaPixelTracker from "@/components/MetaPixelTracker";
 import { SeoProvider } from "@/components/SeoManager";
 import { lazy, Suspense } from "react";
 
@@ -142,6 +143,7 @@ const App = () => (
             <BrowserRouter>
               <SeoProvider>
                 <ScrollToTop />
+                <MetaPixelTracker />
                 <AppRoutes />
                 <WhatsAppFloatingButton />
               </SeoProvider>
