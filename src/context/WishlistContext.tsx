@@ -12,7 +12,9 @@ export interface WishlistItem {
   image_url: string;
   category: string;
   description?: string;
-  sale_percentage?: number;
+  sale_percentage?: number | null;
+  sale_start_at?: string | null;
+  sale_end_at?: string | null;
   stock_quantity?: number;
 }
 
@@ -35,6 +37,8 @@ const mapToWishlistItem = (product: (Partial<WishlistItem> & { id: string; name:
   category: product.category ?? "Uncategorized",
   description: product.description,
   sale_percentage: product.sale_percentage,
+  sale_start_at: product.sale_start_at,
+  sale_end_at: product.sale_end_at,
   stock_quantity: product.stock_quantity,
 });
 

@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { resolveProductImageUrls } from "@/lib/productImages";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getAppliedSalePercent, getEffectivePrice } from "@/lib/productSale";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
 import { ProductDescription } from "@/components/ProductDescription";
 import { useTouchSlideNavigation } from "@/hooks/useTouchSlideNavigation";
 
@@ -46,6 +47,7 @@ const ProductDetailDialog = ({
 }: ProductDetailDialogProps) => {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { sale } = useSitewideSale();
   const navigate = useNavigate();
 
   const productLike = useMemo(
@@ -59,8 +61,9 @@ const ProductDetailDialog = ({
   const productImages = useMemo(() => resolveProductImageUrls(productLike), [productLike]);
   const fallbackImage = product.image_url || product.image || "";
   const [selectedImage, setSelectedImage] = useState(productImages[0] ?? fallbackImage);
-  const saleActive = isSaleActive(product);
-  const effectivePrice = getEffectivePrice(product);
+  const appliedPercent = getAppliedSalePercent(product, new Date(), sale);
+  const saleActive = appliedPercent > 0;
+  const effectivePrice = getEffectivePrice(product, new Date(), sale);
   const displayPrice = typeof product.price === "string" ? product.price : `Rs ${effectivePrice.toLocaleString()}`;
 
   useEffect(() => {

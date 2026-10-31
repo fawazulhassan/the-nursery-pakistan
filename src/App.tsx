@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { CartProvider } from "@/context/CartContext";
+import { SitewideSaleProvider } from "@/context/SitewideSaleContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
@@ -137,6 +138,7 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <WishlistProvider>
+          <SitewideSaleProvider>
           <CartProvider>
             <Toaster />
             <Sonner />
@@ -151,6 +153,7 @@ const App = () => (
             <Analytics />
             <SpeedInsights />
           </CartProvider>
+          </SitewideSaleProvider>
         </WishlistProvider>
       </AuthProvider>
     </TooltipProvider>

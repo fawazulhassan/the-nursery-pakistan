@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Package, Search, Eye, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getOrderCity } from '@/lib/orderCity';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,6 +35,8 @@ interface Order {
   created_at: string;
   payment_method: string;
   payment_status: string;
+  admin_dispatch_note: string | null;
+  customer_note: string | null;
   profiles: {
     email: string;
     full_name: string | null;
@@ -47,6 +51,9 @@ const AdminOrdersPage = () => {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [cityFilter, setCityFilter] = useState('');
+  const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
+  const [savingNoteId, setSavingNoteId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +67,21 @@ const AdminOrdersPage = () => {
 
   useEffect(() => {
     filterOrders();
-  }, [orders, searchTerm, statusFilter]);
+  }, [orders, searchTerm, statusFilter, cityFilter]);
+
+  useEffect(() => {
+    setNoteDrafts((current) => {
+      let changed = false;
+      const next = { ...current };
+      for (const order of orders) {
+        if (!(order.id in next)) {
+          next[order.id] = order.admin_dispatch_note ?? "";
+          changed = true;
+        }
+      }
+      return changed ? next : current;
+    });
+  }, [orders]);
 
   const fetchOrders = async () => {
     try {
@@ -119,7 +140,59 @@ const AdminOrdersPage = () => {
       filtered = filtered.filter(order => order.status === statusFilter);
     }
 
+    const normalizedCity = cityFilter.trim().toLowerCase();
+    if (normalizedCity) {
+      filtered = filtered.filter((order) =>
+        getOrderCity(order.shipping_address).toLowerCase().includes(normalizedCity)
+      );
+    }
+
     setFilteredOrders(filtered);
+  };
+
+  const saveDispatchNote = async (orderId: string) => {
+    const trimmed = (noteDrafts[orderId] ?? "").trim();
+    if (trimmed.length > 500) {
+      toast({
+        title: "Note too long",
+        description: "Dispatch notes are limited to 500 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const savedNote = trimmed.length === 0 ? null : trimmed;
+    setSavingNoteId(orderId);
+    try {
+      const { error } = await supabase
+        .from("orders")
+        .update({ admin_dispatch_note: savedNote })
+        .eq("id", orderId);
+
+      if (error) throw error;
+
+      setOrders((current) =>
+        current.map((order) =>
+          order.id === orderId ? { ...order, admin_dispatch_note: savedNote } : order
+        )
+      );
+      setNoteDrafts((current) => ({ ...current, [orderId]: savedNote ?? "" }));
+      setSelectedOrder((current) =>
+        current?.id === orderId ? { ...current, admin_dispatch_note: savedNote } : current
+      );
+      toast({
+        title: "Note saved",
+        description: "Dispatch note updated.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message ?? "Failed to save dispatch note.",
+        variant: "destructive",
+      });
+    } finally {
+      setSavingNoteId(null);
+    }
   };
 
   // Define valid status transitions
@@ -292,11 +365,16 @@ const AdminOrdersPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Input
                 placeholder="Search by email, name, or order ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Input
+                placeholder="Filter by city"
+                value={cityFilter}
+                onChange={(e) => setCityFilter(e.target.value)}
               />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
@@ -321,6 +399,14 @@ const AdminOrdersPage = () => {
           </div>
         ) : (
           <div className="grid gap-4">
+            <p className="text-sm font-medium text-foreground">
+              {filteredOrders.length} {filteredOrders.length === 1 ? "order" : "orders"}
+              {" · "}
+              Total: Rs{" "}
+              {filteredOrders
+                .reduce((sum, order) => sum + Number(order.total_amount), 0)
+                .toLocaleString("en-PK")}
+            </p>
             {filteredOrders.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center text-muted-foreground">
@@ -331,7 +417,7 @@ const AdminOrdersPage = () => {
               filteredOrders.map((order) => (
                 <Card key={order.id}>
                   <CardContent className="py-6">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="font-semibold text-lg">
@@ -345,7 +431,8 @@ const AdminOrdersPage = () => {
                           <p>Customer: {getDisplayName(order)}</p>
                           <p>Email: {getDisplayEmail(order)}</p>
                           <p>Phone: {order.phone_number}</p>
-                          <p>Total: Rs {order.total_amount.toLocaleString()}</p>
+                          <p>City: {getOrderCity(order.shipping_address) || "—"}</p>
+                          <p>Total: Rs {Number(order.total_amount).toLocaleString("en-PK")}</p>
                           <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
                           <p>Items: {order.order_items.length} product(s)</p>
                           <p className="flex items-center gap-2 mt-2">
@@ -354,6 +441,36 @@ const AdminOrdersPage = () => {
                               {order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
                             </Badge>
                           </p>
+                        </div>
+                        <div className="mt-4 max-w-xl space-y-2">
+                          <p className="text-sm font-medium text-foreground">Customer note</p>
+                          <p className="whitespace-pre-wrap text-sm text-muted-foreground">
+                            {order.customer_note?.trim() || "No customer note"}
+                          </p>
+                          <label className="text-sm font-medium text-foreground" htmlFor={`dispatch-note-${order.id}`}>
+                            Dispatch note
+                          </label>
+                          <Textarea
+                            id={`dispatch-note-${order.id}`}
+                            value={noteDrafts[order.id] ?? ""}
+                            maxLength={500}
+                            onChange={(event) =>
+                              setNoteDrafts((current) => ({
+                                ...current,
+                                [order.id]: event.target.value,
+                              }))
+                            }
+                            placeholder="Notes for packing or dispatch"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => saveDispatchNote(order.id)}
+                            disabled={savingNoteId === order.id}
+                          >
+                            {savingNoteId === order.id ? "Saving..." : "Save note"}
+                          </Button>
                         </div>
                       </div>
                       
@@ -457,6 +574,21 @@ const AdminOrdersPage = () => {
               <div>
                 <h4 className="font-semibold mb-2">Shipping Address</h4>
                 <p className="text-sm">{selectedOrder.shipping_address}</p>
+                <p className="text-sm mt-1">City: {getOrderCity(selectedOrder.shipping_address) || "—"}</p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">Customer note</h4>
+                <p className="text-sm whitespace-pre-wrap">
+                  {selectedOrder.customer_note?.trim() || "No customer note"}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">Dispatch note</h4>
+                <p className="text-sm whitespace-pre-wrap">
+                  {selectedOrder.admin_dispatch_note?.trim() || "No dispatch note"}
+                </p>
               </div>
 
               <div>

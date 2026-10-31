@@ -10,7 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useWishlist } from "@/context/WishlistContext";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
 import { productPath } from "@/lib/productUrls";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getAppliedSalePercent, getEffectivePrice } from "@/lib/productSale";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
 import { productDescriptionPreview } from "@/components/ProductDescription";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -21,6 +22,7 @@ const FeaturedProducts = () => {
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { sale } = useSitewideSale();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const navigate = useNavigate();
 
@@ -44,7 +46,7 @@ const FeaturedProducts = () => {
   }, [toast]);
 
   const handleBuyNow = (product: ProductRow) => {
-    const effectivePrice = getEffectivePrice(product);
+    const effectivePrice = getEffectivePrice(product, new Date(), sale);
     const productImage = resolvePrimaryProductImage(product);
     navigate("/checkout", {
       state: {
@@ -88,8 +90,9 @@ const FeaturedProducts = () => {
           {products.map((product, index) => {
             const inWishlist = isInWishlist(product.id);
             const productImage = resolvePrimaryProductImage(product);
-            const saleActive = isSaleActive(product);
-            const effectivePrice = getEffectivePrice(product);
+            const appliedPercent = getAppliedSalePercent(product, new Date(), sale);
+            const saleActive = appliedPercent > 0;
+            const effectivePrice = getEffectivePrice(product, new Date(), sale);
             return (
             <Card
               key={product.id}
@@ -132,7 +135,7 @@ const FeaturedProducts = () => {
                       {saleActive && (
                         <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                           <Tag className="h-3 w-3 mr-1" />
-                          {product.sale_percentage}% OFF
+                          {appliedPercent}% OFF
                         </Badge>
                       )}
                       <Badge variant="secondary" className="text-xs px-3 py-1 bg-yellow-500 text-white">
@@ -142,7 +145,7 @@ const FeaturedProducts = () => {
                   ) : saleActive ? (
                     <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                       <Tag className="h-3 w-3 mr-1" />
-                      {product.sale_percentage}% OFF
+                      {appliedPercent}% OFF
                     </Badge>
                   ) : (
                     <span className="bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full font-medium">

@@ -11,7 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
 import { productPath } from "@/lib/productUrls";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getAppliedSalePercent, getEffectivePrice } from "@/lib/productSale";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
 import { productDescriptionPreview } from "@/components/ProductDescription";
 import { trackSearch } from "@/lib/metaPixel";
 
@@ -22,6 +23,7 @@ const SearchPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { sale } = useSitewideSale();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const SearchPage = () => {
   };
 
   const handleBuyNow = (product: any) => {
-    const effectivePrice = getEffectivePrice(product);
+    const effectivePrice = getEffectivePrice(product, new Date(), sale);
     const productImage = resolvePrimaryProductImage(product);
     navigate("/checkout", {
       state: {
@@ -117,8 +119,9 @@ const SearchPage = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {products.map((product, index) => {
                   const productImage = resolvePrimaryProductImage(product);
-                  const saleActive = isSaleActive(product);
-                  const effectivePrice = getEffectivePrice(product);
+                  const appliedPercent = getAppliedSalePercent(product, new Date(), sale);
+                  const saleActive = appliedPercent > 0;
+                  const effectivePrice = getEffectivePrice(product, new Date(), sale);
                   return (
                   <Card
                     key={product.id}
@@ -140,7 +143,7 @@ const SearchPage = () => {
                           ) : saleActive ? (
                             <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                               <Tag className="h-3 w-3 mr-1" />
-                              {product.sale_percentage}% OFF
+                              {appliedPercent}% OFF
                             </Badge>
                           ) : null}
                         </div>

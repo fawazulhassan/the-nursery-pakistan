@@ -9,17 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { resolveProductImageUrls } from "@/lib/productImages";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
+import { getAppliedSalePercent, getEffectivePrice } from "@/lib/productSale";
 
 const WishlistPage = () => {
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { sale } = useSitewideSale();
   const navigate = useNavigate();
 
   const handleAddToCartFromWishlist = (item: (typeof wishlistItems)[number]) => {
-    const salePrice = item.sale_percentage
-      ? item.price - (item.price * item.sale_percentage / 100)
-      : null;
-    const effectivePrice = salePrice ?? item.price;
+    const effectivePrice = getEffectivePrice(item, new Date(), sale);
 
     addToCart(
       {
@@ -48,10 +48,7 @@ const WishlistPage = () => {
   };
 
   const handleBuyNowFromWishlist = (item: (typeof wishlistItems)[number]) => {
-    const salePrice = item.sale_percentage
-      ? item.price - (item.price * item.sale_percentage / 100)
-      : null;
-    const effectivePrice = salePrice ?? item.price;
+    const effectivePrice = getEffectivePrice(item, new Date(), sale);
 
     navigate("/checkout", {
       state: {
@@ -101,9 +98,9 @@ const WishlistPage = () => {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {wishlistItems.map((item) => {
-                  const salePrice = item.sale_percentage
-                    ? item.price - (item.price * item.sale_percentage / 100)
-                    : null;
+                  const appliedPercent = getAppliedSalePercent(item, new Date(), sale);
+                  const effectivePrice = getEffectivePrice(item, new Date(), sale);
+                  const salePrice = appliedPercent > 0 ? effectivePrice : null;
 
                   return (
                     <Card key={item.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">

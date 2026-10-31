@@ -15,7 +15,8 @@ import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import { useAuth } from "@/contexts/AuthContext";
 import { resolvePrimaryProductImage, resolveProductImageUrls } from "@/lib/productImages";
-import { getEffectivePrice, isSaleActive } from "@/lib/productSale";
+import { getAppliedSalePercent, getEffectivePrice } from "@/lib/productSale";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
 import { ProductDescription } from "@/components/ProductDescription";
 import { usePageSeo } from "@/components/SeoManager";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -23,6 +24,7 @@ import { CATEGORIES } from "@/lib/constants";
 import { createBreadcrumbSchema } from "@/lib/seoSchemas";
 import { productIdFromRoute, productPath } from "@/lib/productUrls";
 import { trackViewContent } from "@/lib/metaPixel";
+import SimilarProducts from "@/components/SimilarProducts";
 
 const isEditableKeyboardTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -44,7 +46,9 @@ const ProductPage = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { user } = useAuth();
+  const { sale, ready: sitewideReady } = useSitewideSale();
   const preferredProductPath = product ? productPath(product) : undefined;
+  const effectivePrice = product ? getEffectivePrice(product, new Date(), sale) : 0;
 
   usePageSeo(
     isLoading
@@ -79,7 +83,7 @@ const ProductPage = () => {
                 offers: {
                   "@type": "Offer",
                   priceCurrency: "PKR",
-                  price: getEffectivePrice(product).toFixed(2),
+                  price: effectivePrice.toFixed(2),
                   availability:
                     Number(product.stock_quantity) > 0
                       ? "https://schema.org/InStock"
@@ -106,13 +110,13 @@ const ProductPage = () => {
   }, [productId]);
 
   useEffect(() => {
-    if (!product) return;
+    if (!product || !sitewideReady) return;
     trackViewContent({
       id: product.id,
       name: product.name,
-      price: getEffectivePrice(product),
+      price: getEffectivePrice(product, new Date(), sale),
     });
-  }, [product]);
+  }, [product, sale, sitewideReady]);
 
   useEffect(() => {
     if (!product || !id) return;
@@ -153,7 +157,7 @@ const ProductPage = () => {
   const handleAddToCart = () => {
     if (!product) return;
     const imageUrl = selectedImage || resolvePrimaryProductImage(product);
-    const effectivePrice = getEffectivePrice(product);
+    const effectivePrice = getEffectivePrice(product, new Date(), sale);
 
     addToCart(
       {
@@ -171,7 +175,7 @@ const ProductPage = () => {
   const handleBuyNow = () => {
     if (!product) return;
     const imageUrl = selectedImage || resolvePrimaryProductImage(product);
-    const effectivePrice = getEffectivePrice(product);
+    const effectivePrice = getEffectivePrice(product, new Date(), sale);
 
     navigate("/checkout", {
       state: {
@@ -267,8 +271,8 @@ const ProductPage = () => {
   }
 
   const basePrice = Number(product.price);
-  const saleActive = isSaleActive(product);
-  const effectivePrice = getEffectivePrice(product);
+  const appliedPercent = getAppliedSalePercent(product, new Date(), sale);
+  const saleActive = appliedPercent > 0;
   const displayPrice = saleActive ? `Rs ${effectivePrice.toFixed(0)}` : `Rs ${basePrice.toLocaleString()}`;
   const inWishlist = isInWishlist(product.id);
   const mainImage = selectedImage || resolvePrimaryProductImage(product);
@@ -373,7 +377,7 @@ const ProductPage = () => {
                   <Badge variant="secondary">{product.category}</Badge>
                   {saleActive && (
                     <Badge className="bg-red-500 text-white">
-                      {product.sale_percentage}% OFF
+                      {appliedPercent}% OFF
                     </Badge>
                   )}
                   {product.stock_quantity === 0 && (
@@ -459,6 +463,8 @@ const ProductPage = () => {
                 </div>
               </div>
             </div>
+
+            <SimilarProducts productId={product.id} category={product.category} />
 
             <section className="mt-14 border-t pt-10">
               <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Customer Reviews</h2>

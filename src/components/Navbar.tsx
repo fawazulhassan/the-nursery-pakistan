@@ -7,6 +7,8 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { CATEGORIES } from "@/lib/constants";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
+import { getActiveSitewidePercent } from "@/lib/productSale";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,6 +17,8 @@ const Navbar = () => {
   const { getCartCount } = useCart();
   const { getWishlistCount } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
+  const { sale } = useSitewideSale();
+  const sitewidePercent = getActiveSitewidePercent(sale);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -57,6 +61,11 @@ const Navbar = () => {
 
   return (
     <nav ref={navRef} className="sticky top-0 z-50 bg-card border-b border-border">
+      {sitewidePercent > 0 && (
+        <div className="bg-red-600 px-4 py-2 text-center text-sm font-medium text-white">
+          {sale?.name?.trim() || "Sale"}: {sitewidePercent}% off everything
+        </div>
+      )}
       {/* Top Bar */}
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">

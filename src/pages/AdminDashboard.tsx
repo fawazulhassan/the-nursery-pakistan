@@ -11,6 +11,7 @@ import { CATEGORIES } from '@/lib/constants';
 import { MAX_PRODUCT_IMAGES, MAX_PRODUCT_IMAGE_BYTES, deleteProductImagesFromStorage, resolvePrimaryProductImage, resolveProductImageUrls, uploadProductImage, validateProductImageFile } from '@/lib/productImages';
 import { deleteReviewsForProductBySlugCandidates } from '@/lib/reviews';
 import AdminLayout from '@/components/admin/AdminLayout';
+import SitewideSaleCard from '@/components/admin/SitewideSaleCard';
 import { ProductImageCropDialog } from '@/components/admin/ProductImageCropDialog';
 
 interface Product {
@@ -617,6 +618,7 @@ const AdminDashboard = () => {
       contentClassName="max-w-4xl"
       desktopMenuMode="hamburger"
     >
+        <SitewideSaleCard />
         <div className="bg-card rounded-lg shadow-lg p-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">

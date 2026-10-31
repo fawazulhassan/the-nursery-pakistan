@@ -11,8 +11,9 @@ import { useToast } from "@/hooks/use-toast";
 import { slugToCategory } from "@/lib/constants";
 import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useWishlist } from "@/context/WishlistContext";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
-import { getEffectivePrice, isSaleActive, isSaleListingProduct } from "@/lib/productSale";
+import { getAppliedSalePercent, getEffectivePrice, isSaleListingProduct } from "@/lib/productSale";
 import { productDescriptionPreview } from "@/components/ProductDescription";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { productPath } from "@/lib/productUrls";
@@ -25,6 +26,7 @@ const CategoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { sale } = useSitewideSale();
   const navigate = useNavigate();
 
   const categoryName = (category && slugToCategory[category]) || "";
@@ -78,7 +80,7 @@ const CategoryPage = () => {
   });
 
   const handleBuyNow = (product: any) => {
-    const effectivePrice = getEffectivePrice(product);
+    const effectivePrice = getEffectivePrice(product, new Date(), sale);
     const productImage = resolvePrimaryProductImage(product);
     navigate("/checkout", {
       state: {
@@ -179,8 +181,9 @@ const CategoryPage = () => {
                 {filteredProducts.map((product, index) => {
                   const inWishlist = isInWishlist(product.id);
                   const productImage = resolvePrimaryProductImage(product);
-                  const saleActive = isSaleActive(product);
-                  const effectivePrice = getEffectivePrice(product);
+                  const appliedPercent = getAppliedSalePercent(product, new Date(), sale);
+                  const saleActive = appliedPercent > 0;
+                  const effectivePrice = getEffectivePrice(product, new Date(), sale);
                   return (
                   <Card
                     key={product.id}
@@ -223,7 +226,7 @@ const CategoryPage = () => {
                             {saleActive && (
                               <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                                 <Tag className="h-3 w-3 mr-1" />
-                                {product.sale_percentage}% OFF
+                                {appliedPercent}% OFF
                               </Badge>
                             )}
                             <Badge variant="secondary" className="text-xs px-3 py-1 bg-yellow-500 text-white">
@@ -233,7 +236,7 @@ const CategoryPage = () => {
                         ) : saleActive ? (
                           <Badge className="bg-red-500 text-white text-xs px-3 py-1">
                             <Tag className="h-3 w-3 mr-1" />
-                            {product.sale_percentage}% OFF
+                            {appliedPercent}% OFF
                           </Badge>
                         ) : (
                           <span className="bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full font-medium">

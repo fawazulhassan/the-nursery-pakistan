@@ -9,7 +9,8 @@ import { fetchProductsWithFallback } from "@/lib/productQueries";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePrimaryProductImage } from "@/lib/productImages";
 import { productPath } from "@/lib/productUrls";
-import { getEffectivePrice, isSaleActive, isSaleListingProduct } from "@/lib/productSale";
+import { getAppliedSalePercent, getEffectivePrice, isSaleListingProduct } from "@/lib/productSale";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
 import type { Tables } from "@/integrations/supabase/types";
 
 type ProductRow = Tables<"products">;
@@ -19,6 +20,7 @@ const HomeSaleSection = () => {
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { sale } = useSitewideSale();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const HomeSaleSection = () => {
   }, [toast]);
 
   const handleBuyNow = (product: ProductRow) => {
-    const effectivePrice = getEffectivePrice(product);
+    const effectivePrice = getEffectivePrice(product, new Date(), sale);
     const productImage = resolvePrimaryProductImage(product);
     navigate("/checkout", {
       state: {
@@ -83,8 +85,9 @@ const HomeSaleSection = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {products.map((product, index) => {
             const productImage = resolvePrimaryProductImage(product);
-            const saleActive = isSaleActive(product);
-            const effectivePrice = getEffectivePrice(product);
+            const appliedPercent = getAppliedSalePercent(product, new Date(), sale);
+            const saleActive = appliedPercent > 0;
+            const effectivePrice = getEffectivePrice(product, new Date(), sale);
             return (
             <Card
               key={product.id}
@@ -105,7 +108,7 @@ const HomeSaleSection = () => {
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-red-500 text-white text-sm px-3 py-1">
                       <Tag className="h-3 w-3 mr-1" />
-                      {product.sale_percentage}% OFF
+                      {appliedPercent}% OFF
                     </Badge>
                   </div>
                 )}

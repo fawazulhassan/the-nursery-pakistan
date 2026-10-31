@@ -2,6 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 type ProductQueryOptions = {
   id?: string;
+  excludeId?: string;
   searchTerm?: string;
   category?: string;
   limit?: number;
@@ -35,6 +36,7 @@ const buildProductsQuery = (
   let query = supabase.from("products").select("*");
 
   if (options.id) query = query.eq("id", options.id);
+  if (options.excludeId) query = query.neq("id", options.excludeId);
   if (options.category) query = query.eq("category", options.category);
   if (options.searchTerm) {
     query = query.or(

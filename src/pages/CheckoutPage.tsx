@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -16,6 +16,8 @@ import { sendEmail } from "@/lib/sendEmail";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDefaultAddress } from "@/hooks/useDefaultAddress";
 import { trackInitiateCheckout, trackPurchase } from "@/lib/metaPixel";
+import { useSitewideSale } from "@/context/SitewideSaleContext";
+import { getEffectivePrice } from "@/lib/productSale";
 
 interface StockError {
   product_id: string;
@@ -36,8 +38,17 @@ interface BuyNowItem {
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { cartItems, clearCart } = useCart();
   const { user, loading: authLoading } = useAuth();
+  const { sale, ready: sitewideReady } = useSitewideSale();
+  const checkoutTracked = useRef(false);
+  const [pricedLines, setPricedLines] = useState<Array<{
+    id: string;
+    name: string;
+    quantity: number;
+    unitPrice: number;
+  }> | null>(null);
+  const [priceError, setPriceError] = useState("");
   const { defaultAddress } = useDefaultAddress();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stockErrors, setStockErrors] = useState<StockError[]>([]);
@@ -54,16 +65,58 @@ const CheckoutPage = () => {
   const isBuyNowCheckout = Boolean(buyNowItem);
   const checkoutSourceItems = isBuyNowCheckout && buyNowItem ? [buyNowItem] : cartItems;
 
-  const getCheckoutTotal = () => {
-    const total = checkoutSourceItems.reduce((sum, item) => {
-      const price =
-        typeof item.price === "string"
-          ? parseInt(item.price.replace(/[^0-9]/g, ""))
-          : item.price;
-      return sum + price * item.quantity;
-    }, 0);
-    return `Rs ${total.toLocaleString()}`;
-  };
+  const checkoutItemKey = checkoutSourceItems.map((item) => `${item.id}:${item.quantity}`).join("|");
+  const pricedTotal = pricedLines
+    ? pricedLines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0)
+    : null;
+
+  useEffect(() => {
+    if (!sitewideReady) return;
+    let cancelled = false;
+
+    const loadPrices = async () => {
+      if (checkoutSourceItems.length === 0) {
+        setPricedLines([]);
+        setPriceError("");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("products")
+        .select("id, price, sale_percentage, sale_start_at, sale_end_at")
+        .in("id", checkoutSourceItems.map((item) => item.id));
+
+      if (cancelled) return;
+      if (error || !data) {
+        setPricedLines(null);
+        setPriceError("Could not load current prices. Refresh and try again.");
+        return;
+      }
+
+      const productsById = new Map(data.map((product) => [product.id, product]));
+      const missing = checkoutSourceItems.some((item) => !productsById.has(item.id));
+      if (missing) {
+        setPricedLines(null);
+        setPriceError("A product in your order is no longer available.");
+        return;
+      }
+
+      setPriceError("");
+      setPricedLines(
+        checkoutSourceItems.map((item) => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          unitPrice: getEffectivePrice(productsById.get(item.id)!, new Date(), sale),
+        })),
+      );
+    };
+
+    void loadPrices();
+    return () => {
+      cancelled = true;
+    };
+  }, [checkoutItemKey, sale, sitewideReady]);
 
   // Pre-fill form with default address when available
   useEffect(() => {
@@ -79,19 +132,17 @@ const CheckoutPage = () => {
     }
   }, [defaultAddress, user]);
 
-  // Fire InitiateCheckout once on mount (empty cart already redirects away)
   useEffect(() => {
-    if (checkoutSourceItems.length > 0) {
-      trackInitiateCheckout(
-        checkoutSourceItems.map((item) => ({
-          id: item.id,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only per Meta plan
-  }, []);
+    if (!pricedLines || pricedLines.length === 0 || checkoutTracked.current) return;
+    checkoutTracked.current = true;
+    trackInitiateCheckout(
+      pricedLines.map((line) => ({
+        id: line.id,
+        quantity: line.quantity,
+        price: line.unitPrice,
+      })),
+    );
+  }, [pricedLines]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,29 +199,27 @@ const CheckoutPage = () => {
         return;
       }
 
-      // Calculate total amount
-      const totalAmount = checkoutSourceItems.reduce((sum, item) => {
-        const price = typeof item.price === 'string' 
-          ? parseInt(item.price.replace(/[^0-9]/g, ""))
-          : item.price;
-        return sum + price * item.quantity;
-      }, 0);
+      if (!pricedLines || pricedLines.length === 0) {
+        toast({
+          title: "Prices still loading",
+          description: priceError || "Wait for the order total, then place the order.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      const totalAmount = pricedLines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
 
       // Determine payment status based on method
       const paymentStatus = paymentMethod === 'online' ? 'paid' : 'unpaid';
 
       // Build atomic checkout payload (order + items + stock updates in one transaction)
-      const checkoutItems = checkoutSourceItems.map(item => {
-        const price = typeof item.price === 'string' 
-          ? parseInt(item.price.replace(/[^0-9]/g, ""))
-          : item.price;
-        
-        return {
-          product_id: item.id,
-          quantity: item.quantity,
-          price: price,
-        };
-      });
+      const checkoutItems = pricedLines.map((line) => ({
+        product_id: line.id,
+        quantity: line.quantity,
+        price: line.unitPrice,
+      }));
 
       const { data: orderId, error: checkoutError } = await supabase.rpc("create_checkout_order", {
         p_total_amount: totalAmount,
@@ -180,6 +229,7 @@ const CheckoutPage = () => {
         p_payment_status: paymentStatus,
         p_customer_name: formData.name.trim(),
         p_customer_email: trimmedCheckoutEmail,
+        p_customer_note: formData.notes.trim() || null,
         p_items: checkoutItems,
       });
 
@@ -357,6 +407,7 @@ const CheckoutPage = () => {
                             onChange={handleChange}
                             placeholder="Any special instructions for delivery"
                             rows={3}
+                            maxLength={500}
                           />
                         </div>
 
@@ -414,21 +465,28 @@ const CheckoutPage = () => {
                       )}
 
                       <div className="space-y-3 mb-6">
-                        {checkoutSourceItems.map((item) => (
-                          <div key={item.id} className="flex justify-between text-sm">
+                        {priceError && (
+                          <p className="text-sm text-destructive">{priceError}</p>
+                        )}
+                        {pricedLines ? pricedLines.map((line) => (
+                          <div key={line.id} className="flex justify-between text-sm">
                             <span className="text-foreground">
-                              {item.name} x {item.quantity}
+                              {line.name} x {line.quantity}
                             </span>
                             <span className="text-muted-foreground">
-                              {item.price}
+                              Rs {(line.unitPrice * line.quantity).toLocaleString()}
                             </span>
                           </div>
-                        ))}
+                        )) : (
+                          <p className="text-sm text-muted-foreground">Loading current prices...</p>
+                        )}
                         
                         <div className="border-t border-border pt-3">
                           <div className="flex justify-between font-bold text-lg">
                             <span>Total</span>
-                            <span className="text-primary">{isBuyNowCheckout ? getCheckoutTotal() : getCartTotal()}</span>
+                            <span className="text-primary">
+                              {pricedTotal == null ? "..." : `Rs ${pricedTotal.toLocaleString()}`}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -441,7 +499,7 @@ const CheckoutPage = () => {
                         </p>
                       </div>
 
-                      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || authLoading}>
+                      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || authLoading || pricedTotal == null}>
                         {authLoading ? "Checking Session..." : isSubmitting ? "Placing Order..." : "Place Order"}
                       </Button>
                     </CardContent>
