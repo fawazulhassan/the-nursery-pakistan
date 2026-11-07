@@ -1,0 +1,829 @@
+[
+  {
+    "pathname": "/",
+    "title": "Buy Plants Online in Pakistan | The Nursery Pakistan",
+    "description": "Shop indoor and outdoor plants, pots, fertilizers and garden accessories online from The Nursery Pakistan, with practical plant-care guidance.",
+    "heading": "Buy plants and garden supplies online in Pakistan"
+  },
+  {
+    "pathname": "/about",
+    "title": "About The Nursery Pakistan | Plants & Garden Care",
+    "description": "Learn about The Nursery Pakistan, our passion for quality plants, reliable gardening supplies and practical support for plant lovers.",
+    "heading": "About The Nursery Pakistan"
+  },
+  {
+    "pathname": "/blogs",
+    "title": "Plant Care Blog Pakistan | The Nursery Pakistan",
+    "description": "Read practical plant-care advice, seasonal gardening tips and workshop updates created for plant lovers in Pakistan.",
+    "heading": "Plant care advice for Pakistan"
+  },
+  {
+    "pathname": "/category/fertilizers-soil",
+    "title": "Fertilizers & Soil Online in Pakistan | The Nursery Pakistan",
+    "description": "Find fertilizers, soil mixes and plant nutrition products for healthier plant growth in Pakistani conditions.",
+    "heading": "Fertilizers and soil"
+  },
+  {
+    "pathname": "/category/indoor-plants",
+    "title": "Indoor Plants Online in Pakistan | The Nursery Pakistan",
+    "description": "Shop indoor plants for Pakistani homes, including easy-care and air-purifying varieties with practical care guidance.",
+    "heading": "Indoor plants"
+  },
+  {
+    "pathname": "/category/outdoor-plants",
+    "title": "Outdoor Plants Online in Pakistan | The Nursery Pakistan",
+    "description": "Explore outdoor plants suited to Pakistan's climate for gardens, balconies and attractive green spaces.",
+    "heading": "Outdoor plants"
+  },
+  {
+    "pathname": "/category/pots-accessories",
+    "title": "Pots & Accessories Online in Pakistan | The Nursery Pakistan",
+    "description": "Shop plant pots, planters and useful garden accessories for indoor and outdoor planting.",
+    "heading": "Pots and garden accessories"
+  },
+  {
+    "pathname": "/flower-workshop",
+    "title": "Hands-On Flower Arrangement Workshop | The Nursery Pakistan",
+    "description": "Learn flower arrangement, bouquet styling and bloom-care techniques through The Nursery Pakistan's hands-on workshop experience.",
+    "heading": "Hands-on flower arrangement workshop"
+  },
+  {
+    "pathname": "/guide",
+    "title": "Plant Care Guide for Pakistan | The Nursery Pakistan",
+    "description": "Use our practical Pakistan plant-care guide for watering, feeding, common plant problems and care tips for popular indoor plants.",
+    "heading": "Plant care guide for Pakistan",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How often should indoor plants be watered in Pakistan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Check the soil instead of following a fixed calendar. Water when the top layer feels dry, and reduce watering during cooler months or when the soil stays wet longer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I protect plants during Pakistan's summer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Keep sensitive plants away from harsh afternoon sun, water deeply when the soil needs it, improve airflow, and use mulch for outdoor pots to slow moisture loss."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do plant leaves turn yellow?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Common causes include overwatering, poor drainage, low light, root stress, and nutrient problems. Check soil moisture and drainage before adding fertilizer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which indoor plants are easiest for beginners?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Snake plant, money plant, aloe vera, and several pothos varieties are popular beginner choices when they receive suitable light and are not overwatered."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "pathname": "/landscaping-services",
+    "title": "Landscaping Services in Kasur | The Nursery Pakistan",
+    "description": "Explore residential and commercial landscaping services in Kasur, including garden planning, planting and completed project inspiration.",
+    "heading": "Landscaping services in Kasur",
+    "structuredData": [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Landscaping Services",
+        "serviceType": "Garden landscaping and planting",
+        "areaServed": {
+          "@type": "City",
+          "name": "Kasur"
+        },
+        "provider": {
+          "@id": "https://nurserypakistan.pk/#organization"
+        },
+        "url": "https://nurserypakistan.pk/landscaping-services"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Which landscaping services are available in Kasur?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Nursery Pakistan provides garden planning, plant selection, planting, and landscaping consultation for suitable residential and commercial projects in Kasur."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I request a landscaping consultation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Use the landscaping consultation form and share your location, space details, and project goals. The team can then review the request and discuss the next step."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I view completed landscaping work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The completed projects section shows published landscaping work from The Nursery Pakistan."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "pathname": "/products",
+    "title": "Buy Plants, Pots & Garden Supplies Online in Pakistan",
+    "description": "Browse plants, pots, fertilizers, soil and garden accessories available online from The Nursery Pakistan.",
+    "heading": "Plants and garden supplies"
+  },
+  {
+    "pathname": "/projects",
+    "title": "Completed Landscaping Projects | The Nursery Pakistan",
+    "description": "Explore completed garden and landscaping projects by The Nursery Pakistan for ideas, design inspiration and proof of our work.",
+    "heading": "Completed landscaping projects"
+  },
+  {
+    "pathname": "/workshops",
+    "title": "Current & Upcoming Flower Workshops | The Nursery Pakistan",
+    "description": "View current and upcoming hands-on flower workshops, available dates and booking information from The Nursery Pakistan.",
+    "heading": "Current and upcoming flower workshops"
+  },
+  {
+    "pathname": "/category/sale",
+    "title": "Sale Online in Pakistan | The Nursery Pakistan",
+    "description": "Browse current offers on visible plants and garden supplies from The Nursery Pakistan.",
+    "heading": "Plants and garden supplies on sale",
+    "robots": "index, follow"
+  },
+  {
+    "pathname": "/product/peace-lily--9d6b8e58-f0e4-4d84-a402-9b4697ac4766",
+    "title": "Peace Lily (پیس للی) امن کا پھول | The Nursery Pakistan",
+    "description": "پیس للی پاکستان کا سب سے مقبول انڈور پودا ہے جو گھر اور آفس کی ہوا کو صاف کرتا ہے اور سفید خوبصورت پھول دیتا ہے۔ کم روشنی میں بھی خوب اگتا ہے اور گھر کی خوبصورت",
+    "heading": "Peace Lily (پیس للی) امن کا پھول",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/53046da8-0895-4de4-ba0f-f313bad9e2ca-1778155692750.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Peace Lily (پیس للی) امن کا پھول",
+      "description": "پیس للی پاکستان کا سب سے مقبول انڈور پودا ہے جو گھر اور آفس کی ہوا کو صاف کرتا ہے اور سفید خوبصورت پھول دیتا ہے۔ کم روشنی میں بھی خوب اگتا ہے اور گھر کی خوبصورتی کے ساتھ ساتھ ذہنی سکون بھی فراہم کرتا ہے۔ نئے پودے اگانے والوں کے لیے سب سے بہترین انتخاب۔\n\nPeace Lily is one of Pakistan's most beloved and best-selling indoor plants. It purifies indoor air, thrives in low light, and produces elegant white blooms that bring calm and beauty to any home or office. Extremely easy to care for perfect for beginners, apartments, and office spaces.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/53046da8-0895-4de4-ba0f-f313bad9e2ca-1778155692750.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c6e16890-376b-4e7b-9eb4-08ba7cdd8cdd-1778155692751.webp"
+      ],
+      "sku": "9d6b8e58-f0e4-4d84-a402-9b4697ac4766",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "3000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/peace-lily--9d6b8e58-f0e4-4d84-a402-9b4697ac4766"
+      }
+    }
+  },
+  {
+    "pathname": "/product/hyacinth--7c37c1ec-aff3-41c0-9943-ed2f28134858",
+    "title": "Hyacinth (ہائیسنتھ)  خوشبودار بلب پودا | The Nursery Pakistan",
+    "description": "\nہائیسنتھ پاکستان کا سب سے خوشبودار اور رنگین بلب پودا ہے۔ اس کے گھنے اور مہکتے پھول گھر، لان اور گملوں میں لاجواب خوبصورتی اور خوشبو بکھیرتے ہیں۔ سردیوں کے موس",
+    "heading": "Hyacinth (ہائیسنتھ)  خوشبودار بلب پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/0b605b79-9ac1-43b4-b520-abd4deeca3db-1778156975528.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Hyacinth (ہائیسنتھ)  خوشبودار بلب پودا",
+      "description": "\nہائیسنتھ پاکستان کا سب سے خوشبودار اور رنگین بلب پودا ہے۔ اس کے گھنے اور مہکتے پھول گھر، لان اور گملوں میں لاجواب خوبصورتی اور خوشبو بکھیرتے ہیں۔ سردیوں کے موسم میں یہ پودا بھرپور کھلتا ہے اور پورے گھر کو مہکا دیتا ہے۔\n\nOne of the most fragrant and vibrant flowering bulb plants available in Pakistan. Hyacinth produces dense, beautifully scented flower spikes in shades of purple, pink, white, and blue. It thrives in Pakistan's winter season, making your garden, lawn, or balcony smell absolutely wonderful.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/0b605b79-9ac1-43b4-b520-abd4deeca3db-1778156975528.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/4812917b-d830-4769-8b50-68b77b118aa5-1778156975528.webp"
+      ],
+      "sku": "7c37c1ec-aff3-41c0-9943-ed2f28134858",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/hyacinth--7c37c1ec-aff3-41c0-9943-ed2f28134858"
+      }
+    }
+  },
+  {
+    "pathname": "/product/sunrise-succulent-anacampseros--6b4080b7-363f-4072-bfb1-7081bce4d3e8",
+    "title": "Sunrise Succulent – Anacampseros (سن رائز سکولنٹ) | The Nursery Pakistan",
+    "description": "ایک انتہائی خوبصورت اور رنگ بدلنے والا سکولنٹ پودا۔ Sunrise Succulent کے پتے گلابی، سبز اور بنفشی رنگوں کا شاندار امتزاج ہیں جو دیکھنے والے کو سورج طلوع ہونے کا",
+    "heading": "Sunrise Succulent – Anacampseros (سن رائز سکولنٹ)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c2090c7e-70e3-4b60-b374-acbc501dffaa-1778156723085.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Sunrise Succulent – Anacampseros (سن رائز سکولنٹ)",
+      "description": "ایک انتہائی خوبصورت اور رنگ بدلنے والا سکولنٹ پودا۔ Sunrise Succulent کے پتے گلابی، سبز اور بنفشی رنگوں کا شاندار امتزاج ہیں جو دیکھنے والے کو سورج طلوع ہونے کا احساس دلاتے ہیں۔ کم پانی، کم دیکھ بھال — گھر، آفس یا تحفے کے لیے بہترین انتخاب۔\n\nA stunning little succulent with a dazzling mix of pink, purple, and green leaves that resemble a beautiful sunrise. Native to South Africa, it grows in clumps of rosettes and thrives in bright indirect light — perfect for desks, shelves, and windowsills across Pakistan. Extremely low maintenance and a gorgeous gifting choice.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c2090c7e-70e3-4b60-b374-acbc501dffaa-1778156723085.webp"
+      ],
+      "sku": "6b4080b7-363f-4072-bfb1-7081bce4d3e8",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "800",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/sunrise-succulent-anacampseros--6b4080b7-363f-4072-bfb1-7081bce4d3e8"
+      }
+    }
+  },
+  {
+    "pathname": "/product/yellow-lily--74c21605-2deb-48bd-8a5f-e9dce5fdb3ad",
+    "title": "Yellow Lily (پیلی للی) | The Nursery Pakistan",
+    "description": "گھر اور باغ کو روشن کرنے کے لیے بہترین پھول دار پودا۔ Yellow Lily اپنے چمکدار پیلے پھولوں سے آپ کے گارڈن، بالکونی یا لان کو خوبصورت بنا دیتا ہے۔ پاکستان کے موسم",
+    "heading": "Yellow Lily (پیلی للی)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/118575ec-cbb4-4261-8f1f-fe9b1c1a91b6-1778157269113.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Yellow Lily (پیلی للی)",
+      "description": "گھر اور باغ کو روشن کرنے کے لیے بہترین پھول دار پودا۔ Yellow Lily اپنے چمکدار پیلے پھولوں سے آپ کے گارڈن، بالکونی یا لان کو خوبصورت بنا دیتا ہے۔ پاکستان کے موسم میں آسانی سے اگتا ہے اور کم دیکھ بھال میں خوبصورت رہتا ہے۔\n\nA stunning flowering plant that brightens any garden, balcony, or lawn with its vibrant yellow blooms. Yellow Lily thrives easily in Pakistan's climate and adds a cheerful, colorful touch to your outdoor space with minimal care.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/118575ec-cbb4-4261-8f1f-fe9b1c1a91b6-1778157269113.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/7ae65529-3f95-426d-9f08-4052960810d8-1778157269113.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/26ca172b-fde4-4899-9785-a529ce9080fe-1778157269113.webp"
+      ],
+      "sku": "74c21605-2deb-48bd-8a5f-e9dce5fdb3ad",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/yellow-lily--74c21605-2deb-48bd-8a5f-e9dce5fdb3ad"
+      }
+    }
+  },
+  {
+    "pathname": "/product/lisianthus-prairie-gentian--f786d810-0d3b-49f3-a29f-b998e11ae1e6",
+    "title": "Lisianthus (لیسی اینتھس)  Prairie Gentian | The Nursery Pakistan",
+    "description": "\nلیسی اینتھس ایک نادر اور خوبصورت پھول دار پودا ہے جو گلاب جیسے نرم اور دلکش پھول دیتا ہے۔ شادیوں، تقریبات اور گھر کی سجاوٹ کے لیے یہ پودا پاکستان میں بہت مقبول",
+    "heading": "Lisianthus (لیسی اینتھس)  Prairie Gentian",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3ca38412-fb82-49d8-b33c-7e522093f8c2-1778157139346.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Lisianthus (لیسی اینتھس)  Prairie Gentian",
+      "description": "\nلیسی اینتھس ایک نادر اور خوبصورت پھول دار پودا ہے جو گلاب جیسے نرم اور دلکش پھول دیتا ہے۔ شادیوں، تقریبات اور گھر کی سجاوٹ کے لیے یہ پودا پاکستان میں بہت مقبول ہو رہا ہے۔ ابھی سیڈلنگ سٹیج پر ہے . جلد خوبصورت پھولوں سے مہک اٹھے گا۔\n\nA rare and elegant flowering plant producing rose-like blooms in shades of purple, white, and pink. Lisianthus is gaining popularity across Pakistan for home décor, wedding arrangements, and gifting. Currently at seedling stage will bloom into a stunning floral display with proper care.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3ca38412-fb82-49d8-b33c-7e522093f8c2-1778157139346.webp"
+      ],
+      "sku": "f786d810-0d3b-49f3-a29f-b998e11ae1e6",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/lisianthus-prairie-gentian--f786d810-0d3b-49f3-a29f-b998e11ae1e6"
+      }
+    }
+  },
+  {
+    "pathname": "/product/grafted-moon-cactus--2efda029-58c2-46f0-9c0d-062c9be5c767",
+    "title": "Grafted Moon Cactus  رنگین گرافٹڈ کیکٹس | The Nursery Pakistan",
+    "description": "رنگ برنگے اور انوکھے گرافٹڈ کیکٹس جو آپ کے گھر، آفس یا گارڈن کی خوبصورتی میں چار چاند لگا دیں۔ سرخ، نارنجی، پیلے اور سفید رنگوں میں دستیاب  یہ کیکٹس کم پانی اور",
+    "heading": "Grafted Moon Cactus  رنگین گرافٹڈ کیکٹس",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/354d2890-9f18-4979-8840-22be4305085b-1778156892154.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Grafted Moon Cactus  رنگین گرافٹڈ کیکٹس",
+      "description": "رنگ برنگے اور انوکھے گرافٹڈ کیکٹس جو آپ کے گھر، آفس یا گارڈن کی خوبصورتی میں چار چاند لگا دیں۔ سرخ، نارنجی، پیلے اور سفید رنگوں میں دستیاب  یہ کیکٹس کم پانی اور کم دیکھ بھال میں بھی خوبصورت رہتا ہے۔ تحفے کے طور پر بھی بہترین انتخاب !\n\nA stunning collection of grafted Moon Cactus available in vibrant red, orange, yellow, and white colors. Each plant features a colorful cactus top grafted onto a tall green stem  creating a truly unique and eye-catching display. Extremely low maintenance and perfect as a gift or desk decoration.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/354d2890-9f18-4979-8840-22be4305085b-1778156892154.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/667a85e7-a40a-453d-ad78-bf89a0dc5185-1778156892154.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/caa054c3-1113-4fa8-885e-b7d0dc843d14-1778156892154.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c70d05ff-d8da-45f4-830a-a4bdd9cb5817-1778156892154.webp"
+      ],
+      "sku": "2efda029-58c2-46f0-9c0d-062c9be5c767",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/grafted-moon-cactus--2efda029-58c2-46f0-9c0d-062c9be5c767"
+      }
+    }
+  },
+  {
+    "pathname": "/product/agave-variegated--21655ce4-e2c7-4e2b-b110-0749bd9d4810",
+    "title": "Agave Variegated (ایگیوی ویری گیٹڈ) دو رنگی صحرائی پودا | The Nursery Pakistan",
+    "description": "ایگیوی ویری گیٹڈ ایک انتہائی مضبوط اور خوبصورت صحرائی پودا ہے جس کی پتیوں پر سبز اور پیلے رنگ کی دلکش دھاریاں ہوتی ہیں۔ پاکستان کی گرم آب و ہوا میں بغیر کسی خاص",
+    "heading": "Agave Variegated (ایگیوی ویری گیٹڈ) دو رنگی صحرائی پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6e32653d-25d6-469f-b2fd-cf9b3ab2057a-1778155855663.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Agave Variegated (ایگیوی ویری گیٹڈ) دو رنگی صحرائی پودا",
+      "description": "ایگیوی ویری گیٹڈ ایک انتہائی مضبوط اور خوبصورت صحرائی پودا ہے جس کی پتیوں پر سبز اور پیلے رنگ کی دلکش دھاریاں ہوتی ہیں۔ پاکستان کی گرم آب و ہوا میں بغیر کسی خاص دیکھ بھال کے پروان چڑھتا ہے۔ گھر کے باہر، لان یا گملے میں رکھنے کے لیے ایک شاندار اور دیرپا پودا۔\n\nA bold and architectural succulent with stunning green and yellow striped leaves edged with sharp spines. Agave Variegated is virtually indestructible it thrives in Pakistan's intense heat and requires almost no watering or care. A perfect statement plant for lawns, driveways, patios, and large pots.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6e32653d-25d6-469f-b2fd-cf9b3ab2057a-1778155855663.webp"
+      ],
+      "sku": "21655ce4-e2c7-4e2b-b110-0749bd9d4810",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/agave-variegated--21655ce4-e2c7-4e2b-b110-0749bd9d4810"
+      }
+    }
+  },
+  {
+    "pathname": "/product/kalanchoe-red-dwarf--6c875678-22d7-4ddf-b3ed-3342df359cc9",
+    "title": "Kalanchoe Red Dwarf (کالانکوئی سرخ بونا پودا) | The Nursery Pakistan",
+    "description": "کالانکوئی ریڈ ڈوارف ایک چھوٹا لیکن انتہائی خوبصورت پھول دار پودا ہے جو اپنے چمکدار سرخ پھولوں سے کسی بھی کمرے، میز یا کھڑکی کو روشن کر دیتا ہے۔ کم پانی اور کم د",
+    "heading": "Kalanchoe Red Dwarf (کالانکوئی سرخ بونا پودا)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/275aa85b-13db-439d-9fbb-357091788fd1-1778156268683.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Kalanchoe Red Dwarf (کالانکوئی سرخ بونا پودا)",
+      "description": "کالانکوئی ریڈ ڈوارف ایک چھوٹا لیکن انتہائی خوبصورت پھول دار پودا ہے جو اپنے چمکدار سرخ پھولوں سے کسی بھی کمرے، میز یا کھڑکی کو روشن کر دیتا ہے۔ کم پانی اور کم دیکھ بھال میں ہفتوں تک کھلا رہتا ہے گھر سجانے اور تحفہ دینے کے لیے بہترین انتخاب۔\n\nA compact and cheerful flowering plant that bursts with clusters of vivid red blooms. Kalanchoe Red Dwarf stays in flower for weeks with very little care or watering perfect for windowsills, office desks, dining tables, and as a beautiful gift for any occasion.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/275aa85b-13db-439d-9fbb-357091788fd1-1778156268683.webp"
+      ],
+      "sku": "6c875678-22d7-4ddf-b3ed-3342df359cc9",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/kalanchoe-red-dwarf--6c875678-22d7-4ddf-b3ed-3342df359cc9"
+      }
+    }
+  },
+  {
+    "pathname": "/product/neon-pothos--4b6ea6c0-37f7-453d-8282-b204105c9cf7",
+    "title": "Neon Pothos (نیون پوتھوس) چمکدار پیلا منی پلانٹ | The Nursery Pakistan",
+    "description": "نیون پوتھوس اپنے چمکدار لیموں پیلے پتوں کی وجہ سے گھر اور آفس کی سجاوٹ کے لیے سب سے زیادہ پسند کیا جانے والا انڈور پودا ہے۔ کم روشنی اور کم پانی میں بھی خوب اگت",
+    "heading": "Neon Pothos (نیون پوتھوس) چمکدار پیلا منی پلانٹ",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2f65da12-4bd4-483d-9a13-ae97457a45de-1778156402068.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Neon Pothos (نیون پوتھوس) چمکدار پیلا منی پلانٹ",
+      "description": "نیون پوتھوس اپنے چمکدار لیموں پیلے پتوں کی وجہ سے گھر اور آفس کی سجاوٹ کے لیے سب سے زیادہ پسند کیا جانے والا انڈور پودا ہے۔ کم روشنی اور کم پانی میں بھی خوب اگتا ہے نئے پودے اگانے والوں کے لیے بہترین انتخاب۔ شیلف، میز یا ہینگنگ باسکٹ میں لاجواب لگتا ہے۔\n\nNeon Pothos is one of Pakistan's most popular indoor plants, loved for its strikingly bright lime-yellow leaves that instantly brighten any room. Thrives in low light and needs minimal watering perfect for beginners, offices, shelves, and hanging baskets. Fast growing and nearly impossible to kill!",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2f65da12-4bd4-483d-9a13-ae97457a45de-1778156402068.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/39d15902-5499-4d9e-9bba-29247b42ee99-1778156402068.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6af3bbbe-0910-43e8-9944-232771fd02f7-1778156402068.webp"
+      ],
+      "sku": "4b6ea6c0-37f7-453d-8282-b204105c9cf7",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "600",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/neon-pothos--4b6ea6c0-37f7-453d-8282-b204105c9cf7"
+      }
+    }
+  },
+  {
+    "pathname": "/product/hydrangea--8d9f2917-3508-403c-b1d5-005e831d6d3f",
+    "title": "Hydrangea (ہائیڈرینجیا) گلِ افشاں | The Nursery Pakistan",
+    "description": "ہائیڈرینجیا پاکستان کا سب سے خوبصورت اور نادر پھول دار پودا ہے جو اپنے گھنے اور رنگین پھولوں کے گچھوں سے باغ، بالکونی اور گھر کو جنت نظیر بنا دیتا ہے۔ سفید، نیل",
+    "heading": "Hydrangea (ہائیڈرینجیا) گلِ افشاں",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/ea105566-0b0b-45b0-8b20-4193a953947c-1778156179860.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Hydrangea (ہائیڈرینجیا) گلِ افشاں",
+      "description": "ہائیڈرینجیا پاکستان کا سب سے خوبصورت اور نادر پھول دار پودا ہے جو اپنے گھنے اور رنگین پھولوں کے گچھوں سے باغ، بالکونی اور گھر کو جنت نظیر بنا دیتا ہے۔ سفید، نیلے، گلابی اور جامنی رنگوں میں دستیاب شادیوں اور تقریبات کی سجاوٹ کے لیے بھی بے مثال انتخاب۔\n\nOne of Pakistan's most stunning and premium flowering shrubs. Hydrangea produces magnificent clusters of blooms in shades of white, pink, blue, and purple transforming any garden, balcony, or lawn into a breathtaking floral display. Highly sought after for home décor, wedding events, and luxury gifting.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/ea105566-0b0b-45b0-8b20-4193a953947c-1778156179860.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/a49f49e4-2bd9-4ac0-9e0d-fe9e13642e66-1778156121178.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/1874e62e-6d7d-4310-85bd-643b4d11fb1f-1778156121178.webp"
+      ],
+      "sku": "8d9f2917-3508-403c-b1d5-005e831d6d3f",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "3000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/hydrangea--8d9f2917-3508-403c-b1d5-005e831d6d3f"
+      }
+    }
+  },
+  {
+    "pathname": "/product/adenium-desert-rose--2e318cd5-8811-4f7e-8c3c-b5362b8a19c0",
+    "title": "Adenium Desert Rose (ایڈینیم صحرائی گلاب) | The Nursery Pakistan",
+    "description": "ایڈینیم جسے صحرائی گلاب بھی کہتے ہیں پاکستان کا سب سے مقبول اور خوبصورت پھول دار پودا ہے۔ اس کے گلابی، سرخ اور سفید رنگ کے شاندار پھول اور موٹی جڑیں اسے ایک انو",
+    "heading": "Adenium Desert Rose (ایڈینیم صحرائی گلاب)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2a334f4c-f8e1-4ff3-bd11-49c594cdef7c-1778156547302.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Adenium Desert Rose (ایڈینیم صحرائی گلاب)",
+      "description": "ایڈینیم جسے صحرائی گلاب بھی کہتے ہیں پاکستان کا سب سے مقبول اور خوبصورت پھول دار پودا ہے۔ اس کے گلابی، سرخ اور سفید رنگ کے شاندار پھول اور موٹی جڑیں اسے ایک انوکھا اور دلکش پودا بناتی ہیں۔ گرم موسم میں بھرپور کھلتا ہے اور کم پانی میں بھی زندہ رہتا ہے۔\n\nKnown as the Desert Rose, Adenium is one of Pakistan's most loved and sought-after flowering plants. Its stunning pink, red, or white blooms and thick swollen base make it a truly unique showpiece for any home, balcony, or garden. Thrives in Pakistan's hot climate with very little water and care.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2a334f4c-f8e1-4ff3-bd11-49c594cdef7c-1778156547302.webp",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/0a6699cd-00d3-4bdf-b011-9f5f6746ade9-1778156547302.webp"
+      ],
+      "sku": "2e318cd5-8811-4f7e-8c3c-b5362b8a19c0",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/adenium-desert-rose--2e318cd5-8811-4f7e-8c3c-b5362b8a19c0"
+      }
+    }
+  },
+  {
+    "pathname": "/product/exotic-plant-deal-3-snake-plants-for-rs-1-000--ff5cbfee-6cfd-4a3f-b717-b870bc74ae7f",
+    "title": "Exotic Plant Deal - 3 Snake Plants for Rs. 1,000 | The Nursery Pakistan",
+    "description": "Bring beautiful low-maintenance snake plants to your home with our Regular Plant Deal 2.\n\nThis deal includes:\n\n- Moonshine Snake Plant\n- Siam Silver\n- Green Sna",
+    "heading": "Exotic Plant Deal - 3 Snake Plants for Rs. 1,000",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/4e65271e-14b6-4c3e-b335-00b45bdff647-1789303733751.png",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Exotic Plant Deal - 3 Snake Plants for Rs. 1,000",
+      "description": "Bring beautiful low-maintenance snake plants to your home with our Regular Plant Deal 2.\n\nThis deal includes:\n\n- Moonshine Snake Plant\n- Siam Silver\n- Green Snake Plant\n\nPrice:\nRs. 1,000 for all 3 plants\n\nImportant details:\n\n- Plants are provided bare-root\n- Pots are not included\n- Soil media is not included\n- Delivery charges are separate\n\nDelivery charges:\n\n- 1 deal: Rs. 300\n- 2 deals: Rs. 400\n\nThis deal is a good choice for indoor plant lovers, home gardeners, balcony gardening, and anyone who wants easy-care plants at an affordable price.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/4e65271e-14b6-4c3e-b335-00b45bdff647-1789303733751.png"
+      ],
+      "sku": "ff5cbfee-6cfd-4a3f-b717-b870bc74ae7f",
+      "category": "Sale",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/exotic-plant-deal-3-snake-plants-for-rs-1-000--ff5cbfee-6cfd-4a3f-b717-b870bc74ae7f"
+      }
+    }
+  },
+  {
+    "pathname": "/product/azadi-plant-deal-4-indoor-plants-for-rs-1-000--e4ebe044-bbbb-4828-adbd-0a9d8509b25d",
+    "title": "Azadi Plant Deal: 4 Indoor Plants for Rs. 1,000 | The Nursery Pakistan",
+    "description": "After receiving an amazing response from our customers, we have extended our Azadi Plant Deal for 1 more month.\n\nThis deal includes 4 indoor plants:\n\n- Snake Pl",
+    "heading": "Azadi Plant Deal: 4 Indoor Plants for Rs. 1,000",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6554a8e2-579b-472c-ba94-97e6a4c5193c-1789297029301.png",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Azadi Plant Deal: 4 Indoor Plants for Rs. 1,000",
+      "description": "After receiving an amazing response from our customers, we have extended our Azadi Plant Deal for 1 more month.\n\nThis deal includes 4 indoor plants:\n\n- Snake Plant\n- Syngonium\n- Red Dracaena\n- Spider Plant\n\nPrice:\nRs. 1,000 for all 4 plants\n\nImportant details:\n\n- Plants are provided bare-root\n- Pots are not included\n- Soil media is not included\n- Delivery charges are separate\n- Very limited stock is available\n\nDelivery charges:\n\n- 1 deal: Rs. 300\n- 2 deals: Rs. 400\n\nThis offer is a good choice for indoor plant lovers, home gardeners, and anyone who wants to start a small plant collection at an affordable price.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6554a8e2-579b-472c-ba94-97e6a4c5193c-1789297029301.png"
+      ],
+      "sku": "e4ebe044-bbbb-4828-adbd-0a9d8509b25d",
+      "category": "Sale",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/azadi-plant-deal-4-indoor-plants-for-rs-1-000--e4ebe044-bbbb-4828-adbd-0a9d8509b25d"
+      }
+    }
+  },
+  {
+    "pathname": "/product/organic-bone-meal-fertilizer--bd36b8cf-09ab-4817-ab09-2e2b481841f6",
+    "title": "Organic Bone Meal Fertilizer (ہڈی کی کھاد) | The Nursery Pakistan",
+    "description": "ہڈی کی کھاد پاکستان میں سب سے زیادہ استعمال ہونے والی نامیاتی کھاد ہے جو پودوں کی جڑوں کو مضبوط بناتی ہے اور پھول و پھل زیادہ کرتی ہے۔ یہ کیمیکل سے پاک 100% قدر",
+    "heading": "Organic Bone Meal Fertilizer (ہڈی کی کھاد)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/46708f15-26b4-4ba5-93b8-d49a16e9936c-1781270328552.png",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Organic Bone Meal Fertilizer (ہڈی کی کھاد)",
+      "description": "ہڈی کی کھاد پاکستان میں سب سے زیادہ استعمال ہونے والی نامیاتی کھاد ہے جو پودوں کی جڑوں کو مضبوط بناتی ہے اور پھول و پھل زیادہ کرتی ہے۔ یہ کیمیکل سے پاک 100% قدرتی کھاد فاسفورس اور کیلشیم سے بھرپور ہے — جو مٹی کو زرخیز بناتی ہے اور پودوں کی نشوونما کو تیز کرتی ہے۔ انڈور، آؤٹ ڈور، سبزیوں اور پھولوں والے تمام پودوں کے لیے موزوں۔\n\nThe Nursery Pakistans Organic Bone Meal Fertilizer is 100% natural, chemical-free, and packed with phosphorus and calcium the two nutrients plants crave most for strong roots, bigger blooms, and abundant fruit. Slow-release and soil-friendly, it feeds your plants for months. Perfect for indoor plants, kitchen gardens, flowering plants, vegetables, and fruit trees. No chemicals. No harm. Just pure, organic plant power.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/46708f15-26b4-4ba5-93b8-d49a16e9936c-1781270328552.png",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/ac539e85-5054-41de-9bb7-cecc627282df-1778842119211.png",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6b24d52b-0dca-4ba8-b319-44c331d51125-1778842119211.png",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/a617fe40-1f13-4668-ad6b-9dafcbd56ad2-1781270328554.png"
+      ],
+      "sku": "bd36b8cf-09ab-4817-ab09-2e2b481841f6",
+      "category": "Fertilizers & Soil",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "450",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/organic-bone-meal-fertilizer--bd36b8cf-09ab-4817-ab09-2e2b481841f6"
+      }
+    }
+  },
+  {
+    "pathname": "/product/english-ivy-tricolor--59da5d33-a8b2-488c-a3c0-15091af0d3e4",
+    "title": "English Ivy Tricolor (انگلش آئیوی ٹرائی کلر)  تین رنگی بیل | The Nursery Pakistan",
+    "description": "\nانگلش آئیوی ٹرائی کلر ایک خوبصورت اور تیزی سے پھیلنے والا پودا ہے جس کے پتوں پر سبز، سفید اور گلابی رنگوں کا دلکش امتزاج ہوتا ہے۔ ہینگنگ باسکٹ، شیلف یا دیوار پ",
+    "heading": "English Ivy Tricolor (انگلش آئیوی ٹرائی کلر)  تین رنگی بیل",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3de0039f-efa1-4e5d-86d5-b7c155903709-1778156642160.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "English Ivy Tricolor (انگلش آئیوی ٹرائی کلر)  تین رنگی بیل",
+      "description": "\nانگلش آئیوی ٹرائی کلر ایک خوبصورت اور تیزی سے پھیلنے والا پودا ہے جس کے پتوں پر سبز، سفید اور گلابی رنگوں کا دلکش امتزاج ہوتا ہے۔ ہینگنگ باسکٹ، شیلف یا دیوار پر لٹکانے کے لیے بہترین  گھر کو فطری خوبصورتی سے سجائیں۔\n\nA gorgeous trailing and climbing plant with striking tricolor leaves featuring shades of green, white, and pink. Perfect for hanging baskets, shelves, balconies, and indoor walls. English Ivy Tricolor grows quickly and adds a lush, natural elegance to any space with very little effort.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3de0039f-efa1-4e5d-86d5-b7c155903709-1778156642160.webp"
+      ],
+      "sku": "59da5d33-a8b2-488c-a3c0-15091af0d3e4",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "600",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/english-ivy-tricolor--59da5d33-a8b2-488c-a3c0-15091af0d3e4"
+      }
+    }
+  },
+  {
+    "pathname": "/product/regular-plant-deal-3-plants-for-rs-1-000--5303d62f-19e6-45c9-b7d3-a7ef5787c899",
+    "title": "Regular Plant Deal - 3 Plants for Rs. 1,000 | The Nursery Pakistan",
+    "description": "Bring fresh greenery to your home with our Regular Plant Deal.\n\nThis deal includes:\n- Song of Thailand\n- Song of India\n- Green Snake Plant\n\nPrice:\nRs. 1,000 for",
+    "heading": "Regular Plant Deal - 3 Plants for Rs. 1,000",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/707504a1-d72f-492a-b68c-97abe546a2aa-1789297301161.png",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Regular Plant Deal - 3 Plants for Rs. 1,000",
+      "description": "Bring fresh greenery to your home with our Regular Plant Deal.\n\nThis deal includes:\n- Song of Thailand\n- Song of India\n- Green Snake Plant\n\nPrice:\nRs. 1,000 for all 3 plants\n\nImportant details:\n- Plants are provided bare-root\n- Pots are not included\n- Soil media is not included\n- Delivery charges are separate\n\nDelivery charges:\n- 1 deal: Rs. 300\n- 2 deals: Rs. 400\n\nThis deal is perfect for indoor plant lovers, home gardeners, balcony gardening, and anyone who wants to grow their plant collection at an affordable price.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/707504a1-d72f-492a-b68c-97abe546a2aa-1789297301161.png"
+      ],
+      "sku": "5303d62f-19e6-45c9-b7d3-a7ef5787c899",
+      "category": "Sale",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/regular-plant-deal-3-plants-for-rs-1-000--5303d62f-19e6-45c9-b7d3-a7ef5787c899"
+      }
+    }
+  },
+  {
+    "pathname": "/product/dwarf-pineapple-plant-ananas-comosus--9ba23b72-7d57-46f2-a980-78d9aee5374a",
+    "title": "Dwarf Pineapple Plant (بونا انناس پودا) Ananas Comosus | The Nursery Pakistan",
+    "description": "بونا انناس پودا پاکستان میں ایک انتہائی نادر اور انوکھا پودا ہے جو اپنی گہری سرخ اور جامنی رنگ کی پتیوں کی وجہ سے سب سے الگ نظر آتا ہے۔ گھر، آفس یا ڈرائنگ روم م",
+    "heading": "Dwarf Pineapple Plant (بونا انناس پودا) Ananas Comosus",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/921105fd-4206-4c2b-a608-1dee204c5985-1778155939189.webp",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Dwarf Pineapple Plant (بونا انناس پودا) Ananas Comosus",
+      "description": "بونا انناس پودا پاکستان میں ایک انتہائی نادر اور انوکھا پودا ہے جو اپنی گہری سرخ اور جامنی رنگ کی پتیوں کی وجہ سے سب سے الگ نظر آتا ہے۔ گھر، آفس یا ڈرائنگ روم میں رکھنے کے لیے ایک شاندار اور بات چیت کا موضوع بننے والا پودا۔ چھوٹا اصلی انناس بھی پیدا کرتا ہے!\n\nOne of Pakistan's most exotic and eye-catching rare plants. The Dwarf Pineapple features stunning deep red and burgundy spiky leaves that make it an instant conversation piece in any home or office. It actually produces a small real pineapple fruit making it as fascinating as it is beautiful!",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/921105fd-4206-4c2b-a608-1dee204c5985-1778155939189.webp"
+      ],
+      "sku": "9ba23b72-7d57-46f2-a980-78d9aee5374a",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/dwarf-pineapple-plant-ananas-comosus--9ba23b72-7d57-46f2-a980-78d9aee5374a"
+      }
+    }
+  },
+  {
+    "pathname": "/blog/care-for-plants-pakistani-summer-2026",
+    "title": "How to Care for Plants in Pakistani Summer (Ultimate 2026 Guide) | The Nursery Pakistan",
+    "description": "Pakistani summers can reach 45°C brutal for humans and plants alike. \nLearn exactly how to protect, water, and revive your plants during \nthe hot months of May, June & July in Pakistan.",
+    "heading": "How to Care for Plants in Pakistani Summer (Ultimate 2026 Guide)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/0464c936-e215-413a-a64a-85178ca6972e-1777983635004.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/best-fertilizers-home-garden-pakistan-bone-meal",
+    "title": "Best Fertilizers for Home Gardens in Pakistan (Bone Meal & More) | The Nursery Pakistan",
+    "description": "Looking for the best fertilizers for your home garden in Pakistan? \nDiscover why Bone Meal is the #1 organic fertilizer Pakistani gardeners \nswear by plus 6 more fertilizers that will transform your plants.",
+    "heading": "Best Fertilizers for Home Gardens in Pakistan (Bone Meal & More)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/9a48f5b4-73ab-49c2-b090-97ad74c2bb12-1777990727506.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/grow-kitchen-herb-garden-home-pakistan",
+    "title": "How to Grow a Kitchen Herb Garden at Home in Pakistan | The Nursery Pakistan",
+    "description": "Imagine picking fresh pudina, dhania, and methi straight from your \nkitchen windowsill. Learn how to grow a thriving herb garden at \nhome in Pakistan even in a small apartment with no outdoor space.",
+    "heading": "How to Grow a Kitchen Herb Garden at Home in Pakistan",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/740a1795-e72b-4ae2-8aa0-040da7f49d93-1778006832632.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/best-indoor-plants-pakistan-2026",
+    "title": "10 Best Indoor Plants for Pakistani Homes (2026 Guide) | The Nursery Pakistan",
+    "description": "Discover the top 10 indoor plants that thrive in Pakistan's climate. \nFrom low-maintenance succulents to air-purifying peace lilies find \nthe perfect plant for your home in Lahore, Karachi, or Islamabad.",
+    "heading": "10 Best Indoor Plants for Pakistani Homes (2026 Guide)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/01720f55-1959-41c9-a905-f3e6f446eb27-1777982415682.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/bone-meal-fertilizer-roses-pakistan",
+    "title": "Bone Meal Fertilizer for Roses in Pakistan: Complete Guide | The Nursery Pakistan",
+    "description": "Learn how to use bone meal fertilizer for roses in Pakistan, including safe application steps, timing, soil tips, and common mistakes to avoid.",
+    "heading": "Bone Meal Fertilizer for Roses in Pakistan: Complete Guide",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/a846c68f-538f-45a7-a432-790010c4458d-1785417923485.png",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/pakistan-plant-crisis-why-plants-dying-2026",
+    "title": "Pakistan's Plant Crisis: Why Your Plants Are Dying in 2026 & How to Fix It | The Nursery Pakistan",
+    "description": "Pakistani gardeners are reporting mass plant deaths in 2026 from \nLahore to Karachi. Experts reveal the 6 biggest threats killing \nhome gardens across Pakistan right now and exactly how to fight back.",
+    "heading": "Pakistan's Plant Crisis: Why Your Plants Are Dying in 2026 & How to Fix It",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/b71c4918-27aa-416e-9394-d4c59cfa8198-1778008947798.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/peace-lily-drooping-causes",
+    "title": "Peace Lily Drooping? Check Water, Roots and Light | The Nursery Pakistan",
+    "description": "A drooping peace lily may need water or better drainage. Check moisture, roots and light before changing its care or adding fertilizer.",
+    "heading": "Peace Lily Drooping? Check Water, Roots and Light",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/7aabd023-ad83-4aba-b141-aea4273fda71-1792707510657.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/pot-bare-root-plants-after-delivery",
+    "title": "How to Pot Bare-Root Plants After Delivery | The Nursery Pakistan",
+    "description": "Learn how to pot bare-root plants after delivery, choose a suitable mix, inspect roots, and adjust watering for foliage plants and succulents.",
+    "heading": "How to Pot Bare-Root Plants After Delivery",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/1df2ce1f-2c8c-48ac-bf26-20e8127cc049-1792704467996.png",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/snake-plant-watering-pakistan",
+    "title": "When to Water a Snake Plant in Pakistani Homes | The Nursery Pakistan",
+    "description": "Learn when to water a snake plant in Pakistan using soil checks, pot drainage, seasonal conditions, and signs that need a closer look.",
+    "heading": "When to Water a Snake Plant in Pakistani Homes",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/0ca01290-f375-4ae7-9752-2b7d3843c9c7-1792704370111.png",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/coco-peat-vs-compost",
+    "title": "Coco Peat vs Compost: Which Does Your Pot Need? | The Nursery Pakistan",
+    "description": "Compare coco peat and compost for container plants: moisture, nutrients, quality checks and when a complete potting mix is the simpler choice.",
+    "heading": "Coco Peat vs Compost: Which Does Your Pot Need?",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/577619c6-2963-4321-9ba0-e46fcd4b6238-1792707653426.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/winter-plant-care-pakistan",
+    "title": "Winter Plant Care in Pakistan: A Home Gardener's Guide | The Nursery Pakistan",
+    "description": "A practical guide to winter plant care in Pakistan: adjust watering, improve light, protect tender plants, and check pots without a fixed calendar.",
+    "heading": "Winter Plant Care in Pakistan: A Home Gardener's Guide",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/d61ab7b5-1f3b-4228-bd25-b5467ca0053d-1792704236657.png",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/winter-flowers-pots-pakistan",
+    "title": "Winter Flowers for Pots in Pakistan: How to Choose | The Nursery Pakistan",
+    "description": "Choose winter flowers for pots in Pakistan by sunlight, variety size and planting stage, with practical tips for seedlings, drainage and care.",
+    "heading": "Winter Flowers for Pots in Pakistan: How to Choose",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/c015309f-ac46-4684-b378-38a0f90a626f-1792707289400.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/pot-size-indoor-plants",
+    "title": "How to Choose a Pot Size for Indoor Plants | The Nursery Pakistan",
+    "description": "Choose an indoor plant pot by root-ball size, drainage, plant type and room conditions, with practical repotting checks for Pakistani homes.",
+    "heading": "How to Choose a Pot Size for Indoor Plants",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/1df2ce1f-2c8c-48ac-bf26-20e8127cc049-1792704467996.png",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/bone-meal-vs-compost",
+    "title": "Bone Meal vs Compost: When to Use Each | The Nursery Pakistan",
+    "description": "Compare bone meal and compost by purpose, nutrients, soil condition and label guidance so you can choose the right amendment for pots and beds.",
+    "heading": "Bone Meal vs Compost: When to Use Each",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/577619c6-2963-4321-9ba0-e46fcd4b6238-1792707653426.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/grow-coriander-pots-pakistan",
+    "title": "How to Grow Dhania in Pots in Pakistan | The Nursery Pakistan",
+    "description": "Grow dhania, or coriander, in a container with the right depth, light, moisture and harvest routine for Pakistani balconies and windows.",
+    "heading": "How to Grow Dhania in Pots in Pakistan",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/c015309f-ac46-4684-b378-38a0f90a626f-1792707289400.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/potting-mix-indoor-plants-pakistan",
+    "title": "Potting Mix for Indoor Plants: Choose by Plant Type | The Nursery Pakistan",
+    "description": "Choose indoor potting mix by plant group, drainage, moisture and label details instead of using one untested recipe for every houseplant.",
+    "heading": "Potting Mix for Indoor Plants: Choose by Plant Type",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/577619c6-2963-4321-9ba0-e46fcd4b6238-1792707653426.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/bright-indirect-light-indoor-plants",
+    "title": "What Does Bright Indirect Light Mean for Plants? | The Nursery Pakistan",
+    "description": "Learn how to judge bright indirect light indoors by window direction, obstructions, distance and seasonal changes in Pakistani homes.",
+    "heading": "What Does Bright Indirect Light Mean for Plants?",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/4eec155b-604a-452a-af64-eed9c618439c-1792706508782.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/blog/white-crust-potting-soil",
+    "title": "White Crust on Potting Soil: What to Check First | The Nursery Pakistan",
+    "description": "Learn how to check white crust on potting soil by looking at texture, water, fertilizer history, drainage and root health before adding more products.",
+    "heading": "White Crust on Potting Soil: What to Check First",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/blog-images/blogs/11050aa5-d2ec-4398-938b-302f292f1748-1792707678873.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/workshop/first-work-shop",
+    "title": "Floral Arrangement — Batch 1 | The Nursery Pakistan",
+    "description": "Our first hands-on session where participants created their own stunning arrangements from scratch.",
+    "heading": "Floral Arrangement — Batch 1",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/workshop-images/workshops/860ff90c-e36e-4061-b9dc-7693dc40134a-1777751185944.webp",
+    "type": "article"
+  },
+  {
+    "pathname": "/project/dahlia-nursery-caf-gulberg-lahore",
+    "title": "Dahlia Nursery Café – Gulberg, Lahore | The Nursery Pakistan",
+    "description": "Proud to share one of my designed projects Dahlia Nursery Café, a space where hospitality meets horticulture.\n\nThe concept was to create a biophilic café enviro",
+    "heading": "Dahlia Nursery Café – Gulberg, Lahore",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/0ca0f147-7b4e-43a0-a5cf-b00d786cc5b7-1777752089009.webp"
+  },
+  {
+    "pathname": "/project/tropical-farmhouse-landscape-gulberg-greens-islamabad",
+    "title": "Tropical Farmhouse Landscape - Gulberg Greens, Islamabad | The Nursery Pakistan",
+    "description": "Excited to share one of my recent landscape design projects  a 4 kanal farmhouse in Gulberg Greens, Islamabad, designed as a private tropical sanctuary in the h",
+    "heading": "Tropical Farmhouse Landscape - Gulberg Greens, Islamabad",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/835a0d8a-8e6c-4e13-94f1-b0cb2f6ced9f-1777752953160.webp"
+  },
+  {
+    "pathname": "/project/holistic-care-clinic-chain-healthcare-landscape-consulting-lahore-pakistan-2025",
+    "title": "Holistic Care Clinic Chain – Healthcare Landscape Consulting | Lahore, Pakistan | 2025 | The Nursery Pakistan",
+    "description": "Our most meaningful consulting projects  a city-wide plantation drive for greener pakistan and plantscape/ plant interior designs for Holistic Care Clinic lahor",
+    "heading": "Holistic Care Clinic Chain – Healthcare Landscape Consulting | Lahore, Pakistan | 2025",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/849b128f-f3ce-42a1-86af-f37e8f083175-1777752559142.webp"
+  },
+  {
+    "pathname": "/project/agricom-international-head-quater-landscape-design-lahore-pakistan",
+    "title": "Agricom International – Head quater Landscape Design, Lahore Pakistan | The Nursery Pakistan",
+    "description": "Agricom International one of my most rewarding corporate projects a full factory landscape design for Agricom International, a leading pesticide company headqua",
+    "heading": "Agricom International – Head quater Landscape Design, Lahore Pakistan",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/935e82f5-2bc5-4e47-8a33-e47629dd00ba-1777753837910.webp"
+  },
+  {
+    "pathname": "/project/residential-landscape-design-wapda-town-lahore",
+    "title": "Residential Landscape Design – Wapda Town, Lahore | The Nursery Pakistan",
+    "description": "A lush tropical escape brought to life in the heart of Wapda Town — where the client's bold green vision shaped every corner of this residential landscape.\nThe ",
+    "heading": "Residential Landscape Design – Wapda Town, Lahore",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/b6edf22d-87d4-4379-8f42-9b98446d32f0-1777753518259.webp"
+  },
+  {
+    "pathname": "/project/residential-landscape-design-nursery-pakistan",
+    "title": "Residential Landscape Design – Nursery Pakistan | The Nursery Pakistan",
+    "description": "our expertise in transforming everyday outdoor spaces into beautiful, functional retreats.\nThe concept is to craft personalized residential landscapes that harm",
+    "heading": "Residential Landscape Design – Nursery Pakistan",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/7cbc844a-8277-4224-a993-0e5519a156ce-1777754054229.webp"
+  },
+  {
+    "pathname": "/project/one-kanal-residential-plantscape-johar-town-lahore",
+    "title": "One Kanal Residential Plantscape – Johar Town, Lahore | The Nursery Pakistan",
+    "description": "One kanal residential plantscape in Johar Town, a space where simplicity meets nature.\nThe concept was to create a minimalistic yet lush living environment that",
+    "heading": "One Kanal Residential Plantscape – Johar Town, Lahore",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/landscaping-images/projects/62bba434-b15d-4356-9c13-5f1ee0b60431-1777753202624.webp"
+  }
+]
