@@ -223,86 +223,6 @@
     }
   },
   {
-    "pathname": "/product/sunrise-succulent-anacampseros--6b4080b7-363f-4072-bfb1-7081bce4d3e8",
-    "title": "Sunrise Succulent – Anacampseros (سن رائز سکولنٹ) | The Nursery Pakistan",
-    "description": "ایک انتہائی خوبصورت اور رنگ بدلنے والا سکولنٹ پودا۔ Sunrise Succulent کے پتے گلابی، سبز اور بنفشی رنگوں کا شاندار امتزاج ہیں جو دیکھنے والے کو سورج طلوع ہونے کا",
-    "heading": "Sunrise Succulent – Anacampseros (سن رائز سکولنٹ)",
-    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c2090c7e-70e3-4b60-b374-acbc501dffaa-1778156723085.webp",
-    "type": "product",
-    "structuredData": {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Sunrise Succulent – Anacampseros (سن رائز سکولنٹ)",
-      "description": "ایک انتہائی خوبصورت اور رنگ بدلنے والا سکولنٹ پودا۔ Sunrise Succulent کے پتے گلابی، سبز اور بنفشی رنگوں کا شاندار امتزاج ہیں جو دیکھنے والے کو سورج طلوع ہونے کا احساس دلاتے ہیں۔ کم پانی، کم دیکھ بھال — گھر، آفس یا تحفے کے لیے بہترین انتخاب۔\n\nA stunning little succulent with a dazzling mix of pink, purple, and green leaves that resemble a beautiful sunrise. Native to South Africa, it grows in clumps of rosettes and thrives in bright indirect light — perfect for desks, shelves, and windowsills across Pakistan. Extremely low maintenance and a gorgeous gifting choice.",
-      "image": [
-        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c2090c7e-70e3-4b60-b374-acbc501dffaa-1778156723085.webp"
-      ],
-      "sku": "6b4080b7-363f-4072-bfb1-7081bce4d3e8",
-      "category": "Indoor Plants",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "PKR",
-        "price": "800",
-        "availability": "https://schema.org/InStock",
-        "url": "https://nurserypakistan.pk/product/sunrise-succulent-anacampseros--6b4080b7-363f-4072-bfb1-7081bce4d3e8"
-      }
-    }
-  },
-  {
-    "pathname": "/product/yellow-lily--74c21605-2deb-48bd-8a5f-e9dce5fdb3ad",
-    "title": "Yellow Lily (پیلی للی) | The Nursery Pakistan",
-    "description": "گھر اور باغ کو روشن کرنے کے لیے بہترین پھول دار پودا۔ Yellow Lily اپنے چمکدار پیلے پھولوں سے آپ کے گارڈن، بالکونی یا لان کو خوبصورت بنا دیتا ہے۔ پاکستان کے موسم",
-    "heading": "Yellow Lily (پیلی للی)",
-    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/118575ec-cbb4-4261-8f1f-fe9b1c1a91b6-1778157269113.webp",
-    "type": "product",
-    "structuredData": {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Yellow Lily (پیلی للی)",
-      "description": "گھر اور باغ کو روشن کرنے کے لیے بہترین پھول دار پودا۔ Yellow Lily اپنے چمکدار پیلے پھولوں سے آپ کے گارڈن، بالکونی یا لان کو خوبصورت بنا دیتا ہے۔ پاکستان کے موسم میں آسانی سے اگتا ہے اور کم دیکھ بھال میں خوبصورت رہتا ہے۔\n\nA stunning flowering plant that brightens any garden, balcony, or lawn with its vibrant yellow blooms. Yellow Lily thrives easily in Pakistan's climate and adds a cheerful, colorful touch to your outdoor space with minimal care.",
-      "image": [
-        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/118575ec-cbb4-4261-8f1f-fe9b1c1a91b6-1778157269113.webp",
-        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/7ae65529-3f95-426d-9f08-4052960810d8-1778157269113.webp",
-        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/26ca172b-fde4-4899-9785-a529ce9080fe-1778157269113.webp"
-      ],
-      "sku": "74c21605-2deb-48bd-8a5f-e9dce5fdb3ad",
-      "category": "Outdoor Plants",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "PKR",
-        "price": "2000",
-        "availability": "https://schema.org/InStock",
-        "url": "https://nurserypakistan.pk/product/yellow-lily--74c21605-2deb-48bd-8a5f-e9dce5fdb3ad"
-      }
-    }
-  },
-  {
-    "pathname": "/product/lisianthus-prairie-gentian--f786d810-0d3b-49f3-a29f-b998e11ae1e6",
-    "title": "Lisianthus (لیسی اینتھس)  Prairie Gentian | The Nursery Pakistan",
-    "description": "\nلیسی اینتھس ایک نادر اور خوبصورت پھول دار پودا ہے جو گلاب جیسے نرم اور دلکش پھول دیتا ہے۔ شادیوں، تقریبات اور گھر کی سجاوٹ کے لیے یہ پودا پاکستان میں بہت مقبول",
-    "heading": "Lisianthus (لیسی اینتھس)  Prairie Gentian",
-    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3ca38412-fb82-49d8-b33c-7e522093f8c2-1778157139346.webp",
-    "type": "product",
-    "structuredData": {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Lisianthus (لیسی اینتھس)  Prairie Gentian",
-      "description": "\nلیسی اینتھس ایک نادر اور خوبصورت پھول دار پودا ہے جو گلاب جیسے نرم اور دلکش پھول دیتا ہے۔ شادیوں، تقریبات اور گھر کی سجاوٹ کے لیے یہ پودا پاکستان میں بہت مقبول ہو رہا ہے۔ ابھی سیڈلنگ سٹیج پر ہے . جلد خوبصورت پھولوں سے مہک اٹھے گا۔\n\nA rare and elegant flowering plant producing rose-like blooms in shades of purple, white, and pink. Lisianthus is gaining popularity across Pakistan for home décor, wedding arrangements, and gifting. Currently at seedling stage will bloom into a stunning floral display with proper care.",
-      "image": [
-        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3ca38412-fb82-49d8-b33c-7e522093f8c2-1778157139346.webp"
-      ],
-      "sku": "f786d810-0d3b-49f3-a29f-b998e11ae1e6",
-      "category": "Outdoor Plants",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "PKR",
-        "price": "500",
-        "availability": "https://schema.org/InStock",
-        "url": "https://nurserypakistan.pk/product/lisianthus-prairie-gentian--f786d810-0d3b-49f3-a29f-b998e11ae1e6"
-      }
-    }
-  },
-  {
     "pathname": "/product/grafted-moon-cactus--2efda029-58c2-46f0-9c0d-062c9be5c767",
     "title": "Grafted Moon Cactus  رنگین گرافٹڈ کیکٹس | The Nursery Pakistan",
     "description": "رنگ برنگے اور انوکھے گرافٹڈ کیکٹس جو آپ کے گھر، آفس یا گارڈن کی خوبصورتی میں چار چاند لگا دیں۔ سرخ، نارنجی، پیلے اور سفید رنگوں میں دستیاب  یہ کیکٹس کم پانی اور",
@@ -486,35 +406,9 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "PKR",
-        "price": "1000",
+        "price": "1500",
         "availability": "https://schema.org/InStock",
         "url": "https://nurserypakistan.pk/product/exotic-plant-deal-3-snake-plants-for-rs-1-000--ff5cbfee-6cfd-4a3f-b717-b870bc74ae7f"
-      }
-    }
-  },
-  {
-    "pathname": "/product/azadi-plant-deal-4-indoor-plants-for-rs-1-000--e4ebe044-bbbb-4828-adbd-0a9d8509b25d",
-    "title": "Azadi Plant Deal: 4 Indoor Plants for Rs. 1,000 | The Nursery Pakistan",
-    "description": "After receiving an amazing response from our customers, we have extended our Azadi Plant Deal for 1 more month.\n\nThis deal includes 4 indoor plants:\n\n- Snake Pl",
-    "heading": "Azadi Plant Deal: 4 Indoor Plants for Rs. 1,000",
-    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6554a8e2-579b-472c-ba94-97e6a4c5193c-1789297029301.png",
-    "type": "product",
-    "structuredData": {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Azadi Plant Deal: 4 Indoor Plants for Rs. 1,000",
-      "description": "After receiving an amazing response from our customers, we have extended our Azadi Plant Deal for 1 more month.\n\nThis deal includes 4 indoor plants:\n\n- Snake Plant\n- Syngonium\n- Red Dracaena\n- Spider Plant\n\nPrice:\nRs. 1,000 for all 4 plants\n\nImportant details:\n\n- Plants are provided bare-root\n- Pots are not included\n- Soil media is not included\n- Delivery charges are separate\n- Very limited stock is available\n\nDelivery charges:\n\n- 1 deal: Rs. 300\n- 2 deals: Rs. 400\n\nThis offer is a good choice for indoor plant lovers, home gardeners, and anyone who wants to start a small plant collection at an affordable price.",
-      "image": [
-        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6554a8e2-579b-472c-ba94-97e6a4c5193c-1789297029301.png"
-      ],
-      "sku": "e4ebe044-bbbb-4828-adbd-0a9d8509b25d",
-      "category": "Sale",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "PKR",
-        "price": "1000",
-        "availability": "https://schema.org/InStock",
-        "url": "https://nurserypakistan.pk/product/azadi-plant-deal-4-indoor-plants-for-rs-1-000--e4ebe044-bbbb-4828-adbd-0a9d8509b25d"
       }
     }
   },
@@ -593,9 +487,36 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "PKR",
-        "price": "1000",
+        "price": "1500",
         "availability": "https://schema.org/InStock",
         "url": "https://nurserypakistan.pk/product/regular-plant-deal-3-plants-for-rs-1-000--5303d62f-19e6-45c9-b7d3-a7ef5787c899"
+      }
+    }
+  },
+  {
+    "pathname": "/product/variegated-peace-lily--2537e4a3-fc56-4e86-918d-5079f1500ac5",
+    "title": "Variegated Peace Lily (ویری گیٹڈ پیس للی) – دو رنگی امن کا پھول | The Nursery Pakistan",
+    "description": "\nویری گیٹڈ پیس للی اپنے سبز اور کریمی پیلے رنگ کے منفرد پتوں کی وجہ سے عام پیس للی سے بالکل مختلف اور نایاب ہے۔ کم روشنی میں بھی اگتا ہے، ہوا صاف کرتا ہے اور سف",
+    "heading": "Variegated Peace Lily (ویری گیٹڈ پیس للی) – دو رنگی امن کا پھول",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/333a16da-a6b3-42b8-9f91-83676e322b09-1794220975269.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Variegated Peace Lily (ویری گیٹڈ پیس للی) – دو رنگی امن کا پھول",
+      "description": "\nویری گیٹڈ پیس للی اپنے سبز اور کریمی پیلے رنگ کے منفرد پتوں کی وجہ سے عام پیس للی سے بالکل مختلف اور نایاب ہے۔ کم روشنی میں بھی اگتا ہے، ہوا صاف کرتا ہے اور سفید پھول بھی دیتا ہے۔ گھر، آفس اور تحفے کے لیے ایک خاص اور انوکھا انتخاب۔\n\nA rare twist on Pakistan’s favourite indoor plant. The Variegated Peace Lily has striking green leaves splashed with cream and yellow, so every plant looks one of a kind. It thrives in low light, helps freshen indoor air, and produces elegant white blooms. A standout choice for homes, offices, and gifting.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/333a16da-a6b3-42b8-9f91-83676e322b09-1794220975269.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/8fa3719e-1f7b-4f74-bfea-9d9c2ef02a24-1794220975270.jpg"
+      ],
+      "sku": "2537e4a3-fc56-4e86-918d-5079f1500ac5",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/variegated-peace-lily--2537e4a3-fc56-4e86-918d-5079f1500ac5"
       }
     }
   },
@@ -622,6 +543,543 @@
         "price": "1000",
         "availability": "https://schema.org/InStock",
         "url": "https://nurserypakistan.pk/product/dwarf-pineapple-plant-ananas-comosus--9ba23b72-7d57-46f2-a980-78d9aee5374a"
+      }
+    }
+  },
+  {
+    "pathname": "/product/pothos-brasil--ac9dc6c6-710e-489d-8541-2f83ee7d9e83",
+    "title": "Pothos Brasil (پوتھوس برازیل) – دھاری دار منی پلانٹ | The Nursery Pakistan",
+    "description": "\nپوتھوس برازیل اپنے دل کی شکل کے سبز پتوں اور ان کے درمیان چمکدار لیموں پیلی دھاری کی وجہ سے سب سے الگ نظر آتا ہے۔ یہ تیزی سے بڑھنے والی بیل ہے جو شیلف، ہینگنگ ",
+    "heading": "Pothos Brasil (پوتھوس برازیل) – دھاری دار منی پلانٹ",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c99b2284-fe80-429b-9d6b-603dd825ce37-1794221316800.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Pothos Brasil (پوتھوس برازیل) – دھاری دار منی پلانٹ",
+      "description": "\nپوتھوس برازیل اپنے دل کی شکل کے سبز پتوں اور ان کے درمیان چمکدار لیموں پیلی دھاری کی وجہ سے سب سے الگ نظر آتا ہے۔ یہ تیزی سے بڑھنے والی بیل ہے جو شیلف، ہینگنگ باسکٹ یا کھڑکی کے پاس بہت خوبصورت لگتی ہے۔ کم روشنی اور کم پانی میں بھی آسانی سے اگتی ہے، اس لیے نئے پودے لگانے والوں کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA beautiful trailing plant with heart-shaped green leaves and a bright lime-yellow stripe down the centre. Pothos Brasil grows fast and looks great on shelves, in hanging baskets, or by a window. It does well in low to medium light and needs very little care, so it’s perfect for beginners, homes, and offices.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c99b2284-fe80-429b-9d6b-603dd825ce37-1794221316800.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/26968a2d-e3ae-4d61-9ee3-a40aabc09371-1794221316801.jpg"
+      ],
+      "sku": "ac9dc6c6-710e-489d-8541-2f83ee7d9e83",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/pothos-brasil--ac9dc6c6-710e-489d-8541-2f83ee7d9e83"
+      }
+    }
+  },
+  {
+    "pathname": "/product/syngonium-pink-margarita--b83fc3e4-cf4e-41e2-9241-fcf072618e66",
+    "title": "Syngonium Pink Margarita (سنگونیم پنک مارگریٹا) – گلابی پتوں والا پودا | The Nursery Pakistan",
+    "description": "\nسنگونیم پنک مارگریٹا اپنے نرم گلابی، کریمی اور سبز پتوں کے خوبصورت امتزاج کی وجہ سے سب سے الگ نظر آتا ہے۔ اس کے تیر کی شکل کے پتے گھر کے کسی بھی کونے کو رنگین ",
+    "heading": "Syngonium Pink Margarita (سنگونیم پنک مارگریٹا) – گلابی پتوں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/69d315c6-b77f-42fb-994c-ecba1a942d41-1794221695380.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Syngonium Pink Margarita (سنگونیم پنک مارگریٹا) – گلابی پتوں والا پودا",
+      "description": "\nسنگونیم پنک مارگریٹا اپنے نرم گلابی، کریمی اور سبز پتوں کے خوبصورت امتزاج کی وجہ سے سب سے الگ نظر آتا ہے۔ اس کے تیر کی شکل کے پتے گھر کے کسی بھی کونے کو رنگین اور تازہ بنا دیتے ہیں۔ کم سے درمیانی روشنی میں آسانی سے اگتا ہے، اس لیے ڈرائنگ روم، آفس اور بالکونی کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA colourful indoor plant with arrow-shaped leaves in a lovely mix of soft pink, cream, and green. Syngonium Pink Margarita is easy to grow, does well in low to medium light, and fills out nicely over time. A great choice for living rooms, offices, shelves, and balconies.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/69d315c6-b77f-42fb-994c-ecba1a942d41-1794221695380.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/24826ce7-ad70-4ce7-82f3-663e428ab245-1794221695381.jpg"
+      ],
+      "sku": "b83fc3e4-cf4e-41e2-9241-fcf072618e66",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/syngonium-pink-margarita--b83fc3e4-cf4e-41e2-9241-fcf072618e66"
+      }
+    }
+  },
+  {
+    "pathname": "/product/calathea--5aa6fe7d-669c-4181-87c2-95e024f55993",
+    "title": "Calathea (کالیتھیا) – چاندی دھاری والا پودا | The Nursery Pakistan",
+    "description": "\nکالیتھیا اپنے سبز پتوں پر چاندی جیسی خوبصورت دھاریوں کی وجہ سے سب سے الگ نظر آتا ہے۔ اس کے پتے دن کے وقت کھلتے ہیں اور رات کو ہلکے سے بند ہو جاتے ہیں۔ اسے ڈرائ",
+    "heading": "Calathea (کالیتھیا) – چاندی دھاری والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/76846237-1d1f-4717-a372-91d339a7b594-1794222204008.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Calathea (کالیتھیا) – چاندی دھاری والا پودا",
+      "description": "\nکالیتھیا اپنے سبز پتوں پر چاندی جیسی خوبصورت دھاریوں کی وجہ سے سب سے الگ نظر آتا ہے۔ اس کے پتے دن کے وقت کھلتے ہیں اور رات کو ہلکے سے بند ہو جاتے ہیں۔ اسے ڈرائنگ روم، بیڈ روم یا آفس میں ایسی جگہ رکھیں جہاں ہلکی روشنی ہو اور براہ راست دھوپ نہ پڑے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA decorative foliage plant with silvery feather-like stripes across deep green leaves. Calathea leaves open during the day and gently fold up at night, which makes it a real conversation piece. Keep it in bright, indirect light away from direct sun, and it will brighten any living room, bedroom, or office.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/76846237-1d1f-4717-a372-91d339a7b594-1794222204008.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/87b7d21b-e5a2-427c-b89c-c127dbeb4c65-1794222204009.jpg"
+      ],
+      "sku": "5aa6fe7d-669c-4181-87c2-95e024f55993",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/calathea--5aa6fe7d-669c-4181-87c2-95e024f55993"
+      }
+    }
+  },
+  {
+    "pathname": "/product/syngonium-milk-confetti--41e56a85-c563-4d3f-b3ad-aec4c019a107",
+    "title": "Syngonium Milk Confetti (سنگونیم ملک کنفیٹی) – گلابی چھینٹوں والا پودا | The Nursery Pakistan",
+    "description": "\nسنگونیم ملک کنفیٹی اپنے ہلکے گلابی اور کریمی پتوں پر سبز چھینٹوں کی وجہ سے بہت منفرد اور خوبصورت لگتا ہے۔ اس کے تیر کی شکل کے نرم پتے ہر پودے کو الگ رنگ دیتے ہ",
+    "heading": "Syngonium Milk Confetti (سنگونیم ملک کنفیٹی) – گلابی چھینٹوں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/dd6fcc51-a09a-4374-8a10-b881eff3a60c-1794222466142.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Syngonium Milk Confetti (سنگونیم ملک کنفیٹی) – گلابی چھینٹوں والا پودا",
+      "description": "\nسنگونیم ملک کنفیٹی اپنے ہلکے گلابی اور کریمی پتوں پر سبز چھینٹوں کی وجہ سے بہت منفرد اور خوبصورت لگتا ہے۔ اس کے تیر کی شکل کے نرم پتے ہر پودے کو الگ رنگ دیتے ہیں۔ درمیانی روشنی میں آسانی سے اگتا ہے، اس لیے ڈرائنگ روم، شیلف اور آفس کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA rare-looking indoor plant with soft pink and cream arrow-shaped leaves splashed with green speckles, like confetti. No two plants look the same. Syngonium Milk Confetti is easy to grow in medium indirect light and makes a lovely addition to living rooms, shelves, and offices.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/dd6fcc51-a09a-4374-8a10-b881eff3a60c-1794222466142.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/ac2ea0e0-be45-4951-ad28-fd69b6b023a8-1794222466142.jpg"
+      ],
+      "sku": "41e56a85-c563-4d3f-b3ad-aec4c019a107",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/syngonium-milk-confetti--41e56a85-c563-4d3f-b3ad-aec4c019a107"
+      }
+    }
+  },
+  {
+    "pathname": "/product/moonlight-snake-mother-plant--776250c0-ce5f-4cbe-9d9f-ec6c8304c2ad",
+    "title": "Moonlight Snake (Mother Plant)  - چاندی جیسے سبز پتوں والا پودا | The Nursery Pakistan",
+    "description": "\nمون لائٹ سنیک پلانٹ اپنے چوڑے، چاندی جیسے ہلکے سبز پتوں کی وجہ سے عام سنیک پلانٹ سے الگ اور بہت خوبصورت نظر آتا ہے۔ یہ بہت مضبوط پودا ہے جو کم روشنی اور کم پان",
+    "heading": "Moonlight Snake (Mother Plant)  - چاندی جیسے سبز پتوں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/b1349b00-81b1-4b6e-954b-49246af2e574-1794228797614.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Moonlight Snake (Mother Plant)  - چاندی جیسے سبز پتوں والا پودا",
+      "description": "\nمون لائٹ سنیک پلانٹ اپنے چوڑے، چاندی جیسے ہلکے سبز پتوں کی وجہ سے عام سنیک پلانٹ سے الگ اور بہت خوبصورت نظر آتا ہے۔ یہ بہت مضبوط پودا ہے جو کم روشنی اور کم پانی میں بھی آسانی سے اگتا ہے۔ ڈرائنگ روم، بیڈ روم، آفس اور نئے پودے لگانے والوں کے لیے بہترین انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA tough and elegant snake plant with broad, silvery pale-green leaves that look different from the common dark green type. Moonlight handles low light and very little water, so it suits beginners, bedrooms, offices, and busy homes.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/b1349b00-81b1-4b6e-954b-49246af2e574-1794228797614.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/595b7018-092f-42e0-acf3-bb5db0d923e0-1794228797615.jpg"
+      ],
+      "sku": "776250c0-ce5f-4cbe-9d9f-ec6c8304c2ad",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/moonlight-snake-mother-plant--776250c0-ce5f-4cbe-9d9f-ec6c8304c2ad"
+      }
+    }
+  },
+  {
+    "pathname": "/product/whale-fin-snake-plant--7038ec4c-2d56-453f-a8ce-7bc5e039bdd0",
+    "title": "Whale Fin Snake Plant (ویل فن سنیک پلانٹ) - وہیل کے پر جیسے پتوں والا پودا | The Nursery Pakistan",
+    "description": "\nویل فن سنیک پلانٹ اپنے چوڑے، پیڈل نما پتوں اور سبز دھبے دار نمونوں کی وجہ سے عام سنیک پلانٹ سے بالکل مختلف اور نایاب ہے۔ یہ بہت آہستہ بڑھتا ہے اور کم پانی اور ",
+    "heading": "Whale Fin Snake Plant (ویل فن سنیک پلانٹ) - وہیل کے پر جیسے پتوں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/5506891c-1a2c-404b-9094-bf75c42a75ac-1794222726213.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Whale Fin Snake Plant (ویل فن سنیک پلانٹ) - وہیل کے پر جیسے پتوں والا پودا",
+      "description": "\nویل فن سنیک پلانٹ اپنے چوڑے، پیڈل نما پتوں اور سبز دھبے دار نمونوں کی وجہ سے عام سنیک پلانٹ سے بالکل مختلف اور نایاب ہے۔ یہ بہت آہستہ بڑھتا ہے اور کم پانی اور کم دیکھ بھال میں بھی خوب اگتا ہے۔ ڈرائنگ روم، آفس اور پودوں کے شوقین افراد کے لیے ایک شاندار انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA rare and sculptural snake plant with broad, paddle-shaped leaves and mottled green patterns, nothing like the common upright snake plant. Whale Fin grows slowly, needs very little water, and handles low light well. A standout piece for living rooms, offices, and plant collectors.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/5506891c-1a2c-404b-9094-bf75c42a75ac-1794222726213.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/f58b2068-e8ea-430d-beed-63c61d9d17a9-1794222726213.jpg"
+      ],
+      "sku": "7038ec4c-2d56-453f-a8ce-7bc5e039bdd0",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1200",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/whale-fin-snake-plant--7038ec4c-2d56-453f-a8ce-7bc5e039bdd0"
+      }
+    }
+  },
+  {
+    "pathname": "/product/monstera-adansonii-swiss-cheese--e74421e6-917a-408d-b51e-570e9bd22576",
+    "title": "Monstera Adansonii – Swiss Cheese (مونسٹیرا ایڈنسونی - سوئس چیز ) | The Nursery Pakistan",
+    "description": "\nمونسٹیرا ایڈنسونی، جسے سوئس چیز پلانٹ بھی کہتے ہیں، اپنے پتوں میں قدرتی سوراخوں کی وجہ سے سب سے الگ اور جدید نظر آتا ہے۔ یہ بیل کی طرح بڑھتا ہے، اس لیے اسے ہین",
+    "heading": "Monstera Adansonii – Swiss Cheese (مونسٹیرا ایڈنسونی - سوئس چیز )",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/1f132f9b-8a3c-4f72-aaaf-52d1ecf09858-1794223099209.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Monstera Adansonii – Swiss Cheese (مونسٹیرا ایڈنسونی - سوئس چیز )",
+      "description": "\nمونسٹیرا ایڈنسونی، جسے سوئس چیز پلانٹ بھی کہتے ہیں، اپنے پتوں میں قدرتی سوراخوں کی وجہ سے سب سے الگ اور جدید نظر آتا ہے۔ یہ بیل کی طرح بڑھتا ہے، اس لیے اسے ہینگنگ باسکٹ میں لٹکائیں یا لکڑی کے سہارے پر چڑھائیں۔ درمیانی روشنی میں آسانی سے اگتا ہے اور ڈرائنگ روم، بیڈ روم اور آفس کو جدید اور تازہ انداز دیتا ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA trendy indoor plant with natural holes in its leaves, which is why it’s called the Swiss Cheese Plant. Monstera Adansonii can trail from a hanging basket or climb a moss pole or wooden support. It grows easily in medium indirect light and gives living rooms, bedrooms, and offices a fresh, modern look.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/1f132f9b-8a3c-4f72-aaaf-52d1ecf09858-1794223099209.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/1805db5e-00a9-4834-a626-e3db1c29edf0-1794223099210.jpg"
+      ],
+      "sku": "e74421e6-917a-408d-b51e-570e9bd22576",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/monstera-adansonii-swiss-cheese--e74421e6-917a-408d-b51e-570e9bd22576"
+      }
+    }
+  },
+  {
+    "pathname": "/product/golden-flame-snake-plant--df44332d-1e61-45c2-82d0-ec60adf3b2d9",
+    "title": "Golden Flame Snake Plant (گولڈن فلیم سنیک پلانٹ) - سنہری کناروں والا پودا | The Nursery Pakistan",
+    "description": "\nگولڈن فلیم سنیک پلانٹ اپنے گہرے سبز پتوں اور سنہری پیلے کناروں کی وجہ سے بہت نمایاں اور خوبصورت نظر آتا ہے۔ یہ بہت مضبوط پودا ہے جو کم روشنی اور کم پانی میں بھ",
+    "heading": "Golden Flame Snake Plant (گولڈن فلیم سنیک پلانٹ) - سنہری کناروں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/13a15fc6-3372-4eb1-95c5-2e9a18ef4be4-1794223445931.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Golden Flame Snake Plant (گولڈن فلیم سنیک پلانٹ) - سنہری کناروں والا پودا",
+      "description": "\nگولڈن فلیم سنیک پلانٹ اپنے گہرے سبز پتوں اور سنہری پیلے کناروں کی وجہ سے بہت نمایاں اور خوبصورت نظر آتا ہے۔ یہ بہت مضبوط پودا ہے جو کم روشنی اور کم پانی میں بھی آسانی سے اگتا ہے۔ ڈرائنگ روم، بیڈ روم، آفس اور نئے پودے لگانے والوں کے لیے بہترین انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA tough, good-looking snake plant with deep green leaves edged in golden yellow. Golden Flame handles low light and very little water, so it’s ideal for beginners, bedrooms, offices, and busy homes. A simple way to add a bold, upright shape to any space.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/13a15fc6-3372-4eb1-95c5-2e9a18ef4be4-1794223445931.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c187ad18-e049-4cdb-b2d1-0c3c70c48fb6-1794223445932.jpg"
+      ],
+      "sku": "df44332d-1e61-45c2-82d0-ec60adf3b2d9",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/golden-flame-snake-plant--df44332d-1e61-45c2-82d0-ec60adf3b2d9"
+      }
+    }
+  },
+  {
+    "pathname": "/product/syngonium-arrowhead-plant--9d9a9e33-8a52-438c-86a2-e0bc7b30e607",
+    "title": "Syngonium Arrowhead Plant (سنگونیم ایرو ہیڈ) - تیر نما پتوں والا پودا | The Nursery Pakistan",
+    "description": "\nسنگونیم ایرو ہیڈ اپنے تیر کی شکل کے ہلکے سبز اور کریمی پتوں کی وجہ سے ہر کمرے کو تازہ اور روشن بنا دیتا ہے۔ یہ تیزی سے بڑھنے والا پودا ہے جسے آپ گملے میں رکھ س",
+    "heading": "Syngonium Arrowhead Plant (سنگونیم ایرو ہیڈ) - تیر نما پتوں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/9d7b796a-6bc4-46da-840e-5a67f585af4c-1794223736767.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Syngonium Arrowhead Plant (سنگونیم ایرو ہیڈ) - تیر نما پتوں والا پودا",
+      "description": "\nسنگونیم ایرو ہیڈ اپنے تیر کی شکل کے ہلکے سبز اور کریمی پتوں کی وجہ سے ہر کمرے کو تازہ اور روشن بنا دیتا ہے۔ یہ تیزی سے بڑھنے والا پودا ہے جسے آپ گملے میں رکھ سکتے ہیں یا سہارے پر چڑھا سکتے ہیں۔ کم سے درمیانی روشنی میں آسانی سے اگتا ہے، اس لیے نئے پودے لگانے والوں، گھر اور آفس کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA fresh, easy-going indoor plant with arrow-shaped leaves in soft green and cream. Syngonium Arrowhead grows quickly, and you can keep it bushy in a pot or let it climb a support. It does well in low to medium light, so it suits beginners, homes, and offices.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/9d7b796a-6bc4-46da-840e-5a67f585af4c-1794223736767.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/e13aff39-8c05-4e23-b733-75485303b0bc-1794223736769.jpg"
+      ],
+      "sku": "9d9a9e33-8a52-438c-86a2-e0bc7b30e607",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/syngonium-arrowhead-plant--9d9a9e33-8a52-438c-86a2-e0bc7b30e607"
+      }
+    }
+  },
+  {
+    "pathname": "/product/green-syngonium-arrowhead-plant--a3934a1b-8489-42e1-a029-17fac0bb2049",
+    "title": "Green Syngonium - Arrowhead Plant (گرین سنگونیم - تیر نما پتوں والا پودا) | The Nursery Pakistan",
+    "description": "\nگرین سنگونیم اپنے بڑے، تیر کی شکل کے گہرے سبز پتوں کی وجہ سے گھر کو تازگی اور سبزہ دیتا ہے۔ یہ تیزی سے بڑھنے والا پودا ہے جسے آپ گملے میں گھنا رکھ سکتے ہیں یا ",
+    "heading": "Green Syngonium - Arrowhead Plant (گرین سنگونیم - تیر نما پتوں والا پودا)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/f881506d-445f-4b57-8d32-982be3f63fc2-1794224772655.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Green Syngonium - Arrowhead Plant (گرین سنگونیم - تیر نما پتوں والا پودا)",
+      "description": "\nگرین سنگونیم اپنے بڑے، تیر کی شکل کے گہرے سبز پتوں کی وجہ سے گھر کو تازگی اور سبزہ دیتا ہے۔ یہ تیزی سے بڑھنے والا پودا ہے جسے آپ گملے میں گھنا رکھ سکتے ہیں یا سہارے پر چڑھا سکتے ہیں۔ کم سے درمیانی روشنی میں آسانی سے اگتا ہے، اس لیے نئے پودے لگانے والوں، گھر اور آفس کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA lush, easy-care indoor plant with large, arrow-shaped deep green leaves. Green Syngonium grows quickly, and you can keep it bushy in a pot or let it climb a support. It does well in low to medium light, so it suits beginners, homes, and offices.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/f881506d-445f-4b57-8d32-982be3f63fc2-1794224772655.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c20a7645-f4db-4979-928b-7aa438539b7e-1794224772655.jpg"
+      ],
+      "sku": "a3934a1b-8489-42e1-a029-17fac0bb2049",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/green-syngonium-arrowhead-plant--a3934a1b-8489-42e1-a029-17fac0bb2049"
+      }
+    }
+  },
+  {
+    "pathname": "/product/variegated-schefflera-umbrella-plant--091bf73f-7bd9-4b99-bf0b-f267ab12b876",
+    "title": "Variegated Schefflera - Umbrella Plant (ویری گیٹڈ شیفلیرا - چھتری نما پودا) | The Nursery Pakistan",
+    "description": "\nشیفلیرا اپنے چھتری کی طرح پھیلے ہوئے سبز اور کریمی پتوں کی وجہ سے گھر کو تازہ اور خوبصورت انداز دیتا ہے۔ یہ مضبوط پودا ہے جو درمیانی روشنی میں آسانی سے اگتا ہے",
+    "heading": "Variegated Schefflera - Umbrella Plant (ویری گیٹڈ شیفلیرا - چھتری نما پودا)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c468d97a-b0ba-480f-a389-db833c6af6f2-1794223992155.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Variegated Schefflera - Umbrella Plant (ویری گیٹڈ شیفلیرا - چھتری نما پودا)",
+      "description": "\nشیفلیرا اپنے چھتری کی طرح پھیلے ہوئے سبز اور کریمی پتوں کی وجہ سے گھر کو تازہ اور خوبصورت انداز دیتا ہے۔ یہ مضبوط پودا ہے جو درمیانی روشنی میں آسانی سے اگتا ہے اور وقت کے ساتھ ایک گھنی جھاڑی کی شکل اختیار کر لیتا ہے۔ ڈرائنگ روم، آفس، بالکونی اور نئے پودے لگانے والوں کے لیے بہترین انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA hardy indoor plant with umbrella-like clusters of green and cream leaves. Schefflera grows easily in medium light and slowly fills out into a full, bushy plant. A great pick for living rooms, offices, balconies, and beginners.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/c468d97a-b0ba-480f-a389-db833c6af6f2-1794223992155.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/a4639ba5-390b-44b3-a014-75847b96e382-1794224072974.jpg"
+      ],
+      "sku": "091bf73f-7bd9-4b99-bf0b-f267ab12b876",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "750",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/variegated-schefflera-umbrella-plant--091bf73f-7bd9-4b99-bf0b-f267ab12b876"
+      }
+    }
+  },
+  {
+    "pathname": "/product/green-schefflera-umbrella-plant--a85a25e8-9b24-41f0-a106-6438769a0486",
+    "title": "Green Schefflera - Umbrella Plant (گرین شیفلیرا - چھتری نما پودا) | The Nursery Pakistan",
+    "description": "\nگرین شیفلیرا اپنے گہرے سبز، چمکدار اور چھتری کی طرح پھیلے ہوئے پتوں کی وجہ سے گھر کو تازگی اور سبزہ دیتا ہے۔ یہ مضبوط پودا ہے جو درمیانی روشنی میں آسانی سے اگت",
+    "heading": "Green Schefflera - Umbrella Plant (گرین شیفلیرا - چھتری نما پودا)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2406e83e-556f-4b84-9606-450224a0604b-1794224258179.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Green Schefflera - Umbrella Plant (گرین شیفلیرا - چھتری نما پودا)",
+      "description": "\nگرین شیفلیرا اپنے گہرے سبز، چمکدار اور چھتری کی طرح پھیلے ہوئے پتوں کی وجہ سے گھر کو تازگی اور سبزہ دیتا ہے۔ یہ مضبوط پودا ہے جو درمیانی روشنی میں آسانی سے اگتا ہے اور وقت کے ساتھ ایک گھنے پودے کی شکل اختیار کر لیتا ہے۔ ڈرائنگ روم، آفس، بالکونی اور نئے پودے لگانے والوں کے لیے بہترین انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA hardy indoor plant with glossy, deep green leaves that fan out like little umbrellas. Green Schefflera grows easily in medium light and slowly fills out into a lush plant. A great pick for living rooms, offices, balconies, and beginners.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2406e83e-556f-4b84-9606-450224a0604b-1794224258179.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/a71e882e-8e0c-4b79-8152-67d294f8387b-1794224258179.jpg"
+      ],
+      "sku": "a85a25e8-9b24-41f0-a106-6438769a0486",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/green-schefflera-umbrella-plant--a85a25e8-9b24-41f0-a106-6438769a0486"
+      }
+    }
+  },
+  {
+    "pathname": "/product/song-of-india-dracaena-reflexa--8337d4e4-95dc-4f20-a887-6f330b5923f3",
+    "title": "Song of India - Dracaena Reflexa (سونگ آف انڈیا - سنہری دھاری والا پودا) | The Nursery Pakistan",
+    "description": "\nسونگ آف انڈیا اپنے گہرے سبز پتوں اور سنہری پیلی دھاریوں کی وجہ سے بہت نمایاں اور خوبصورت نظر آتا ہے۔ اس کے لمبے، لہراتے پتے کمرے کو ایک نرم اور جدید انداز دیتے",
+    "heading": "Song of India - Dracaena Reflexa (سونگ آف انڈیا - سنہری دھاری والا پودا)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2355ccea-d9f7-4b8e-b863-35eb53caba26-1794224421550.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Song of India - Dracaena Reflexa (سونگ آف انڈیا - سنہری دھاری والا پودا)",
+      "description": "\nسونگ آف انڈیا اپنے گہرے سبز پتوں اور سنہری پیلی دھاریوں کی وجہ سے بہت نمایاں اور خوبصورت نظر آتا ہے۔ اس کے لمبے، لہراتے پتے کمرے کو ایک نرم اور جدید انداز دیتے ہیں۔ یہ درمیانی روشنی میں آسانی سے اگتا ہے اور کم دیکھ بھال چاہتا ہے، اس لیے ڈرائنگ روم، آفس اور نئے پودے لگانے والوں کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA graceful indoor plant with arching dark green leaves edged in golden yellow. Song of India grows slowly, handles medium light well, and needs very little care. It gives living rooms and offices a soft, tropical look and suits beginners too.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/2355ccea-d9f7-4b8e-b863-35eb53caba26-1794224421550.jpg"
+      ],
+      "sku": "8337d4e4-95dc-4f20-a887-6f330b5923f3",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/song-of-india-dracaena-reflexa--8337d4e4-95dc-4f20-a887-6f330b5923f3"
+      }
+    }
+  },
+  {
+    "pathname": "/product/green-pothos-money-plant--6f58377c-a8d0-41e1-8578-d6fa030bb8bd",
+    "title": "Green Pothos - Money Plant (گرین پوتھوس - منی پلانٹ) | The Nursery Pakistan",
+    "description": "\nگرین پوتھوس، جسے عام طور پر منی پلانٹ بھی کہا جاتا ہے، پاکستان کا سب سے پسندیدہ اور آسانی سے اگنے والا انڈور پودا ہے۔ اس کے دل کی شکل کے سبز پتے گھر اور آفس کو",
+    "heading": "Green Pothos - Money Plant (گرین پوتھوس - منی پلانٹ)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6c907004-0a9e-4db4-8aec-1a03eb601bed-1794228541127.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Green Pothos - Money Plant (گرین پوتھوس - منی پلانٹ)",
+      "description": "\nگرین پوتھوس، جسے عام طور پر منی پلانٹ بھی کہا جاتا ہے، پاکستان کا سب سے پسندیدہ اور آسانی سے اگنے والا انڈور پودا ہے۔ اس کے دل کی شکل کے سبز پتے گھر اور آفس کو تازگی دیتے ہیں۔ اسے گملے میں رکھیں، ہینگنگ باسکٹ میں لٹکائیں یا پانی کی بوتل میں بھی اگا سکتے ہیں۔ کم روشنی اور کم دیکھ بھال میں بھی تیزی سے بڑھتا ہے، اس لیے نئے پودے لگانے والوں کے لیے بہترین ہے۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nPakistan’s favourite easy-care indoor plant. Green Pothos, also known as Money Plant, has heart-shaped green leaves that freshen up any home or office. Keep it in a pot, hang it in a basket, or grow it in a bottle of water. It grows fast even in low light, so it’s perfect for beginners.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/6c907004-0a9e-4db4-8aec-1a03eb601bed-1794228541127.jpg"
+      ],
+      "sku": "6f58377c-a8d0-41e1-8578-d6fa030bb8bd",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "1000",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/green-pothos-money-plant--6f58377c-a8d0-41e1-8578-d6fa030bb8bd"
+      }
+    }
+  },
+  {
+    "pathname": "/product/song-of-thai-dracaena-reflexa--f4179a0c-2344-493c-870c-0a47c7d87eac",
+    "title": "Song of Thai - Dracaena Reflexa (سونگ آف تھائی - سنہری سبز دھاری والا پودا) | The Nursery Pakistan",
+    "description": "\nسونگ آف تھائی اپنے چوڑے، چمکدار سبز پتوں اور بیچ میں سنہری پیلی دھاری کی وجہ سے بہت نمایاں اور تازہ نظر آتا ہے۔ یہ آہستہ آہستہ بڑھنے والا مضبوط پودا ہے جو درمی",
+    "heading": "Song of Thai - Dracaena Reflexa (سونگ آف تھائی - سنہری سبز دھاری والا پودا)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/235df07e-c70c-4ea6-b8fd-94f32879a8b1-1794229004221.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Song of Thai - Dracaena Reflexa (سونگ آف تھائی - سنہری سبز دھاری والا پودا)",
+      "description": "\nسونگ آف تھائی اپنے چوڑے، چمکدار سبز پتوں اور بیچ میں سنہری پیلی دھاری کی وجہ سے بہت نمایاں اور تازہ نظر آتا ہے۔ یہ آہستہ آہستہ بڑھنے والا مضبوط پودا ہے جو درمیانی روشنی میں آسانی سے اگتا ہے اور کم دیکھ بھال چاہتا ہے۔ ڈرائنگ روم، آفس، کونے کی جگہوں اور نئے پودے لگانے والوں کے لیے بہترین انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA fresh, tropical-looking indoor plant with broad, glossy green leaves and a golden-yellow stripe down the centre. Song of Thai grows slowly, handles medium light well, and needs very little care. A great pick for living rooms, offices, corners, and beginners.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/235df07e-c70c-4ea6-b8fd-94f32879a8b1-1794229004221.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/56794a04-f164-477a-82bc-90b34d67e2e2-1794229004221.jpg"
+      ],
+      "sku": "f4179a0c-2344-493c-870c-0a47c7d87eac",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/song-of-thai-dracaena-reflexa--f4179a0c-2344-493c-870c-0a47c7d87eac"
+      }
+    }
+  },
+  {
+    "pathname": "/product/dwarf-euphorbia-crown-of-thorns--a159161e-804c-4d5f-a9b6-d8d28d5e0868",
+    "title": "Dwarf Euphorbia - Crown of Thorns (ڈوارف یوفوربیا - کانٹوں کا تاج) | The Nursery Pakistan",
+    "description": "\nڈوارف یوفوربیا اپنے چھوٹے، چمکدار گلابی سرخ پھولوں کی وجہ سے سارا سال باغ، چھت اور بالکونی کو رنگین رکھتا ہے۔ یہ بہت مضبوط پودا ہے جو پاکستان کی گرمی اور تیز د",
+    "heading": "Dwarf Euphorbia - Crown of Thorns (ڈوارف یوفوربیا - کانٹوں کا تاج)",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3c6efee5-3323-4a53-8e17-f6675f081633-1794229229498.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Dwarf Euphorbia - Crown of Thorns (ڈوارف یوفوربیا - کانٹوں کا تاج)",
+      "description": "\nڈوارف یوفوربیا اپنے چھوٹے، چمکدار گلابی سرخ پھولوں کی وجہ سے سارا سال باغ، چھت اور بالکونی کو رنگین رکھتا ہے۔ یہ بہت مضبوط پودا ہے جو پاکستان کی گرمی اور تیز دھوپ میں بھی آسانی سے اگتا ہے اور بہت کم پانی چاہتا ہے۔ نئے پودے لگانے والوں اور مصروف لوگوں کے لیے بہترین انتخاب۔\n\nیہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nA tough little flowering plant with bright pink-red blooms that keep colour in your garden, rooftop, or balcony for most of the year. Dwarf Euphorbia handles Pakistan’s heat and strong sun well and needs very little water. A great pick for beginners and busy people.\n\nThis plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/3c6efee5-3323-4a53-8e17-f6675f081633-1794229229498.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/70aea4c1-9293-4dfc-a2ec-1e992b987842-1794229229499.jpg"
+      ],
+      "sku": "a159161e-804c-4d5f-a9b6-d8d28d5e0868",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/dwarf-euphorbia-crown-of-thorns--a159161e-804c-4d5f-a9b6-d8d28d5e0868"
+      }
+    }
+  },
+  {
+    "pathname": "/product/silver-mist--69a9ba07-d0ed-496c-853e-c64e041d0b9c",
+    "title": "Silver Mist (سلور مسٹ) – سفید دھاری دار لمبے پتوں والا آرائشی پودا | The Nursery Pakistan",
+    "description": "\nسلور مسٹ ایک خوبصورت آرائشی پودا ہے جس کے لمبے، لہراتے پتوں پر کریمی سفید دھاریاں ہوتی ہیں۔ یہ گھر کے لان، گیٹ کے ساتھ، گملوں کی قطار یا بالکونی میں ہلکی اور ت",
+    "heading": "Silver Mist (سلور مسٹ) – سفید دھاری دار لمبے پتوں والا آرائشی پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/1867e62f-a000-45a4-aab8-e538f7adefb7-1794229746897.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Silver Mist (سلور مسٹ) – سفید دھاری دار لمبے پتوں والا آرائشی پودا",
+      "description": "\nسلور مسٹ ایک خوبصورت آرائشی پودا ہے جس کے لمبے، لہراتے پتوں پر کریمی سفید دھاریاں ہوتی ہیں۔ یہ گھر کے لان، گیٹ کے ساتھ، گملوں کی قطار یا بالکونی میں ہلکی اور تازہ شکل دیتا ہے۔ اسے ہلکی دھوپ یا روشن سایہ پسند ہے اور باقاعدہ پانی سے یہ گھنا اور ہرا بھرا رہتا ہے۔ یہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nSilver Mist is an eye-catching ornamental plant with long, arching leaves striped in cream and green. It gives lawns, entrances, balconies and pot arrangements a soft, airy look. It likes bright light or partial shade, and regular watering keeps the clump full and lush. This plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/1867e62f-a000-45a4-aab8-e538f7adefb7-1794229746897.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/112393bf-b5b8-4055-bf29-9d80e289fe52-1794229746898.jpg"
+      ],
+      "sku": "69a9ba07-d0ed-496c-853e-c64e041d0b9c",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "350",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/silver-mist--69a9ba07-d0ed-496c-853e-c64e041d0b9c"
+      }
+    }
+  },
+  {
+    "pathname": "/product/red-dracaena--d4e23f22-a6e8-4d0c-b388-b2d39724a004",
+    "title": "Red Dracaena (ریڈ ڈریسینا) – سرخی مائل پتوں والا خوبصورت پودا | The Nursery Pakistan",
+    "description": "\nریڈ ڈریسینا ایک نمایاں آرائشی پودا ہے جس کے لمبے، نوکیلے پتوں پر سرخی مائل اور جامنی رنگ کی جھلک ہوتی ہے۔ یہ لونگ روم، دفتر، بالکونی یا داخلی دروازے پر رنگ اور",
+    "heading": "Red Dracaena (ریڈ ڈریسینا) – سرخی مائل پتوں والا خوبصورت پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/94ede64a-528e-4f30-bcbc-cdd51d45c8c7-1794230006630.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Red Dracaena (ریڈ ڈریسینا) – سرخی مائل پتوں والا خوبصورت پودا",
+      "description": "\nریڈ ڈریسینا ایک نمایاں آرائشی پودا ہے جس کے لمبے، نوکیلے پتوں پر سرخی مائل اور جامنی رنگ کی جھلک ہوتی ہے۔ یہ لونگ روم، دفتر، بالکونی یا داخلی دروازے پر رنگ اور اونچائی کا اضافہ کرتا ہے۔ اسے روشن روشنی پسند ہے، جتنی اچھی روشنی ملے گی اتنا گہرا رنگ نکلے گا۔ پانی ضرورت کے مطابق دیں اور گملے میں پانی کھڑا نہ ہونے دیں۔ یہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nRed Dracaena is a striking decorative plant with long, pointed leaves tinged in red and burgundy. It adds colour and height to living rooms, offices, balconies and entrances. It likes bright light, and the better the light, the deeper the leaf colour. Water as needed and never let water stand in the pot. This plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/94ede64a-528e-4f30-bcbc-cdd51d45c8c7-1794230006630.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/45226ac3-a679-4bd8-bb2f-963d126db962-1794230006631.jpg"
+      ],
+      "sku": "d4e23f22-a6e8-4d0c-b388-b2d39724a004",
+      "category": "Indoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/red-dracaena--d4e23f22-a6e8-4d0c-b388-b2d39724a004"
+      }
+    }
+  },
+  {
+    "pathname": "/product/alpinia-variegated-shell-ginger--23be1fa4-55be-4c77-aa41-89a562d332c6",
+    "title": "Alpinia Variegated Shell Ginger (الپینیا ویریگیٹڈ شیل جنجر) – پیلی سبز دھاری دار پتوں والا پودا | The Nursery Pakistan",
+    "description": "\nالپینیا ایک خوبصورت آرائشی پودا ہے جس کے لمبے چمکدار پتوں پر سبز اور پیلی دھاریاں ہوتی ہیں۔ یہ لان، گیٹ، باغیچے یا بڑے گملوں میں تازہ اور گرم علاقوں جیسی شکل د",
+    "heading": "Alpinia Variegated Shell Ginger (الپینیا ویریگیٹڈ شیل جنجر) – پیلی سبز دھاری دار پتوں والا پودا",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/97052a66-6dc9-4605-ae8f-2bf5cb81f406-1794230287744.jpg",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Alpinia Variegated Shell Ginger (الپینیا ویریگیٹڈ شیل جنجر) – پیلی سبز دھاری دار پتوں والا پودا",
+      "description": "\nالپینیا ایک خوبصورت آرائشی پودا ہے جس کے لمبے چمکدار پتوں پر سبز اور پیلی دھاریاں ہوتی ہیں۔ یہ لان، گیٹ، باغیچے یا بڑے گملوں میں تازہ اور گرم علاقوں جیسی شکل دیتا ہے۔ اسے روشن روشنی یا ہلکی دھوپ اور باقاعدہ پانی پسند ہے۔ وقت کے ساتھ یہ گھنا اور اونچا ہو جاتا ہے۔ یہ پودا 10 انچ کے گملے میں دستیاب ہے۔ ڈیلیوری چارجز الگ سے لاگو ہوں گے۔\n\nAlpinia is an attractive ornamental plant with long, glossy leaves streaked in green and yellow. It gives lawns, gates, garden beds and large pots a fresh, tropical look. It likes bright light or gentle sun and regular watering, and it grows fuller and taller over time. This plant comes in a 10 inch pot. Delivery charges are separate.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/97052a66-6dc9-4605-ae8f-2bf5cb81f406-1794230287744.jpg",
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/f0f141f0-3b23-4232-87f7-65870b255eab-1794230287745.jpg"
+      ],
+      "sku": "23be1fa4-55be-4c77-aa41-89a562d332c6",
+      "category": "Outdoor Plants",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/alpinia-variegated-shell-ginger--23be1fa4-55be-4c77-aa41-89a562d332c6"
+      }
+    }
+  },
+  {
+    "pathname": "/product/indoor-plant-collection-4-plants-for-rs-2-500--31b39e4f-04e9-4f0b-a4e4-b3e2abda56a7",
+    "title": "Indoor Plant Collection - 4 Plants for Rs. 2,500 | The Nursery Pakistan",
+    "description": "Refresh your home with our 4-plant indoor collection. This deal includes 4 beautiful indoor plants selected for attractive foliage and easy styling in homes, of",
+    "heading": "Indoor Plant Collection - 4 Plants for Rs. 2,500",
+    "image": "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/58d332f8-a334-4319-876b-0e804fd7cf77-1794330594324.png",
+    "type": "product",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Indoor Plant Collection - 4 Plants for Rs. 2,500",
+      "description": "Refresh your home with our 4-plant indoor collection. This deal includes 4 beautiful indoor plants selected for attractive foliage and easy styling in homes, offices and balconies.\n\nGet all 4 plants for only Rs. 2,500.\n\nDelivery charges apply separately. Plant size, shape and appearance may vary naturally from the reference images.",
+      "image": [
+        "https://hwlygzpvcrgksdnqcdvw.supabase.co/storage/v1/object/public/product-images/products/58d332f8-a334-4319-876b-0e804fd7cf77-1794330594324.png"
+      ],
+      "sku": "31b39e4f-04e9-4f0b-a4e4-b3e2abda56a7",
+      "category": "Sale",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": "2500",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nurserypakistan.pk/product/indoor-plant-collection-4-plants-for-rs-2-500--31b39e4f-04e9-4f0b-a4e4-b3e2abda56a7"
       }
     }
   },
